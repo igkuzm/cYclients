@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF03E25C2EB2C33C00149FCA /* curl_transport.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E25A2EB2C33C00149FCA /* curl_transport.h */; };
+		AF03E25D2EB2C33C00149FCA /* curl_transport.c in Sources */ = {isa = PBXBuildFile; fileRef = AF03E25B2EB2C33C00149FCA /* curl_transport.c */; };
+		AF03E27E2EB2C89200149FCA /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */; };
+		AF03E2822EB2C8D600149FCA /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */; };
 		AF56A5242EB2318C006214FB /* partner_token.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5232EB2318C006214FB /* partner_token.h */; };
 		AF56A5262EB23191006214FB /* cYclients.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5252EB23191006214FB /* cYclients.h */; };
 		AF56A52B2EB231A2006214FB /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A5272EB231A2006214FB /* cJSON.c */; };
@@ -28,12 +32,16 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = AF56A5082EB23132006214FB /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = AF56A51B2EB2315C006214FB /* cYclients */;
+			remoteGlobalIDString = AF56A51B2EB2315C006214FB;
 			remoteInfo = cYclients;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AF03E2572EB2C28F00149FCA /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.md; sourceTree = "<group>"; };
+		AF03E25A2EB2C33C00149FCA /* curl_transport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl_transport.h; path = src/curl_transport.h; sourceTree = "<group>"; };
+		AF03E25B2EB2C33C00149FCA /* curl_transport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = curl_transport.c; path = src/curl_transport.c; sourceTree = "<group>"; };
+		AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = /usr/lib/libz.1.2.3.dylib; sourceTree = "<absolute>"; };
 		AF56A51C2EB2315C006214FB /* libcYclients.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcYclients.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF56A5232EB2318C006214FB /* partner_token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = partner_token.h; sourceTree = "<group>"; };
 		AF56A5252EB23191006214FB /* cYclients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cYclients.h; sourceTree = "<group>"; };
@@ -48,9 +56,6 @@
 		AF56A5772EB23844006214FB /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = darwin/libssl.a; sourceTree = "<group>"; };
 		AF56A57E2EB238EA006214FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		AF56A5862EB23913006214FB /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = darwin/libnghttp2.a; sourceTree = "<group>"; };
-		AF56A5A12EB23A46006214FB /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		AF56A5AB2EB24265006214FB /* configure.ac */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; };
-		AF56A5AC2EB2426C006214FB /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +68,7 @@
 				AF56A58E2EB23957006214FB /* libcurl.a in Frameworks */,
 				AF56A58F2EB23957006214FB /* libcrypto.a in Frameworks */,
 				AF56A5902EB23957006214FB /* libssl.a in Frameworks */,
+				AF03E27E2EB2C89200149FCA /* libz.1.2.3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF03E2822EB2C8D600149FCA /* libz.1.2.3.dylib in Frameworks */,
 				AF56A59A2EB23995006214FB /* Foundation.framework in Frameworks */,
 				AF56A54E2EB232B3006214FB /* libcYclients.a in Frameworks */,
 			);
@@ -107,6 +114,8 @@
 				AF56A52A2EB231A2006214FB /* config.h */,
 				AF56A5252EB23191006214FB /* cYclients.h */,
 				AF56A5232EB2318C006214FB /* partner_token.h */,
+				AF03E25A2EB2C33C00149FCA /* curl_transport.h */,
+				AF03E25B2EB2C33C00149FCA /* curl_transport.c */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -115,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				AF56A57E2EB238EA006214FB /* Foundation.framework */,
+				AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */,
 				AF56A5862EB23913006214FB /* libnghttp2.a */,
 				AF56A5702EB2362D006214FB /* libcurl.a */,
 				AF56A5762EB23844006214FB /* libcrypto.a */,
@@ -126,9 +136,7 @@
 		AF56A59F2EB23A21006214FB /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				AF56A5AC2EB2426C006214FB /* Makefile.am */,
-				AF56A5AB2EB24265006214FB /* configure.ac */,
-				AF56A5A12EB23A46006214FB /* CMakeLists.txt */,
+				AF03E2572EB2C28F00149FCA /* ReadMe.md */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -144,6 +152,7 @@
 				AF56A5262EB23191006214FB /* cYclients.h in Headers */,
 				AF56A52D2EB231A2006214FB /* cJSON.h in Headers */,
 				AF56A52E2EB231A2006214FB /* config.h in Headers */,
+				AF03E25C2EB2C33C00149FCA /* curl_transport.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,10 +199,12 @@
 		AF56A5082EB23132006214FB /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF56A5092EB23132006214FB /* Build configuration list for PBXProject "cYclients" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF56A5062EB23132006214FB;
 			productRefGroup = AF56A51D2EB2315C006214FB /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF56A51B2EB2315C006214FB /* cYclients */,
 				AF56A5312EB231C0006214FB /* cYclients_test */,
@@ -208,6 +219,7 @@
 			files = (
 				AF56A52B2EB231A2006214FB /* cJSON.c in Sources */,
 				AF56A52C2EB231A2006214FB /* token.c in Sources */,
+				AF03E25D2EB2C33C00149FCA /* curl_transport.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
