@@ -11,12 +11,20 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/partner_token.h)
   message(FATAL_ERROR "no partner_token.h")
 endif()
 
+set(HEADERS
+  src/cJSON.h
+  src/config.h
+	src/curl_transport.h
+	cYclients.h	
+)
+
 set(SOURCES
   src/cJSON.c
+  src/curl_transport.c	
   src/token.c
 )
 
-add_library(${TARGET} ${SOURCES})
+add_library(${TARGET} ${SOURCES} ${HEADERS})
 target_link_libraries(${TARGET} curl)
 
 if(${BUILD_TEST})

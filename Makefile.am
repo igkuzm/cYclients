@@ -4,8 +4,15 @@ lib_LTLIBRARIES = libcyclients.la
 libcyclients_la_CFLAGS =
 libcyclients_la_LDFLAGS =
 
+nobase_include_HEADERS = \
+	src/cJSON.h \
+	src/config.h \
+	src/curl_transport.h \
+	cYclients.h
+
 libcyclients_la_SOURCES = \
   src/cJSON.c \
+  src/curl_transport.c \
   src/token.c	
 
 libcyclients_la_LIBADD = 

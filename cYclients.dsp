@@ -89,6 +89,10 @@ SOURCE=.\src\cJSON.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\curl_transport.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\token.c
 # End Source File
 # End Group
@@ -102,6 +106,10 @@ SOURCE=.\arc\config.h
 # Begin Source File
 
 SOURCE=.\src\cJSON.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\curl_transport.h
 # End Source File
 # Begin Source File
 
