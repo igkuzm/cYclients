@@ -4,4 +4,4 @@ partner_token.h
 #*
 build
 *.pbxuser
-*.mode2
+*.mode2*
