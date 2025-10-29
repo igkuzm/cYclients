@@ -1,0 +1,366 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AF56A5242EB2318C006214FB /* partner_token.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5232EB2318C006214FB /* partner_token.h */; };
+		AF56A5262EB23191006214FB /* cYclients.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5252EB23191006214FB /* cYclients.h */; };
+		AF56A52B2EB231A2006214FB /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A5272EB231A2006214FB /* cJSON.c */; };
+		AF56A52C2EB231A2006214FB /* token.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A5282EB231A2006214FB /* token.c */; };
+		AF56A52D2EB231A2006214FB /* cJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5292EB231A2006214FB /* cJSON.h */; };
+		AF56A52E2EB231A2006214FB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A52A2EB231A2006214FB /* config.h */; };
+		AF56A53B2EB231D6006214FB /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A53A2EB231D6006214FB /* test.c */; };
+		AF56A54E2EB232B3006214FB /* libcYclients.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A51C2EB2315C006214FB /* libcYclients.a */; };
+		AF56A58C2EB23957006214FB /* libnghttp2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5862EB23913006214FB /* libnghttp2.a */; };
+		AF56A58D2EB23957006214FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A57E2EB238EA006214FB /* Foundation.framework */; };
+		AF56A58E2EB23957006214FB /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5702EB2362D006214FB /* libcurl.a */; };
+		AF56A58F2EB23957006214FB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5762EB23844006214FB /* libcrypto.a */; };
+		AF56A5902EB23957006214FB /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5772EB23844006214FB /* libssl.a */; };
+		AF56A59A2EB23995006214FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A57E2EB238EA006214FB /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AF56A5342EB231C7006214FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF56A5082EB23132006214FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AF56A51B2EB2315C006214FB /* cYclients */;
+			remoteInfo = cYclients;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AF56A51C2EB2315C006214FB /* libcYclients.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcYclients.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF56A5232EB2318C006214FB /* partner_token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = partner_token.h; sourceTree = "<group>"; };
+		AF56A5252EB23191006214FB /* cYclients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cYclients.h; sourceTree = "<group>"; };
+		AF56A5272EB231A2006214FB /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cJSON.c; path = src/cJSON.c; sourceTree = "<group>"; };
+		AF56A5282EB231A2006214FB /* token.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = token.c; path = src/token.c; sourceTree = "<group>"; };
+		AF56A5292EB231A2006214FB /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cJSON.h; path = src/cJSON.h; sourceTree = "<group>"; };
+		AF56A52A2EB231A2006214FB /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/config.h; sourceTree = "<group>"; };
+		AF56A5322EB231C0006214FB /* cYclients_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cYclients_test; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF56A53A2EB231D6006214FB /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
+		AF56A5702EB2362D006214FB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = darwin/libcurl.a; sourceTree = "<group>"; };
+		AF56A5762EB23844006214FB /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = darwin/libcrypto.a; sourceTree = "<group>"; };
+		AF56A5772EB23844006214FB /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = darwin/libssl.a; sourceTree = "<group>"; };
+		AF56A57E2EB238EA006214FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		AF56A5862EB23913006214FB /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = darwin/libnghttp2.a; sourceTree = "<group>"; };
+		AF56A5A12EB23A46006214FB /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AF56A51A2EB2315C006214FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF56A58D2EB23957006214FB /* Foundation.framework in Frameworks */,
+				AF56A58C2EB23957006214FB /* libnghttp2.a in Frameworks */,
+				AF56A58E2EB23957006214FB /* libcurl.a in Frameworks */,
+				AF56A58F2EB23957006214FB /* libcrypto.a in Frameworks */,
+				AF56A5902EB23957006214FB /* libssl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF56A5302EB231C0006214FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF56A59A2EB23995006214FB /* Foundation.framework in Frameworks */,
+				AF56A54E2EB232B3006214FB /* libcYclients.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AF56A5062EB23132006214FB = {
+			isa = PBXGroup;
+			children = (
+				AF56A59F2EB23A21006214FB /* Other */,
+				AF56A5572EB232D0006214FB /* Frameworks */,
+				AF56A5222EB2317D006214FB /* Sources */,
+				AF56A51D2EB2315C006214FB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AF56A51D2EB2315C006214FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AF56A51C2EB2315C006214FB /* libcYclients.a */,
+				AF56A5322EB231C0006214FB /* cYclients_test */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AF56A5222EB2317D006214FB /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				AF56A53A2EB231D6006214FB /* test.c */,
+				AF56A5272EB231A2006214FB /* cJSON.c */,
+				AF56A5282EB231A2006214FB /* token.c */,
+				AF56A5292EB231A2006214FB /* cJSON.h */,
+				AF56A52A2EB231A2006214FB /* config.h */,
+				AF56A5252EB23191006214FB /* cYclients.h */,
+				AF56A5232EB2318C006214FB /* partner_token.h */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		AF56A5572EB232D0006214FB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AF56A57E2EB238EA006214FB /* Foundation.framework */,
+				AF56A5862EB23913006214FB /* libnghttp2.a */,
+				AF56A5702EB2362D006214FB /* libcurl.a */,
+				AF56A5762EB23844006214FB /* libcrypto.a */,
+				AF56A5772EB23844006214FB /* libssl.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AF56A59F2EB23A21006214FB /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				AF56A5A12EB23A46006214FB /* CMakeLists.txt */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		AF56A5182EB2315C006214FB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF56A5242EB2318C006214FB /* partner_token.h in Headers */,
+				AF56A5262EB23191006214FB /* cYclients.h in Headers */,
+				AF56A52D2EB231A2006214FB /* cJSON.h in Headers */,
+				AF56A52E2EB231A2006214FB /* config.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		AF56A51B2EB2315C006214FB /* cYclients */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF56A51E2EB2315D006214FB /* Build configuration list for PBXNativeTarget "cYclients" */;
+			buildPhases = (
+				AF56A5182EB2315C006214FB /* Headers */,
+				AF56A5192EB2315C006214FB /* Sources */,
+				AF56A51A2EB2315C006214FB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = cYclients;
+			productName = cYclients;
+			productReference = AF56A51C2EB2315C006214FB /* libcYclients.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		AF56A5312EB231C0006214FB /* cYclients_test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF56A5372EB231CA006214FB /* Build configuration list for PBXNativeTarget "cYclients_test" */;
+			buildPhases = (
+				AF56A52F2EB231C0006214FB /* Sources */,
+				AF56A5302EB231C0006214FB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AF56A5352EB231C7006214FB /* PBXTargetDependency */,
+			);
+			name = cYclients_test;
+			productName = cYclients_test;
+			productReference = AF56A5322EB231C0006214FB /* cYclients_test */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AF56A5082EB23132006214FB /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = AF56A5092EB23132006214FB /* Build configuration list for PBXProject "cYclients" */;
+			hasScannedForEncodings = 0;
+			mainGroup = AF56A5062EB23132006214FB;
+			productRefGroup = AF56A51D2EB2315C006214FB /* Products */;
+			projectDirPath = "";
+			targets = (
+				AF56A51B2EB2315C006214FB /* cYclients */,
+				AF56A5312EB231C0006214FB /* cYclients_test */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AF56A5192EB2315C006214FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF56A52B2EB231A2006214FB /* cJSON.c in Sources */,
+				AF56A52C2EB231A2006214FB /* token.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AF56A52F2EB231C0006214FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF56A53B2EB231D6006214FB /* test.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AF56A5352EB231C7006214FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AF56A51B2EB2315C006214FB /* cYclients */;
+			targetProxy = AF56A5342EB231C7006214FB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AF56A50A2EB23132006214FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		AF56A50B2EB23132006214FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Release;
+		};
+		AF56A51F2EB2315D006214FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/darwin\"";
+				PREBINDING = NO;
+				PRODUCT_NAME = cYclients;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		AF56A5202EB2315D006214FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/darwin\"";
+				PREBINDING = NO;
+				PRODUCT_NAME = cYclients;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		AF56A5382EB231CA006214FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					/opt/curl/lib,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../.Trash/opt 00-38-39/local/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(DEVELOPER_DIR)/SDKs/MacOSX10.3.9.sdk/usr/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/darwin\"";
+				PREBINDING = NO;
+				PRODUCT_NAME = cYclients_test;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		AF56A5392EB231CA006214FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = "$(HOME)/bin";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					/opt/curl/lib,
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../.Trash/opt 00-38-39/local/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(DEVELOPER_DIR)/SDKs/MacOSX10.3.9.sdk/usr/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/darwin\"";
+				PREBINDING = NO;
+				PRODUCT_NAME = cYclients_test;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AF56A5092EB23132006214FB /* Build configuration list for PBXProject "cYclients" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF56A50A2EB23132006214FB /* Debug */,
+				AF56A50B2EB23132006214FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF56A51E2EB2315D006214FB /* Build configuration list for PBXNativeTarget "cYclients" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF56A51F2EB2315D006214FB /* Debug */,
+				AF56A5202EB2315D006214FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF56A5372EB231CA006214FB /* Build configuration list for PBXNativeTarget "cYclients_test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF56A5382EB231CA006214FB /* Debug */,
+				AF56A5392EB231CA006214FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AF56A5082EB23132006214FB /* Project object */;
+}
