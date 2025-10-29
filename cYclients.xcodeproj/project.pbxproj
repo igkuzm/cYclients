@@ -49,6 +49,8 @@
 		AF56A57E2EB238EA006214FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		AF56A5862EB23913006214FB /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = darwin/libnghttp2.a; sourceTree = "<group>"; };
 		AF56A5A12EB23A46006214FB /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		AF56A5AB2EB24265006214FB /* configure.ac */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = configure.ac; sourceTree = "<group>"; };
+		AF56A5AC2EB2426C006214FB /* Makefile.am */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,8 @@
 		AF56A59F2EB23A21006214FB /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				AF56A5AC2EB2426C006214FB /* Makefile.am */,
+				AF56A5AB2EB24265006214FB /* configure.ac */,
 				AF56A5A12EB23A46006214FB /* CMakeLists.txt */,
 			);
 			name = Other;
