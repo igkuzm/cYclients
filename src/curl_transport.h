@@ -13,9 +13,9 @@
 #include "cJSON.h"
 
 cJSON *
-curl_transport_post(const char *url,
-					const char *auth,
-					const char *post);
+curl_transport_post(const char *request_url,
+					const char *auth_header,
+					const char *post_data);
 						  
 
 #endif // CURL_TRANSPORT_H

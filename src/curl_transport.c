@@ -46,9 +46,9 @@ static size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 }
 
 cJSON *
-curl_transport_post(const char *url, 
-					const char *auth, 
-					const char *post)
+curl_transport_post(const char *request_url, 
+					const char *auth_header, 
+					const char *post_data)
 {
 	CURL *curl;
 	struct string s;
@@ -62,18 +62,18 @@ curl_transport_post(const char *url,
 		
 		init_string(&s);
 	
-		curl_easy_setopt(curl, CURLOPT_URL, url);
+		curl_easy_setopt(curl, CURLOPT_URL, request_url);
 		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");		
 		curl_easy_setopt(curl, CURLOPT_HEADER, 0);
 		
 		header = curl_slist_append(header, "Accept: application/vnd.yclients.v2+json");		
 	    header = curl_slist_append(header, "Connection: close");		
 	    header = curl_slist_append(header, "Content-Type: application/json");		
-	    header = curl_slist_append(header, auth);		
+	    header = curl_slist_append(header, auth_header);		
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
 		
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post));
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post_data));
 
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
@@ -91,6 +91,14 @@ curl_transport_post(const char *url,
 		}		
 		
 		json = cJSON_Parse(s.ptr);
+#ifdef DEBUG
+		if (json){
+			printf("%s\n", cJSON_Print(json));
+		}
+	    else {
+			printf("JSON IS NULL");
+		}
+#endif
 		free(s.ptr);
 		
 		return json;

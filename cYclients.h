@@ -1,13 +1,12 @@
 #ifndef CYCLIENTS_H
 #define CYCLIENTS_H
 
-#include <stdio.h>
+#include "src/structs.h"
 
-
-//return string with user token for yclients for user with password
-const char *
-cyclients_get_user_token(const char *login,
-						 const char *password);
+//return user struct with user token end etc.
+const cyclients_user_t *
+cyclients_login(const char *login, 
+				const char *password);
 
 
 

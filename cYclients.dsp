@@ -93,6 +93,10 @@ SOURCE=.\src\curl_transport.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\structs.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\token.c
 # End Source File
 # End Group
@@ -101,7 +105,11 @@ SOURCE=.\src\token.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\arc\config.h
+SOURCE=.\src\config.h
+# End Source File
+# Begin Source File
+#
+SOURCE=.\src\log.h
 # End Source File
 # Begin Source File
 
@@ -110,6 +118,10 @@ SOURCE=.\src\cJSON.h
 # Begin Source File
 
 SOURCE=.\src\curl_transport.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\structs.h
 # End Source File
 # Begin Source File
 
