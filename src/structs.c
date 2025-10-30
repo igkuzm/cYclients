@@ -32,7 +32,10 @@ cyclients_user_from_json(const cJSON *json,
 		is_approved = cJSON_GetObjectItem(json, "is_approved");			
 		is_email_confirmed = cJSON_GetObjectItem(json, "is_email_confirmed");
 		
-		if (id == NULL || name == NULL || user_token == NULL){
+		if (id == NULL || name == NULL || user_token == NULL || phone == NULL || 
+			login == NULL || email == NULL || avatar == NULL ||
+			is_approved == NULL || is_email_confirmed == NULL)
+		{
 			ERR("%s", "json has no user structure");
 			return -1;
 		}
@@ -52,3 +55,65 @@ cyclients_user_from_json(const cJSON *json,
 
 	return -1;
 }
+
+int 
+cyclients_transport_from_json(const cJSON *json,
+						      cyclients_transport_t *t)
+{
+	assert(json != NULL);
+	assert(t != NULL);
+	if (cJSON_IsObject(json)) {
+		cJSON *type, *recipient;
+		
+		type = cJSON_GetObjectItem(json, "type");
+		recipient = cJSON_GetObjectItem(json, "recipient");			
+		
+		if (type == NULL || recipient == NULL)
+		{
+			ERR("%s", "json has no transport structure");
+			return -1;
+		}
+		
+		STRCPY(t->type, type->valuestring);
+		STRCPY(t->recipient, recipient->valuestring);
+		
+		return 0;
+	}
+	
+	return -1;
+}
+
+int 
+cyclients_2fa_from_json(const cJSON *json,
+						cyclients_2fa_t *t)
+{
+	assert(json != NULL);
+	assert(t != NULL);
+	if (cJSON_IsObject(json)) {
+		cJSON *uuid, *flow, *transport, *refresh_ttl_sec, *attempts_left;
+		
+		uuid = cJSON_GetObjectItem(json, "uuid");
+		flow = cJSON_GetObjectItem(json, "flow");			
+		transport = cJSON_GetObjectItem(json, "transport");			
+		refresh_ttl_sec = cJSON_GetObjectItem(json, "refresh_ttl_sec");			
+		attempts_left = cJSON_GetObjectItem(json, "attempts_left");			
+		
+		if (uuid == NULL || flow == NULL || transport == NULL || refresh_ttl_sec == NULL || 
+			attempts_left == NULL)
+		{
+			ERR("%s", "json has no 2fa structure");
+			return -1;
+		}
+		
+		STRCPY(t->uuid, uuid->valuestring);
+		STRCPY(t->flow, flow->valuestring);
+		cyclients_transport_from_json(transport, &t->transport);
+		t->refresh_ttl_sec = refresh_ttl_sec->valueint;
+		t->attempts_left = attempts_left->valueint;
+		
+		return 0;
+	}
+	
+	return -1;
+}
+

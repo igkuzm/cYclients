@@ -9,6 +9,8 @@
 
 #include "curl_transport.h"
 #include "../partner_token.h"
+#include "config.h"
+#include "log.h"
 #include <curl/curl.h>
 #include <stdlib.h>
 #include <string.h>
@@ -100,6 +102,24 @@ curl_transport_post(const char *request_url,
 		}
 #endif
 		free(s.ptr);
+		
+		// handle errors
+		if (cJSON_IsObject(json)){
+			cJSON *success, *meta;
+			success = cJSON_GetObjectItem(json, "success");
+			meta = cJSON_GetObjectItem(json, "meta");
+			if (success && success->valueint == false){
+				if (cJSON_IsObject(meta)){
+					cJSON *message;
+					message = cJSON_GetObjectItem(json, "message");
+					if (message){
+						ERR("%s", message->valuestring);
+						return json;
+					}
+				}
+				ERR("%s", "unknown error!");
+			}
+		}
 		
 		return json;
 	}

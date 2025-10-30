@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 	
-	user = cyclients_login(argv[1], argv[2]);
+	user = cyclients_login(argv[1], argv[2], NULL);
 	if (user == NULL) {
 		return 1;
 	}

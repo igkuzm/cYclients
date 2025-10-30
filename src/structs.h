@@ -30,6 +30,26 @@ cyclients_user_from_json(const cJSON *json,
 						 cyclients_user_t *t);
 							 
 
+typedef struct cyclients_transport_ {
+	char type[64];
+	char recipient[128];
+} cyclients_transport_t;
+
+int 
+cyclients_transport_from_json(const cJSON *json,
+						      cyclients_transport_t *t);
+
+typedef struct cyclients_2fa_ {
+	char uuid[64];
+	char flow[32];
+	cyclients_transport_t transport;
+	int refresh_ttl_sec;
+	int attempts_left;
+} cyclients_2fa_t;
+
+int 
+cyclients_2fa_from_json(const cJSON *json,
+						cyclients_2fa_t *t);
 
 
 #endif // STRUCTS_H
