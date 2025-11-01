@@ -14,7 +14,7 @@
 
 int 
 cyclients_user_from_json(const cJSON *json,
-						 cyclients_user_t *t)
+												 cyclients_user_t *t)
 {
 	assert(json != NULL);
 	assert(t != NULL);
@@ -58,7 +58,7 @@ cyclients_user_from_json(const cJSON *json,
 
 int 
 cyclients_transport_from_json(const cJSON *json,
-						      cyclients_transport_t *t)
+															cyclients_transport_t *t)
 {
 	assert(json != NULL);
 	assert(t != NULL);

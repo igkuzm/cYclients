@@ -89,6 +89,10 @@ SOURCE=.\src\cJSON.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\log.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\curl_transport.c
 # End Source File
 # Begin Source File
@@ -97,7 +101,7 @@ SOURCE=.\src\structs.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\token.c
+SOURCE=.\src\auth.c
 # End Source File
 # End Group
 # Begin Group "Header Files"

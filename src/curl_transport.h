@@ -12,10 +12,14 @@
 
 #include "cJSON.h"
 
-cJSON *
+typedef long HTTP_RESPONCE;
+
+// perform POST request and return responce code
+HTTP_RESPONCE
 curl_transport_post(const char *request_url,
 					const char *auth_header,
-					const char *post_data);
+					const char *post_datai,
+					cJSON **json);
 						  
 
 #endif // CURL_TRANSPORT_H

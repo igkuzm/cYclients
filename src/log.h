@@ -2,7 +2,7 @@
  * File              : log.h
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 19.03.2023
- * Last Modified Date: 25.10.2024
+ * Last Modified Date: 01.11.2025
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -39,35 +39,9 @@ extern "C" {
 #include <string.h>
 #include <stdarg.h>
 
-static char __buf[BUFSIZ];
-
-static char *STR(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vsnprintf(__buf, BUFSIZ-1,fmt, args);
-	va_end(args);
-	return __buf;
-}
-
-static char * STR_ERR(const char *fmt, ...) {
-	char str[BUFSIZ];
-	va_list args;
-	va_start(args, fmt);
-	vsnprintf(str, BUFSIZ-1,fmt, args);
-	va_end(args);
-	snprintf(__buf, BUFSIZ-1,"E/%s: %d: %s", __FILE__, __LINE__, str);
-	return __buf;
-}
-
-static char * STR_LOG(const char *fmt, ...) {
-	char str[BUFSIZ];
-	va_list args;
-	va_start(args, fmt);
-	vsnprintf(str, BUFSIZ-1,fmt, args);
-	va_end(args);
-	snprintf(__buf, BUFSIZ-1,"E/%s: %d: %s", __FILE__, __LINE__, str);
-	return __buf;
-}
+char *STR(const char *fmt, ...);
+char * STR_ERR(const char *fmt, ...);
+char * STR_LOG(const char *fmt, ...);
 
 #ifdef __ANDROID__
 	#include <android/log.h>
@@ -80,23 +54,8 @@ static char * STR_LOG(const char *fmt, ...) {
 	#define ERR(fmt, ...) LOG("E/_%s: %d: %s", __func__, __LINE__, STR(fmt, __VA_ARGS__)) 
 #else
 
-static void LOG(const char *fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	vsnprintf(__buf, BUFSIZ-1,fmt, args);
-	va_end(args);
-	fprintf(stderr, "%s: %d: %s\n",   __FILE__, __LINE__, __buf);
-}
-
-static void ERR(const char *fmt, ...) {
-	char str[BUFSIZ];
-	va_list args;
-	va_start(args, fmt);
-	vsnprintf(__buf, BUFSIZ-1,fmt, args);
-	va_end(args);
-	snprintf(str, BUFSIZ-1,"E/%s: %d: %s", __FILE__, __LINE__, __buf);
-	perror(str);
-}
+void LOG(const char *fmt, ...);
+void ERR(const char *fmt, ...);
 
 #endif
 

@@ -30,9 +30,10 @@ set(HEADERS
 
 set(SOURCES
   src/cJSON.c
+  src/log.c	
   src/curl_transport.c	
   src/structs.c		
-  src/token.c
+  src/auth.c
 )
 
 add_library(${TARGET} ${SOURCES} ${HEADERS})

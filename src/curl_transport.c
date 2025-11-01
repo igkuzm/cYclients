@@ -9,11 +9,14 @@
 
 #include "curl_transport.h"
 #include "../partner_token.h"
+#include "cJSON.h"
 #include "config.h"
 #include "log.h"
 #include <curl/curl.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define CURL_SSL_VERIFY 1L
 
 static char CURL_ERROR[256];
 
@@ -47,10 +50,11 @@ static size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 	return size*nmemb;
 }
 
-cJSON *
+HTTP_RESPONCE
 curl_transport_post(const char *request_url, 
 					const char *auth_header, 
-					const char *post_data)
+					const char *post_data,
+					cJSON **json)
 {
 	CURL *curl;
 	struct string s;
@@ -60,7 +64,8 @@ curl_transport_post(const char *request_url,
 	if (curl){
 		struct curl_slist *header = NULL;
 		CURLcode res = 0;
-		cJSON *json;
+		long http_code = 0;
+		cJSON *responce;
 		
 		init_string(&s);
 	
@@ -80,49 +85,68 @@ curl_transport_post(const char *request_url,
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);
 
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0); //do not verify sertificate		
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, CURL_SSL_VERIFY); 
 
 		res = curl_easy_perform(curl);
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+#ifdef DEBUG
+		LOG("http returned: %d", http_code);
+#endif
 		
 		curl_easy_cleanup(curl);
 		curl_slist_free_all(header);
 		if (res) { //handle erros
-            sprintf(CURL_ERROR, "CURL ERROR: %d", res);
-			perror(CURL_ERROR);
-            return NULL;			
+      sprintf(CURL_ERROR, "CURL ERROR: %d", res);
+			ERR("%s",CURL_ERROR);
+      return http_code;			
 		}		
 		
-		json = cJSON_Parse(s.ptr);
+		responce = cJSON_Parse(s.ptr);
 #ifdef DEBUG
-		if (json){
-			printf("%s\n", cJSON_Print(json));
+		if (responce){
+			LOG("%s", cJSON_Print(responce));
 		}
 	    else {
-			printf("JSON IS NULL");
+			LOG("%s", "RESPONCE JSON IS NULL");
 		}
 #endif
 		free(s.ptr);
 		
-		// handle errors
-		if (cJSON_IsObject(json)){
+		if (cJSON_IsObject(responce)){
 			cJSON *success, *meta;
-			success = cJSON_GetObjectItem(json, "success");
-			meta = cJSON_GetObjectItem(json, "meta");
+			success = cJSON_GetObjectItem(responce, "success");
+			meta = cJSON_GetObjectItem(responce, "meta");
+
+			// handle answer
+			if (success && success->valueint == true){
+				// return json
+				if (json && responce){
+					*json = responce;
+				} else {
+					cJSON_free(responce);
+				}
+				return http_code;
+			}
+		
+			// handle errors
 			if (success && success->valueint == false){
 				if (cJSON_IsObject(meta)){
 					cJSON *message;
-					message = cJSON_GetObjectItem(json, "message");
+					message = cJSON_GetObjectItem(
+							meta, "message");
 					if (message){
 						ERR("%s", message->valuestring);
-						return json;
+						cJSON_free(responce);
+						return http_code;
 					}
 				}
-				ERR("%s", "unknown error!");
 			}
+			
+			ERR("%s", "unknown error!");
+			return http_code;
 		}
-		
-		return json;
+		return http_code;
 	}
 	
-	return NULL;
+	return -1;
 }
