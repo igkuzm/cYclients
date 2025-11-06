@@ -16,8 +16,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define CURL_SSL_VERIFY 1L
-
 static char CURL_ERROR[256];
 
 struct string {

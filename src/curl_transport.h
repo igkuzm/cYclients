@@ -12,6 +12,8 @@
 
 #include "cJSON.h"
 
+#define CURL_SSL_VERIFY 0L
+
 typedef long HTTP_RESPONCE;
 
 // perform POST request and return responce code

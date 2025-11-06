@@ -14,10 +14,11 @@
 		AF03E2B12EB2DFA400149FCA /* structs.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E2AF2EB2DFA400149FCA /* structs.h */; };
 		AF03E2B22EB2DFA400149FCA /* structs.c in Sources */ = {isa = PBXBuildFile; fileRef = AF03E2B02EB2DFA400149FCA /* structs.c */; };
 		AF03E2B52EB2E4EE00149FCA /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E2B42EB2E4EE00149FCA /* log.h */; };
+		AF2052CC2EBCC94B00392497 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CB2EBCC94B00392497 /* auth.c */; };
+		AF2052D02EBCC95C00392497 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CF2EBCC95C00392497 /* log.c */; };
 		AF56A5242EB2318C006214FB /* partner_token.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5232EB2318C006214FB /* partner_token.h */; };
 		AF56A5262EB23191006214FB /* cYclients.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5252EB23191006214FB /* cYclients.h */; };
 		AF56A52B2EB231A2006214FB /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A5272EB231A2006214FB /* cJSON.c */; };
-		AF56A52C2EB231A2006214FB /* token.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A5282EB231A2006214FB /* token.c */; };
 		AF56A52D2EB231A2006214FB /* cJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5292EB231A2006214FB /* cJSON.h */; };
 		AF56A52E2EB231A2006214FB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A52A2EB231A2006214FB /* config.h */; };
 		AF56A53B2EB231D6006214FB /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A53A2EB231D6006214FB /* test.c */; };
@@ -48,11 +49,12 @@
 		AF03E2AF2EB2DFA400149FCA /* structs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = structs.h; path = src/structs.h; sourceTree = "<group>"; };
 		AF03E2B02EB2DFA400149FCA /* structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = structs.c; path = src/structs.c; sourceTree = "<group>"; };
 		AF03E2B42EB2E4EE00149FCA /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = src/log.h; sourceTree = "<group>"; };
+		AF2052CB2EBCC94B00392497 /* auth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auth.c; path = src/auth.c; sourceTree = "<group>"; };
+		AF2052CF2EBCC95C00392497 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = log.c; path = src/log.c; sourceTree = "<group>"; };
 		AF56A51C2EB2315C006214FB /* libcYclients.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcYclients.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF56A5232EB2318C006214FB /* partner_token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = partner_token.h; sourceTree = "<group>"; };
 		AF56A5252EB23191006214FB /* cYclients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cYclients.h; sourceTree = "<group>"; };
 		AF56A5272EB231A2006214FB /* cJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = cJSON.c; path = src/cJSON.c; sourceTree = "<group>"; };
-		AF56A5282EB231A2006214FB /* token.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = token.c; path = src/token.c; sourceTree = "<group>"; };
 		AF56A5292EB231A2006214FB /* cJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cJSON.h; path = src/cJSON.h; sourceTree = "<group>"; };
 		AF56A52A2EB231A2006214FB /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/config.h; sourceTree = "<group>"; };
 		AF56A5322EB231C0006214FB /* cYclients_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cYclients_test; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,10 +115,11 @@
 		AF56A5222EB2317D006214FB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AF2052CF2EBCC95C00392497 /* log.c */,
+				AF2052CB2EBCC94B00392497 /* auth.c */,
 				AF03E2B42EB2E4EE00149FCA /* log.h */,
 				AF56A53A2EB231D6006214FB /* test.c */,
 				AF56A5272EB231A2006214FB /* cJSON.c */,
-				AF56A5282EB231A2006214FB /* token.c */,
 				AF56A5292EB231A2006214FB /* cJSON.h */,
 				AF56A52A2EB231A2006214FB /* config.h */,
 				AF56A5252EB23191006214FB /* cYclients.h */,
@@ -229,9 +232,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF56A52B2EB231A2006214FB /* cJSON.c in Sources */,
-				AF56A52C2EB231A2006214FB /* token.c in Sources */,
 				AF03E25D2EB2C33C00149FCA /* curl_transport.c in Sources */,
 				AF03E2B22EB2DFA400149FCA /* structs.c in Sources */,
+				AF2052CC2EBCC94B00392497 /* auth.c in Sources */,
+				AF2052D02EBCC95C00392497 /* log.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
