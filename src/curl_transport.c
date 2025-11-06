@@ -88,7 +88,7 @@ curl_transport_post(const char *request_url,
 		res = curl_easy_perform(curl);
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 #ifdef DEBUG
-		LOG("http returned: %d", http_code);
+		LOG("%s: http returned: %d", __FILE__, http_code);
 #endif
 		
 		curl_easy_cleanup(curl);
@@ -102,10 +102,10 @@ curl_transport_post(const char *request_url,
 		responce = cJSON_Parse(s.ptr);
 #ifdef DEBUG
 		if (responce){
-			LOG("%s", cJSON_Print(responce));
+			LOG("%s: %s", __FILE__, cJSON_Print(responce));
 		}
 	    else {
-			LOG("%s", "RESPONCE JSON IS NULL");
+			LOG("%s: %s", __FILE__, "RESPONCE JSON IS NULL");
 		}
 #endif
 		free(s.ptr);

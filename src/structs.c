@@ -8,8 +8,10 @@
  */
 
 #include "structs.h"
+#include "cJSON.h"
 #include "config.h"
 #include "log.h"
+#include "json_to_struct.h"
 #include <assert.h>
 
 int 
@@ -19,41 +21,36 @@ cyclients_user_from_json(const cJSON *json,
 	assert(json != NULL);
 	assert(t != NULL);
 	if (cJSON_IsObject(json)) {
-		cJSON *id, *user_token, *name, *phone, *login, *email, 
-			  *avatar, *is_approved, *is_email_confirmed;
-		
-		id = cJSON_GetObjectItem(json, "id");
-		user_token = cJSON_GetObjectItem(json, "user_token");			
-		name = cJSON_GetObjectItem(json, "name");			
-		phone = cJSON_GetObjectItem(json, "phone");			
-		login = cJSON_GetObjectItem(json, "login");			
-		email = cJSON_GetObjectItem(json, "email");			
-		avatar = cJSON_GetObjectItem(json, "avatar");			
-		is_approved = cJSON_GetObjectItem(json, "is_approved");			
-		is_email_confirmed = cJSON_GetObjectItem(json, "is_email_confirmed");
-		
-		if (id == NULL || name == NULL || user_token == NULL || phone == NULL || 
-			login == NULL || email == NULL || avatar == NULL ||
-			is_approved == NULL || is_email_confirmed == NULL)
-		{
-			ERR("%s", "json has no user structure");
-			return -1;
-		}
-		
-		t->id = id->valueint;
-		STRCPY(t->user_token, user_token->valuestring);
-		STRCPY(t->name, name->valuestring);
-		STRCPY(t->phone, phone->valuestring);
-		STRCPY(t->login, login->valuestring);
-		STRCPY(t->email, email->valuestring);
-		STRCPY(t->avatar, avatar->valuestring);
-		t->is_approved = is_approved->valueint;
-		t->is_email_confirmed = is_email_confirmed->valueint;
-		
+		t->_type = CYCLIENTS_STRUCT_TYPE_USER;
+#define CYCLIENTS_STRUCT_USER_INT(_name) JSON_TO_INT(json, t, _name);
+#define CYCLIENTS_STRUCT_USER_STR(_name, _size) JSON_TO_STR(json, t, _name);
+#define CYCLIENTS_STRUCT_USER_BOL(_name) JSON_TO_INT(json, t, _name);
+		CYCLIENTS_STRUCT_USER
+#undef CYCLIENTS_STRUCT_USER_INT
+#undef CYCLIENTS_STRUCT_USER_STR
+#undef CYCLIENTS_STRUCT_USER_BOL		
 		return 0;
 	}
-
 	return -1;
+}
+
+cJSON * 
+cyclients_user_to_json(cyclients_user_t *t)
+{
+	cJSON *json = NULL;
+	assert(t != NULL);
+	json = cJSON_CreateObject();
+	if (json) {
+#define CYCLIENTS_STRUCT_USER_INT(_name) JSON_FROM_INT(json, t, _name);
+#define CYCLIENTS_STRUCT_USER_STR(_name, _size) JSON_FROM_STR(json, t, _name);
+#define CYCLIENTS_STRUCT_USER_BOL(_name) JSON_FROM_BOL(json, t, _name);
+		CYCLIENTS_STRUCT_USER
+#undef CYCLIENTS_STRUCT_USER_INT
+#undef CYCLIENTS_STRUCT_USER_STR
+#undef CYCLIENTS_STRUCT_USER_BOL		
+		return json;
+	}
+	return NULL;
 }
 
 int 
@@ -63,57 +60,67 @@ cyclients_transport_from_json(const cJSON *json,
 	assert(json != NULL);
 	assert(t != NULL);
 	if (cJSON_IsObject(json)) {
-		cJSON *type, *recipient;
-		
-		type = cJSON_GetObjectItem(json, "type");
-		recipient = cJSON_GetObjectItem(json, "recipient");			
-		
-		if (type == NULL || recipient == NULL)
-		{
-			ERR("%s", "json has no transport structure");
-			return -1;
-		}
-		
-		STRCPY(t->type, type->valuestring);
-		STRCPY(t->recipient, recipient->valuestring);
-		
+		t->_type = CYCLIENTS_STRUCT_TYPE_TRANSPORT;
+#define CYCLIENTS_STRUCT_TRANSPORT_STR(_name, _size) JSON_TO_STR(json, t, _name);
+		CYCLIENTS_STRUCT_TRANSPORT
+#undef CYCLIENTS_STRUCT_TRANSPORT_STR
 		return 0;
 	}
-	
 	return -1;
+}
+
+cJSON * 
+cyclients_transport_to_json(cyclients_transport_t *t)
+{
+	cJSON *json = NULL;
+	assert(t != NULL);
+	json = cJSON_CreateObject();
+	if (json) {
+#define CYCLIENTS_STRUCT_TRANSPORT_STR(_name, _size) JSON_FROM_STR(json, t, _name);
+		CYCLIENTS_STRUCT_TRANSPORT
+#undef CYCLIENTS_STRUCT_TRANSPORT_STR
+		return json;
+	}
+	return NULL;
 }
 
 int 
 cyclients_2fa_from_json(const cJSON *json,
-						cyclients_2fa_t *t)
+												cyclients_2fa_t *t)
 {
 	assert(json != NULL);
 	assert(t != NULL);
 	if (cJSON_IsObject(json)) {
-		cJSON *uuid, *flow, *transport, *refresh_ttl_sec, *attempts_left;
-		
-		uuid = cJSON_GetObjectItem(json, "uuid");
-		flow = cJSON_GetObjectItem(json, "flow");			
-		transport = cJSON_GetObjectItem(json, "transport");			
-		refresh_ttl_sec = cJSON_GetObjectItem(json, "refresh_ttl_sec");			
-		attempts_left = cJSON_GetObjectItem(json, "attempts_left");			
-		
-		if (uuid == NULL || flow == NULL || transport == NULL || refresh_ttl_sec == NULL || 
-			attempts_left == NULL)
-		{
-			ERR("%s", "json has no 2fa structure");
-			return -1;
-		}
-		
-		STRCPY(t->uuid, uuid->valuestring);
-		STRCPY(t->flow, flow->valuestring);
-		cyclients_transport_from_json(transport, &t->transport);
-		t->refresh_ttl_sec = refresh_ttl_sec->valueint;
-		t->attempts_left = attempts_left->valueint;
-		
+		t->_type = CYCLIENTS_STRUCT_TYPE_2FA;
+#define CYCLIENTS_STRUCT_2FA_STR(_name, _size) JSON_TO_STR(json, t, _name);
+#define CYCLIENTS_STRUCT_2FA_TRANSPORT(_name) \
+	cyclients_transport_from_json(json, &t->_name);
+#define CYCLIENTS_STRUCT_2FA_INT(_name) JSON_TO_INT(json, t, _name);
+		CYCLIENTS_STRUCT_2FA
+#undef CYCLIENTS_STRUCT_2FA_STR
+#undef CYCLIENTS_STRUCT_2FA_TRANSPORT
+#undef CYCLIENTS_STRUCT_2FA_INT
 		return 0;
 	}
-	
 	return -1;
 }
 
+cJSON * 
+cyclients_2fa_to_json(cyclients_2fa_t *t)
+{
+	cJSON *json = NULL;
+	assert(t != NULL);
+	json = cJSON_CreateObject();
+	if (json) {
+#define CYCLIENTS_STRUCT_2FA_STR(_name, _size) JSON_FROM_STR(json, t, _name);
+#define CYCLIENTS_STRUCT_2FA_TRANSPORT(_name) \
+		cJSON_AddItemToObject(json, #_name, cyclients_transport_to_json(&t->_name));
+#define CYCLIENTS_STRUCT_2FA_INT(_name) JSON_FROM_INT(json, t, _name);
+		CYCLIENTS_STRUCT_2FA
+#undef CYCLIENTS_STRUCT_2FA_STR
+#undef CYCLIENTS_STRUCT_2FA_TRANSPORT
+#undef CYCLIENTS_STRUCT_2FA_INT
+		return json;
+	}
+	return NULL;
+}

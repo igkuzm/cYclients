@@ -61,7 +61,7 @@ cyclients_login(const char *login,
 		 	auth, post, &json);
 	if (http_code == 201){ // is authorized
 #ifdef DEBUG
-	LOG("%s", "authorized!");
+	LOG("%s: %s", __FILE__, "authorized!");
 #endif
 		if (user)
 			*user = get_user(json);
@@ -69,7 +69,7 @@ cyclients_login(const char *login,
 	
 	} else if (http_code == 200){
 #ifdef DEBUG
-	LOG("%s", "2-factor authorization is needed");
+	LOG("%s: %s", __FILE__, "2-factor authorization is needed");
 #endif
 		if (user2fa){
 			*user2fa = get_2fa(json);
@@ -104,7 +104,7 @@ cyclients_login_2fa(const char *login,
 
 	if (http_code == 201){ // is authorized
 #ifdef DEBUG
-	LOG("%s", "authorized!");
+	LOG("%s: %s", __FILE__, "authorized!");
 #endif
 		if (user)
 			*user = get_user(json);

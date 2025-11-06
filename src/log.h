@@ -2,7 +2,7 @@
  * File              : log.h
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 19.03.2023
- * Last Modified Date: 01.11.2025
+ * Last Modified Date: 02.11.2025
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -39,7 +39,7 @@ extern "C" {
 #include <string.h>
 #include <stdarg.h>
 
-char *STR(const char *fmt, ...);
+char * STR(const char *fmt, ...);
 char * STR_ERR(const char *fmt, ...);
 char * STR_LOG(const char *fmt, ...);
 
