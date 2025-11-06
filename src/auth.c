@@ -58,7 +58,8 @@ cyclients_login(const char *login,
 	
 	http_code = curl_transport_post(
 			requestString,
-		 	auth, post, &json);
+		 	auth, "POST",
+		 	post, &json);
 	if (http_code == 201){ // is authorized
 #ifdef DEBUG
 	LOG("%s: %s", __FILE__, "authorized!");
@@ -100,7 +101,8 @@ cyclients_login_2fa(const char *login,
 			, login, password, uuid, secret);		
 	
 	http_code = curl_transport_post(requestString,
-		 	auth, post, &json);
+		 	auth, "POST", 
+			post, &json);
 
 	if (http_code == 201){ // is authorized
 #ifdef DEBUG

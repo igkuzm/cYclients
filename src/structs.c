@@ -124,3 +124,53 @@ cyclients_2fa_to_json(cyclients_2fa_t *t)
 	}
 	return NULL;
 }
+
+int 
+cyclients_company_from_json(const cJSON *json,
+														cyclients_company_t *t)
+{
+	assert(json != NULL);
+	assert(t != NULL);
+	if (cJSON_IsObject(json)) {
+		t->_type = CYCLIENTS_STRUCT_TYPE_COMPANY;
+#define CYCLIENTS_STRUCT_COMPANY_INT(_name) JSON_TO_INT(json, t, _name);
+#define CYCLIENTS_STRUCT_COMPANY_STR(_name, _size) JSON_TO_STR(json, t, _name);
+#define CYCLIENTS_STRUCT_COMPANY_BOL(_name) JSON_TO_INT(json, t, _name);
+#define CYCLIENTS_STRUCT_COMPANY_SAR(_name, _size, _len)
+#define CYCLIENTS_STRUCT_COMPANY_SOCIAL(_name)
+		CYCLIENTS_STRUCT_COMPANY
+#undef CYCLIENTS_STRUCT_COMPANY_INT
+#undef CYCLIENTS_STRUCT_COMPANY_STR
+#undef CYCLIENTS_STRUCT_COMPANY_BOL		
+#undef CYCLIENTS_STRUCT_COMPANY_SAR
+#undef CYCLIENTS_STRUCT_COMPANY_SOCIAL
+		return 0;
+	}
+	return -1;
+}
+
+cJSON * 
+cyclients_company_to_json(cyclients_company_t *t)
+{
+	cJSON *json = NULL;
+	assert(t != NULL);
+	json = cJSON_CreateObject();
+	if (json) {
+#define CYCLIENTS_STRUCT_COMPANY_INT(_name) JSON_FROM_INT(json, t, _name);
+#define CYCLIENTS_STRUCT_COMPANY_STR(_name, _size) JSON_FROM_STR(json, t, _name);
+#define CYCLIENTS_STRUCT_COMPANY_BOL(_name) JSON_FROM_BOL(json, t, _name);
+#define CYCLIENTS_STRUCT_COMPANY_SAR(_name, _size, _len)
+#define CYCLIENTS_STRUCT_COMPANY_SOCIAL(_name)
+		CYCLIENTS_STRUCT_COMPANY
+#undef CYCLIENTS_STRUCT_COMPANY_INT
+#undef CYCLIENTS_STRUCT_COMPANY_STR
+#undef CYCLIENTS_STRUCT_COMPANY_BOL		
+#undef CYCLIENTS_STRUCT_COMPANY_SAR
+#undef CYCLIENTS_STRUCT_COMPANY_SOCIAL
+		return json;
+	}
+	return NULL;
+}
+
+
+

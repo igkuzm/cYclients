@@ -12,16 +12,15 @@
 
 #include "cJSON.h"
 
-#define CURL_SSL_VERIFY 0L
-
 typedef long HTTP_RESPONCE;
 
 // perform POST request and return responce code
 HTTP_RESPONCE
 curl_transport_post(const char *request_url,
-					const char *auth_header,
-					const char *post_datai,
-					cJSON **json);
+										const char *auth_header,
+										const char *http_method,
+										const char *post_data,
+										cJSON **json);
 						  
 
 #endif // CURL_TRANSPORT_H

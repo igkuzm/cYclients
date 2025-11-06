@@ -1,6 +1,14 @@
 #include "cYclients.h"
 #include <string.h>
 
+
+int companies_cb(void *userdata, const cyclients_company_t *company)
+{
+	printf("COMPANY: %s\n", company->title);
+
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	const cyclients_user_t *user = NULL;
@@ -58,6 +66,10 @@ int main(int argc, char *argv[])
 
 	printf("Authorized as: %s\n", user->name);
 	printf("TOKEN: %s\n", user->user_token);
+
+	cyclients_companies(user->user_token,
+		 	NULL, companies_cb);
+
 	return 0;
 }
 

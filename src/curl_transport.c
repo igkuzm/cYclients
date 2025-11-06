@@ -15,6 +15,7 @@
 #include <curl/curl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 static char CURL_ERROR[256];
 
@@ -50,14 +51,19 @@ static size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 
 HTTP_RESPONCE
 curl_transport_post(const char *request_url, 
-					const char *auth_header, 
-					const char *post_data,
-					cJSON **json)
+										const char *auth_header, 
+										const char *http_method,
+										const char *post_data,
+										cJSON **json)
 {
-	CURL *curl;
+	CURL *curl, *partner_token;
 	struct string s;
-	char * SETUP_PARTNER_TOKEN(partner_token);
+
+	assert(request_url);
+	assert(auth_header);
+	assert(http_method);
 	
+	SETUP_PARTNER_TOKEN(partner_token);
 	curl = curl_easy_init();
 	if (curl){
 		struct curl_slist *header = NULL;
@@ -68,7 +74,7 @@ curl_transport_post(const char *request_url,
 		init_string(&s);
 	
 		curl_easy_setopt(curl, CURLOPT_URL, request_url);
-		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "POST");		
+		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, http_method);		
 		curl_easy_setopt(curl, CURLOPT_HEADER, 0);
 		
 		header = curl_slist_append(header, "Accept: application/vnd.yclients.v2+json");		
@@ -77,8 +83,10 @@ curl_transport_post(const char *request_url,
 	    header = curl_slist_append(header, auth_header);		
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
 		
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post_data));
+		if (post_data){
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post_data));
+		}
 
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunc);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &s);

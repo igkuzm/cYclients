@@ -33,6 +33,7 @@ set(SOURCES
   src/log.c	
   src/curl_transport.c	
   src/structs.c		
+  src/companies.c		
   src/auth.c
 )
 

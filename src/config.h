@@ -13,6 +13,6 @@
 
 #define URL "https://api.yclients.com/api/v1"
 #define PORT 443
-#define CURL_SSL_VERIFY 1L
+#define CURL_SSL_VERIFY 0L
 
 #endif // CYCLIENTS_CONFIG_H
