@@ -1,15 +1,15 @@
 #ifndef CYCLIENTS_CONFIG_H
 #define CYCLIENTS_CONFIG_H
 
-//#ifdef _MSC_VER
-//#ifndef bool
-//#define bool char
-//#define true 1
-//#define false 0
-//#endif
-//#esle
+#ifdef _MSC_VER
+#ifndef bool
+#define bool char
+#define true 1
+#define false 0
+#endif
+#elif
 #include <stdbool.h>
-//#endif
+#endif
 
 #define URL "https://api.yclients.com/api/v1"
 #define PORT 443
