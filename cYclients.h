@@ -28,9 +28,18 @@ cyclients_login_2fa(const char *login,
 
 int
 cyclients_companies(const char *token,
+									  char *company_id,
 										void *userdata,
 										int (*callback)(void *userdata, 
 																		const cyclients_company_t *company));
+int
+cyclients_services(const char *token,
+									 int company_id,
+									 char *service_id,
+									 void *userdata,
+									 int (*callback)(void *userdata, 
+																	 const cyclients_service_t *service));
+
 
 #endif // CYCLIENTS_H
 

@@ -4,7 +4,16 @@
 
 int companies_cb(void *userdata, const cyclients_company_t *company)
 {
+	int *company_id = userdata;
 	printf("COMPANY: %s\n", company->title);
+	*company_id = company->id;
+
+	return 0;
+}
+
+
+int services_cb(void *userdata, const cyclients_service_t *service)
+{
 
 	return 0;
 }
@@ -67,8 +76,15 @@ int main(int argc, char *argv[])
 	printf("Authorized as: %s\n", user->name);
 	printf("TOKEN: %s\n", user->user_token);
 
+	int company_id;
 	cyclients_companies(user->user_token,
-		 	NULL, companies_cb);
+			NULL,
+		 	&company_id, companies_cb);
+
+	cyclients_services(user->user_token,
+		 	company_id, "23599584",
+		 	NULL, services_cb);
+	
 
 	return 0;
 }

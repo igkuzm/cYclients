@@ -34,6 +34,7 @@ set(SOURCES
   src/curl_transport.c	
   src/structs.c		
   src/companies.c		
+  src/services.c		
   src/auth.c
 )
 

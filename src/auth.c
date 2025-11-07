@@ -1,5 +1,6 @@
 #include "../cYclients.h"
 #include "../partner_token.h"
+#include "cJSON.h"
 #include "log.h"
 #include "config.h"
 #include "curl_transport.h"
@@ -44,6 +45,7 @@ cyclients_login(const char *login,
 								const cyclients_user_t **user,
 								const cyclients_2fa_t  **user2fa)
 {
+	CYCLIENTS_AUTH ret = CYCLIENTS_AUTH_ERROR;
 	cJSON *json = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], post[BUFSIZ];
@@ -66,7 +68,7 @@ cyclients_login(const char *login,
 #endif
 		if (user)
 			*user = get_user(json);
-		return CYCLIENTS_AUTH_AUTHORIZED;
+		ret = CYCLIENTS_AUTH_AUTHORIZED;
 	
 	} else if (http_code == 200){
 #ifdef DEBUG
@@ -74,11 +76,12 @@ cyclients_login(const char *login,
 #endif
 		if (user2fa){
 			*user2fa = get_2fa(json);
-			return CYCLIENTS_AUTH_2FA;
+			ret = CYCLIENTS_AUTH_2FA;
 		}
 	}
 	
-	return CYCLIENTS_AUTH_ERROR;
+	cJSON_free(json);
+	return ret;
 }
 
 CYCLIENTS_AUTH
@@ -88,6 +91,7 @@ cyclients_login_2fa(const char *login,
                     const char *secret,
 										const cyclients_user_t **user)
 {
+	CYCLIENTS_AUTH ret = CYCLIENTS_AUTH_ERROR;
 	cJSON *json = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], post[BUFSIZ];
@@ -110,8 +114,10 @@ cyclients_login_2fa(const char *login,
 #endif
 		if (user)
 			*user = get_user(json);
-		return CYCLIENTS_AUTH_AUTHORIZED;
+
+		ret = CYCLIENTS_AUTH_AUTHORIZED;
 	}
 	
-	return CYCLIENTS_AUTH_ERROR;	
+	cJSON_free(json);
+	return ret;	
 }

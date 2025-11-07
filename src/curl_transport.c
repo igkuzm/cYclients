@@ -107,7 +107,7 @@ curl_transport_post(const char *request_url,
       return http_code;			
 		}		
 		
-		responce = cJSON_Parse(s.ptr);
+		responce = cJSON_ParseWithLength(s.ptr, s.len);
 #ifdef DEBUG
 		if (responce){
 			LOG("%s: %s", __FILE__, cJSON_Print(responce));

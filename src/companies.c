@@ -3,6 +3,7 @@
 #include "cJSON.h"
 #include "../partner_token.h"
 #include "curl_transport.h"
+#include <assert.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -10,16 +11,22 @@ static cyclients_company_t COMPANY;
 
 int
 cyclients_companies(const char *token,
+									  char *company_id,
 										void *userdata,
 										int (*callback)(void *userdata, 
 																		const cyclients_company_t *company))
 {
+	int count = 0;
 	cJSON *json = NULL;
 	long http_code = 0;
-	char requestString[BUFSIZ], auth[128];
+	char requestString[BUFSIZ], auth[128], company_id_req[16];
 	char * SETUP_PARTNER_TOKEN(partner_token);
 
-	sprintf(requestString, "%s/companies?my=1", URL);
+	assert(token);
+
+	sprintf(company_id_req, "&id=%s", company_id);
+	sprintf(requestString, "%s/companies?my=1%s", 
+			URL, company_id?company_id_req:"");
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
@@ -34,7 +41,6 @@ cyclients_companies(const char *token,
 			cJSON *data = cJSON_GetObjectItem(json, "data");
 			if (cJSON_IsArray(data))
 			{
-				int i = 0;
 				cJSON *company;
 				memset(&COMPANY, 0, sizeof(COMPANY));
 				cJSON_ArrayForEach(company, data)
@@ -45,13 +51,12 @@ cyclients_companies(const char *token,
 						if (callback(userdata, &COMPANY))
 							break;
 
-					i++;
+					count++;
 				}
-				
-				return i;
 			}
 		}
 	}
 	
-	return 0;
+	cJSON_free(json);
+	return count;
 }
