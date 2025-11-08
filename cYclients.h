@@ -9,10 +9,10 @@ typedef	int CYCLIENTS_COUNTER;
 // Authorization
 //////////////////////////////////////////////////////////
 
-typedef	enum{
-	CYCLIENTS_AUTH_ERROR,
-	CYCLIENTS_AUTH_AUTHORIZED,
-	CYCLIENTS_AUTH_2FA, // 2-factor authorization is needed
+typedef enum{
+  CYCLIENTS_AUTH_ERROR,
+  CYCLIENTS_AUTH_AUTHORIZED,
+  CYCLIENTS_AUTH_2FA, // 2-factor authorization is needed
 } CYCLIENTS_AUTH;
 
 /* authorize to yClients */

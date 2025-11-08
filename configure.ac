@@ -8,11 +8,11 @@ AC_ARG_ENABLE([tests],
                [AS_HELP_STRING([--enable-tests], [Build
                tests @<:@no@:>@])],
                [enable_tests=yes],
-							 [enable_tests=no])
+               [enable_tests=no])
 
 AM_CONDITIONAL([BUILD_TEST], [test "$enable_tests" = "yes"])
 
-AC_CHECK_FILE([partner_token.h],[],[AC_MSG_ERROR([To get partner token - register in https://yclients.com/appstore/developers. create file partner_token.h with content:\n #define SETUP_PARTNER_TOKEN(partner_token) partner_token = \"your_token\";])],[])
+AC_CHECK_FILE([partner_token.h],[],[AC_MSG_ERROR([To get partner token - register in https://yclients.com/appstore/developers. create file partner_token.h with content: #define SETUP_PARTNER_TOKEN(partner_token) partner_token = "your_token";])],[])
 
 AC_CHECK_HEADER([curl/curl.h],[],[AC_MSG_ERROR([Pleaseinstall libcurl])],[])
 

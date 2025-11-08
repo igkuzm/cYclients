@@ -2,10 +2,10 @@
 
 First - get partner token in [Yclients developer](https://yclients.com/appstore/developers)
 
-Then - create file partner_token.h with content:
+Then - create file "partner_token.h" with content:
 
 ```c
-#define SETUP_PARTNER_TOKEN(partner_token) partner_token = \"your_token\";
+#define SETUP_PARTNER_TOKEN(partner_token) partner_token = "your_token";
 ```
 
 Code example:
