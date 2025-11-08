@@ -14,7 +14,7 @@ nobase_include_HEADERS = \
 
 libcyclients_la_SOURCES = \
   src/cJSON.c \
-  src/log.c \	
+  src/log.c \
   src/curl_transport.c \
   src/structs.c	\
   src/companies.c	\
