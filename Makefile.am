@@ -5,16 +5,16 @@ libcyclients_la_CFLAGS =
 libcyclients_la_LDFLAGS =
 
 nobase_include_HEADERS = \
-	src/cJSON.h \
-	src/log.h \	
-	src/config.h \
-	src/curl_transport.h \
-	src/structs.h	\	
-	cYclients.h
+  src/cJSON.h \
+  src/log.h \	
+  src/config.h \
+  src/curl_transport.h \
+  src/structs.h	\	
+  cYclients.h
 
 libcyclients_la_SOURCES = \
   src/cJSON.c \
-	src/log.c \	
+  src/log.c \	
   src/curl_transport.c \
   src/structs.c	\	
   src/companies.c	\	
