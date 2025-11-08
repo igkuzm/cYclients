@@ -2,7 +2,7 @@
 #include <string.h>
 
 
-int companies_cb(void *userdata, const cyclients_company_t *company)
+int companies_cb(void *userdata, const CYCCompany *company)
 {
 	int *company_id = userdata;
 	printf("COMPANY: %s\n", company->title);
@@ -12,7 +12,7 @@ int companies_cb(void *userdata, const cyclients_company_t *company)
 }
 
 
-int services_cb(void *userdata, const cyclients_service_t *service)
+int services_cb(void *userdata, const CYCService *service)
 {
 
 	return 0;
@@ -20,8 +20,8 @@ int services_cb(void *userdata, const cyclients_service_t *service)
 
 int main(int argc, char *argv[])
 {
-	const cyclients_user_t *user = NULL;
-	const cyclients_2fa_t  *user2fa = NULL;
+	const CYCUser *user = NULL;
+	const CYC2fa  *user2fa = NULL;
 	CYCLIENTS_AUTH auth = CYCLIENTS_AUTH_ERROR;
 	char secret[16];
 	

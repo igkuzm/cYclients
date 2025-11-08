@@ -6,16 +6,16 @@
 #include "curl_transport.h"
 #include <string.h>
 
-static cyclients_user_t USER;
-static cyclients_2fa_t  USER_2FA;
+static CYCUser USER;
+static CYC2fa  USER_2FA;
 
-static const cyclients_user_t *
+static const CYCUser *
 get_user(cJSON *json)
 {
 	if (cJSON_IsObject(json)) {
 		cJSON *data = cJSON_GetObjectItem(json, "data");
 		if (cJSON_IsObject(data)) {
-			if (cyclients_user_from_json(data, &USER) == 0){
+			if (cyc_user_fr_json(&USER, data) == 0){
 				// we have user structure
 				return &USER;
 			}
@@ -24,13 +24,13 @@ get_user(cJSON *json)
 	return NULL;
 }
 
-static const cyclients_2fa_t *
+static const CYC2fa *
 get_2fa(cJSON *json)
 {
 	if (cJSON_IsObject(json)) {
 		cJSON *data = cJSON_GetObjectItem(json, "data");
 		if (cJSON_IsObject(data)) {
-			if (cyclients_2fa_from_json(data, &USER_2FA) == 0){
+			if (cyc_2fa_fr_json(&USER_2FA, data) == 0){
 				// we have user structure
 				return &USER_2FA;
 			}
@@ -41,9 +41,9 @@ get_2fa(cJSON *json)
 
 CYCLIENTS_AUTH
 cyclients_login(const char *login,
-								const char *password,
-								const cyclients_user_t **user,
-								const cyclients_2fa_t  **user2fa)
+		            const char *password,
+								const CYCUser **user,
+								const CYC2fa  **user2fa)
 {
 	CYCLIENTS_AUTH ret = CYCLIENTS_AUTH_ERROR;
 	cJSON *json = NULL;
@@ -86,10 +86,10 @@ cyclients_login(const char *login,
 
 CYCLIENTS_AUTH
 cyclients_login_2fa(const char *login, 
-										const char *password,
+		                const char *password,
 										const char *uuid,
-                    const char *secret,
-										const cyclients_user_t **user)
+										const char *secret,
+										const CYCUser **user)
 {
 	CYCLIENTS_AUTH ret = CYCLIENTS_AUTH_ERROR;
 	cJSON *json = NULL;

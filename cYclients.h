@@ -3,48 +3,61 @@
 
 #include "src/structs.h"
 
+typedef	int CYCLIENTS_COUNTER;
+
 //////////////////////////////////////////////////////////
 // Authorization
 //////////////////////////////////////////////////////////
+
 typedef	enum{
 	CYCLIENTS_AUTH_ERROR,
 	CYCLIENTS_AUTH_AUTHORIZED,
 	CYCLIENTS_AUTH_2FA, // 2-factor authorization is needed
 } CYCLIENTS_AUTH;
 
+/* authorize to yClients */
 CYCLIENTS_AUTH
 cyclients_login(const char *login, 
-								const char *password,
-								const cyclients_user_t **user,
-								const cyclients_2fa_t  **user2fa);
+                const char *password,
+                const CYCUser **user,
+                const CYC2fa  **user2fa);
 
 CYCLIENTS_AUTH
 cyclients_login_2fa(const char *login, 
-										const char *password,
-										const char *uuid,
-                    const char *secret,
-										const cyclients_user_t **user);
+                    const char *password,
+                    const char *uuid,
+										const char *secret,
+										const CYCUser **user);
 
 
-int
+//////////////////////////////////////////////////////////
+// Companies
+//////////////////////////////////////////////////////////
+
+/* return number of companies you authorized or with
+ * company_id (if not NULL) and make callback for each 
+ * while callback return is null */
+CYCLIENTS_COUNTER
 cyclients_companies(const char *token,
-									  char *company_id,
+		                char *company_id,
 										void *userdata,
 										int (*callback)(void *userdata, 
-																		const cyclients_company_t *company));
-int
+											              const CYCCompany *company));
+
+//////////////////////////////////////////////////////////
+// Services
+//////////////////////////////////////////////////////////
+
+/* return number of all services for company_id or with
+ * service_id (if not NULL) and make callback for each 
+ * while callback return is null */
+CYCLIENTS_COUNTER
 cyclients_services(const char *token,
-									 int company_id,
+		               int company_id,
 									 char *service_id,
 									 void *userdata,
 									 int (*callback)(void *userdata, 
-																	 const cyclients_service_t *service));
+										               const CYCService *service));
 
 
 #endif // CYCLIENTS_H
-
-
-
-
-
-

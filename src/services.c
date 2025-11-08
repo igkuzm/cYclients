@@ -6,15 +6,15 @@
 #include <stdio.h>
 #include <string.h>
 
-static cyclients_service_t SERVICE;
+static CYCService SERVICE;
 
 int
 cyclients_services(const char *token,
-									 int company_id,
+		               int company_id,
 									 char *service_id,
 									 void *userdata,
 									 int (*callback)(void *userdata, 
-																	 const cyclients_service_t *service))
+										               const CYCService *service))
 {
 	cJSON *json = NULL;
 	long http_code = 0;

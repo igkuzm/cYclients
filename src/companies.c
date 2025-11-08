@@ -7,14 +7,14 @@
 #include <stdio.h>
 #include <string.h>
 
-static cyclients_company_t COMPANY;
+static CYCCompany COMPANY;
 
 int
 cyclients_companies(const char *token,
-									  char *company_id,
+		                char *company_id,
 										void *userdata,
 										int (*callback)(void *userdata, 
-																		const cyclients_company_t *company))
+											              const CYCCompany *company))
 {
 	int count = 0;
 	cJSON *json = NULL;
@@ -45,8 +45,8 @@ cyclients_companies(const char *token,
 				memset(&COMPANY, 0, sizeof(COMPANY));
 				cJSON_ArrayForEach(company, data)
 				{
-					cyclients_company_from_json(
-							company, &COMPANY);
+					cyc_company_fr_json(
+							&COMPANY, company);
 					if (callback)
 						if (callback(userdata, &COMPANY))
 							break;
