@@ -26,8 +26,8 @@ CYCLIENTS_AUTH
 cyclients_login_2fa(const char *login, 
                     const char *password,
                     const char *uuid,
-										const char *secret,
-										const CYCUser **user);
+                    const char *secret,
+                    const CYCUser **user);
 
 
 //////////////////////////////////////////////////////////
@@ -39,10 +39,10 @@ cyclients_login_2fa(const char *login,
  * while callback return is null */
 CYCLIENTS_COUNTER
 cyclients_companies(const char *token,
-		                char *company_id,
-										void *userdata,
-										int (*callback)(void *userdata, 
-											              const CYCCompany *company));
+                    char *company_id,
+                    void *userdata,
+                    int (*callback)(void *userdata, 
+                                    const CYCCompany *company));
 
 //////////////////////////////////////////////////////////
 // Services
@@ -53,11 +53,11 @@ cyclients_companies(const char *token,
  * while callback return is null */
 CYCLIENTS_COUNTER
 cyclients_services(const char *token,
-		               int company_id,
-									 char *service_id,
-									 void *userdata,
-									 int (*callback)(void *userdata, 
-										               const CYCService *service));
+                   int company_id,
+                   char *service_id,
+                   void *userdata,
+                   int (*callback)(void *userdata, 
+                                   const CYCService *service));
 
 
 #endif // CYCLIENTS_H
