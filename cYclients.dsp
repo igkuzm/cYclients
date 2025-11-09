@@ -101,6 +101,14 @@ SOURCE=.\src\structs.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\categories.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\services.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\auth.c
 # End Source File
 # End Group

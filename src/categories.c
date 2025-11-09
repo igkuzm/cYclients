@@ -1,3 +1,4 @@
+#include "../cYclients.h"
 #include "config.h"
 #include "log.h"
 #include "structs.h"
@@ -9,21 +10,21 @@
 #include <string.h>
 #include <assert.h>
 
-static CYCService SERVICE;
+static CYCServiceCategory CATEGORY;
 
-int
-cyclients_services(const char *token,
-		               int company_id,
-									 void *userdata,
-									 int (*callback)(void *userdata, 
-										               const CYCService *service))
+CYCLIENTS_COUNTER
+cyclients_service_categories(const char *token,
+                             int company_id,
+                             void *userdata,
+                             int (*callback)(void *userdata, 
+                                             const CYCServiceCategory *category))
 {
 	cJSON *json = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
 
-	sprintf(requestString, "%s/company/%d/services", 
+	sprintf(requestString, "%s/company/%d/service_categories", 
 			URL, company_id);
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
@@ -40,14 +41,14 @@ cyclients_services(const char *token,
 			if (cJSON_IsArray(data))
 			{
 				int i = 0;
-				cJSON *service;
-				cJSON_ArrayForEach(service, data)
+				cJSON *category;
+				cJSON_ArrayForEach(category, data)
 				{
-					memset(&SERVICE, 0, sizeof(SERVICE));
-					cyc_service_fr_json(
-							&SERVICE, service);
+					memset(&CATEGORY, 0, sizeof(CATEGORY));
+					cyc_service_category_fr_json(
+							&CATEGORY, category);
 					if (callback)
-						if (callback(userdata, &SERVICE))
+						if (callback(userdata, &CATEGORY))
 							break;
 
 					i++;
@@ -61,18 +62,18 @@ cyclients_services(const char *token,
 	return 0;
 }
 
-const CYCService *
-cyclients_service_get(const char *token,
-                      int company_id,
-                      int service_id)
+const CYCServiceCategory *
+cyclients_service_category_get(const char *token,
+                               int company_id,
+                               int category_id)
 {
 	cJSON *json = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
 
-	sprintf(requestString, "%s/company/%d/services/%d", 
-			URL, company_id, service_id);
+	sprintf(requestString, "%s/company/%d/service_categories/%d", 
+			URL, company_id, category_id);
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
@@ -87,10 +88,10 @@ cyclients_service_get(const char *token,
 			cJSON *data = cJSON_GetObjectItem(json, "data");
 			if (cJSON_IsObject(data))
 			{
-				memset(&SERVICE, 0, sizeof(SERVICE));
-				cyc_service_fr_json(
-						&SERVICE, data);
-				return &SERVICE;
+				memset(&CATEGORY, 0, sizeof(CATEGORY));
+				cyc_service_category_fr_json(
+						&CATEGORY, data);
+				return &CATEGORY;
 			}
 		}
 	}
@@ -98,6 +99,7 @@ cyclients_service_get(const char *token,
 	return NULL;
 }
 
+/*
 const CYCService *
 cyclients_service_new(const char *token,
                       int company_id,
@@ -183,3 +185,4 @@ cyclients_service_new(const char *token,
 
 	return NULL;
 }
+*/

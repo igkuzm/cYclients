@@ -24,6 +24,7 @@ typedef	enum {
 	CYC_TYPE_BOOKING_WIDGET_PROMO,
 	CYC_TYPE_ACCESS,
 	CYC_TYPE_COMPANY,
+	CYC_TYPE_SERVICE_CATEGORY,
 	CYC_TYPE_STAFF,
 	CYC_TYPE_SERVICE,
 	CYC_NTYPES,
@@ -435,6 +436,20 @@ typedef	enum {
 	CYC_DOUBLE(sms_price) \
 	CYC_ACCESS_CLASS(access) \
 
+#define CYC_SERVICE_CATEGORY \
+	CYC_INT(id) \
+	CYC_INT(category_id) \
+	CYC_INT(salon_service_id) \
+	CYC_STRING(title, 64) \
+	CYC_INT(weight) \
+	CYC_STRING(api_id, 16) \
+	CYC_INT_ARRAY(staff, 32) \
+	CYC_STRING(booking_title, 64) \
+	CYC_DOUBLE(price_min) \
+	CYC_DOUBLE(price_max) \
+	CYC_INT(sex) \
+	CYC_BOOL(is_chain) \
+
 #define CYC_STAFF \
 	CYC_INT(id) \
 	CYC_INT(seance_length) \
@@ -587,6 +602,13 @@ typedef struct {
 } CYCStaff;
 int     cyc_staff_fr_json(CYCStaff *t, const cJSON *json);
 cJSON * cyc_staff_to_json(CYCStaff *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_SERVICE_CATEGORY
+} CYCServiceCategory;
+int     cyc_service_category_fr_json(CYCServiceCategory *t, const cJSON *json);
+cJSON * cyc_service_category_to_json(CYCServiceCategory *t);
 
 typedef struct {
 	CYC_TYPE _type;

@@ -13,10 +13,15 @@ int companies_cb(void *userdata, const CYCCompany *company)
 	return 0;
 }
 
-
 int services_cb(void *userdata, const CYCService *service)
 {
 	printf("SERVICE: %s\n", service->title);
+	return 0;
+}
+
+int categories_cb(void *userdata, const CYCServiceCategory *category)
+{
+	printf("CATEGORY: %s\n", category->title);
 	return 0;
 }
 
@@ -83,10 +88,15 @@ int main(int argc, char *argv[])
 			NULL,
 		 	&company_id, companies_cb);
 
+	cyclients_service_categories(
+			user->user_token, company_id, 
+			NULL, categories_cb);
+	
 	cyclients_services(user->user_token,
-		 	company_id, "23599584",
+		 	company_id,
 		 	NULL, services_cb);
 
+	/*
 	// create new service
 	char title[256];
 	sprintf(title, "TEST service: %ld", time(NULL));
@@ -116,7 +126,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	printf("Created new service: %s\n", newService->title);
-
+ */
 	return 0;
 }
 

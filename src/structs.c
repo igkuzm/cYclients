@@ -134,6 +134,14 @@ int cyc_company_fr_json(CYCCompany *t, const cJSON *json)
 	FROM_JSON_END
 }
 
+int cyc_service_category_fr_json(CYCServiceCategory *t, const cJSON *json)
+{
+	FROM_JSON_START
+		t->_type = CYC_TYPE_SERVICE_CATEGORY;
+	CYC_SERVICE_CATEGORY
+	FROM_JSON_END
+}
+
 int cyc_staff_fr_json(CYCStaff *t, const cJSON *json)
 {
 	FROM_JSON_START
@@ -323,6 +331,13 @@ cJSON * cyc_company_to_json(CYCCompany *t)
 {
 	TO_JSON_START
 	CYC_COMPANY
+	TO_JSON_END
+}
+
+cJSON * cyc_service_category_to_json(CYCServiceCategory *t)
+{
+	TO_JSON_START
+	CYC_SERVICE_CATEGORY
 	TO_JSON_END
 }
 

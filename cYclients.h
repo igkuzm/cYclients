@@ -3,7 +3,7 @@
 
 #include "src/structs.h"
 
-typedef	int CYCLIENTS_COUNTER;
+typedef int CYCLIENTS_COUNTER;
 
 //////////////////////////////////////////////////////////
 // Authorization
@@ -45,8 +45,32 @@ cyclients_companies(const char *token,
                                     const CYCCompany *company));
 
 //////////////////////////////////////////////////////////
+// Categogies
+//////////////////////////////////////////////////////////
+
+/* return number of all service categories for company_id 
+ * and make callback for each while callback return is null */
+CYCLIENTS_COUNTER
+cyclients_service_categories(const char *token,
+                             int company_id,
+                             void *userdata,
+                             int (*callback)(void *userdata, 
+                                             const CYCServiceCategory *category));
+
+/* return service category with category_id or NULL on error */
+const CYCServiceCategory *
+cyclients_service_category_get(const char *token,
+															 int company_id,
+															 int category_id);
+
+//////////////////////////////////////////////////////////
 // Services
 //////////////////////////////////////////////////////////
+
+typedef enum {
+  CYCLIENTS_SERVICE_TYPE_OFFLINE,
+  CYCLIENTS_SERVICE_TYPE_ONLINE,
+} CYCLIENTS_SERVICE_TYPE;
 
 /* return number of all services for company_id or with
  * service_id (if not NULL) and make callback for each 
@@ -54,10 +78,15 @@ cyclients_companies(const char *token,
 CYCLIENTS_COUNTER
 cyclients_services(const char *token,
                    int company_id,
-                   char *service_id,
                    void *userdata,
                    int (*callback)(void *userdata, 
                                    const CYCService *service));
+
+/* return service with service_id or NULL on error */
+const CYCService *
+cyclients_service_get(const char *token,
+                      int company_id,
+                      int service_id);
 
 /* return new created service or NULL on error */
 const CYCService *
@@ -72,7 +101,7 @@ cyclients_service_new(const char *token,
                       double discount,
                       const char *comment,
                       int weight,
-                      int service_type,
+                      CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
 											int staff_count,
 											int staff_ids[],
@@ -101,7 +130,7 @@ cyclients_service_update(const char *token,
                          int seance_search_finish,
                          int seance_search_step,
                          int weight,
-                         int service_type,
+                         CYCLIENTS_SERVICE_TYPE service_type,
                          const char *api_service_id,
                          int online_invoicing_status,
                          int price_prepaid_percent,
@@ -112,6 +141,5 @@ cyclients_service_update(const char *token,
 											   int staff_count,
 											   int staff_ids[],
 											   int staff_seance_length[]);
-
 
 #endif // CYCLIENTS_H
