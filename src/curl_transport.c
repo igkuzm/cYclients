@@ -63,6 +63,10 @@ curl_transport_post(const char *request_url,
 	assert(auth_header);
 	assert(http_method);
 	
+#ifdef DEBUG
+		LOG("%s: URL: %s", __FILE__, request_url);
+		LOG("%s: METHOD: %s", __FILE__, http_method);
+#endif
 	SETUP_PARTNER_TOKEN(partner_token);
 	curl = curl_easy_init();
 	if (curl){
@@ -78,12 +82,15 @@ curl_transport_post(const char *request_url,
 		curl_easy_setopt(curl, CURLOPT_HEADER, 0);
 		
 		header = curl_slist_append(header, "Accept: application/vnd.yclients.v2+json");		
-	    header = curl_slist_append(header, "Connection: close");		
-	    header = curl_slist_append(header, "Content-Type: application/json");		
-	    header = curl_slist_append(header, auth_header);		
+	  header = curl_slist_append(header, "Connection: close");		
+	  header = curl_slist_append(header, "Content-Type: application/json");		
+	  header = curl_slist_append(header, auth_header);		
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
 		
 		if (post_data){
+#ifdef DEBUG
+		LOG("%s: POST data: %s", __FILE__, post_data);
+#endif
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post_data));
 		}

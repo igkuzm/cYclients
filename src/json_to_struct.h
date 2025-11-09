@@ -93,7 +93,6 @@
 		cJSON *_arr = cJSON_CreateIntArray(_struct->_name, _len); \
 		if (_arr){ \
 			cJSON_AddItemToObject(_json, #_name, _arr); \
-			cJSON_free(_arr); \
 		} \
 	}	while(0);
 
@@ -102,7 +101,6 @@
 		cJSON *_arr = cJSON_CreateDoubleArray(_struct->_name, _len); \
 		if (_arr){ \
 			cJSON_AddItemToObject(_json, #_name, _arr); \
-			cJSON_free(_arr); \
 		} \
 	}	while(0);
 
@@ -115,11 +113,9 @@
 				if (_struct->_name[i]){ \
 					cJSON *_item = cJSON_CreateString(_struct->_name[i]); \
 					cJSON_AddItemToArray(_arr, _item); \
-					cJSON_free(_item); \
 				} \
 			} \
 			cJSON_AddItemToObject(_json, #_name, _arr); \
-			cJSON_free(_arr); \
 		} \
 	}	while(0);
 

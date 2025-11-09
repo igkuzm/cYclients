@@ -190,77 +190,66 @@ int cyc_service_fr_json(CYCService *t, const cJSON *json)
 		cJSON *_obj = \
 		cyc_user_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_TRANSPORT_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_transport_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_2FA_CLASS(_name) CYC2fa _name \
 	do { \
 		cJSON *_obj = \
 		cyc_2fa_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_SOCIAL_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_social_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_BOOKING_WIDGET_PROMO_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_booking_widget_promo_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_MAIN_GROUP_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_main_group_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_SALON_GROUP_SETTINGS_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_salon_group_settings_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_ACCESS_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_access_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_COMPANY_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_company_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_STAFF_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_staff_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 #define CYC_SERVICE_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_service_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
-		cJSON_free(_obj); \
 	}	while(0);
 
 #define TO_JSON_START \

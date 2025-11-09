@@ -475,9 +475,9 @@ typedef	enum {
 	CYC_INT(salon_service_id) \
 	CYC_STRING(title, 256) \
 	CYC_INT(category_id) \
-	CYC_INT(price_min) \
-	CYC_INT(price_max) \
-	CYC_INT(discount) \
+	CYC_DOUBLE(price_min) \
+	CYC_DOUBLE(price_max) \
+	CYC_DOUBLE(discount) \
 	CYC_STRING(comment, 256) \
 	CYC_INT(weight) \
 	CYC_INT(active) \

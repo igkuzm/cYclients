@@ -1,5 +1,7 @@
 #include "cYclients.h"
+#include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 
 int companies_cb(void *userdata, const CYCCompany *company)
@@ -84,7 +86,36 @@ int main(int argc, char *argv[])
 	cyclients_services(user->user_token,
 		 	company_id, "23599584",
 		 	NULL, services_cb);
-	
+
+	// create new service
+	char title[256];
+	sprintf(title, "TEST service: %ld", time(NULL));
+
+	int staff_ids[] = {3862837};
+	int staff_seance_length[] = {3600};
+	 
+	const CYCService *newService = 
+		cyclients_service_new(
+				user->user_token, 
+				company_id, 
+				title, 
+				18565171, 
+				1200, 
+				3500, 
+				3000, 
+				0, 
+				0, 
+				"this is test service", 
+				1, 
+				1, 
+				NULL, 
+				1, 
+				staff_ids, staff_seance_length);
+	if (newService == NULL){
+		printf("can't create new service\n");
+		return 1;
+	}
+	printf("Created new service: %s\n", newService->title);
 
 	return 0;
 }

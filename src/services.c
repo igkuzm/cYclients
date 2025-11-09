@@ -1,10 +1,13 @@
 #include "config.h"
+#include "log.h"
 #include "structs.h"
 #include "cJSON.h"
 #include "../partner_token.h"
 #include "curl_transport.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 static CYCService SERVICE;
 
@@ -68,4 +71,90 @@ cyclients_services(const char *token,
 	}
 	
 	return 0;
+}
+
+const CYCService *
+cyclients_service_new(const char *token,
+                      int company_id,
+                      const char *title,
+                      int category_id,
+                      double price_min,
+                      double price_max,
+                      int duration,
+                      int technical_break_duration,
+                      double discount,
+                      const char *comment,
+                      int weight,
+                      int service_type,
+                      const char *api_service_id,
+											int staff_count,
+											int staff_ids[],
+											int staff_seance_length[])
+{
+	int i;
+	cJSON *json = NULL, *staff = NULL;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+
+	sprintf(requestString, "%s/services/%d", 
+			URL, company_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+
+	json = cJSON_CreateObject();
+	staff = cJSON_CreateArray();	
+
+	if (title)
+		cJSON_AddStringToObject(json, "title", title);
+	cJSON_AddNumberToObject(json, "category_id", category_id);
+	cJSON_AddNumberToObject(json, "price_min", price_min);
+	cJSON_AddNumberToObject(json, "price_max", price_max);
+	cJSON_AddNumberToObject(json, "duration", duration);
+	if (technical_break_duration)
+		cJSON_AddNumberToObject(json, "technical_break_duration", technical_break_duration);
+	cJSON_AddNumberToObject(json, "discount", discount);
+	if (comment)
+		cJSON_AddStringToObject(json, "comment", comment);
+	cJSON_AddNumberToObject(json, "weight", weight);
+	cJSON_AddNumberToObject(json, "service_type", service_type);
+	if (api_service_id)
+		cJSON_AddStringToObject(json, "api_service_id", api_service_id);
+
+	for (i = 0; i < staff_count; ++i) {
+		cJSON *staff_obj = cJSON_CreateObject();
+		cJSON_AddNumberToObject(staff_obj, "id", staff_ids[i]);
+		cJSON_AddNumberToObject(staff_obj, "seance_length", staff_seance_length[i]);
+		cJSON_AddItemToArray(staff, staff_obj);			
+	}
+	cJSON_AddItemToObject(json, "staff", staff);
+
+	post_data = cJSON_Print(json);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __func__);
+		return NULL;
+	}
+	cJSON_free(json);
+
+	http_code = curl_transport_post(
+			requestString,
+		 	auth, "POST",
+		 	cJSON_Print(json), &json);
+	free(post_data);
+
+	if (http_code == 201){ // created
+		if (cJSON_IsObject(json))
+		{
+			cJSON *data = cJSON_GetObjectItem(json, "data");
+			if (cJSON_IsObject(data))
+			{
+				memset(&SERVICE, 0, sizeof(SERVICE));
+				cyc_service_fr_json(
+						&SERVICE, data);
+				return &SERVICE;
+			}
+		}
+	}
+
+	return NULL;
 }
