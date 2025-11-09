@@ -1,4 +1,5 @@
 #include "config.h"
+#include "../cYclients.h"
 #include "log.h"
 #include "structs.h"
 #include "cJSON.h"
@@ -11,7 +12,7 @@
 
 static CYCService SERVICE;
 
-int
+CYCLIENTS_COUNTER
 cyclients_services(const char *token,
 		               int company_id,
 									 void *userdata,
@@ -110,14 +111,13 @@ cyclients_service_new(const char *token,
                       double discount,
                       const char *comment,
                       int weight,
-                      int service_type,
+                      CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
-											int staff_count,
-											int staff_ids[],
-											int staff_seance_length[])
+											int nstaff,
+											struct staff staff[])
 {
 	int i;
-	cJSON *json = NULL, *staff = NULL;
+	cJSON *json = NULL, *astaff = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -128,7 +128,7 @@ cyclients_service_new(const char *token,
 			, partner_token, token);
 
 	json = cJSON_CreateObject();
-	staff = cJSON_CreateArray();	
+	astaff = cJSON_CreateArray();	
 
 	if (title)
 		cJSON_AddStringToObject(json, "title", title);
@@ -146,13 +146,15 @@ cyclients_service_new(const char *token,
 	if (api_service_id)
 		cJSON_AddStringToObject(json, "api_service_id", api_service_id);
 
-	for (i = 0; i < staff_count; ++i) {
+	for (i = 0; i < nstaff; ++i) {
 		cJSON *staff_obj = cJSON_CreateObject();
-		cJSON_AddNumberToObject(staff_obj, "id", staff_ids[i]);
-		cJSON_AddNumberToObject(staff_obj, "seance_length", staff_seance_length[i]);
-		cJSON_AddItemToArray(staff, staff_obj);			
+		cJSON_AddNumberToObject(
+				staff_obj, "id", staff[i].id);
+		cJSON_AddNumberToObject(
+				staff_obj, "seance_length", staff[i].seance_length);
+		cJSON_AddItemToArray(astaff, staff_obj);			
 	}
-	cJSON_AddItemToObject(json, "staff", staff);
+	cJSON_AddItemToObject(json, "staff", astaff);
 
 	post_data = cJSON_Print(json);
 	if (post_data == NULL){

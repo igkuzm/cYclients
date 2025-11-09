@@ -89,6 +89,7 @@ cyclients_service_get(const char *token,
                       int service_id);
 
 /* return new created service or NULL on error */
+struct staff {int id; int seance_length;};
 const CYCService *
 cyclients_service_new(const char *token,
 		                  int company_id,
@@ -103,9 +104,8 @@ cyclients_service_new(const char *token,
                       int weight,
                       CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
-											int staff_count,
-											int staff_ids[],
-											int staff_seance_length[]);
+											int nstaff,
+											struct staff staff[]);
 
 
 /* return updated service or NULL on error */
@@ -138,8 +138,7 @@ cyclients_service_update(const char *token,
                          int abonement_restriction_value,
                          int is_abonement_autopayment_enabled,
                          int autopayment_before_visit_time,
-											   int staff_count,
-											   int staff_ids[],
-											   int staff_seance_length[]);
+											   int nstaff,
+											   struct staff staff[]);
 
 #endif // CYCLIENTS_H

@@ -101,8 +101,7 @@ int main(int argc, char *argv[])
 	char title[256];
 	sprintf(title, "TEST service: %ld", time(NULL));
 
-	int staff_ids[] = {3862837};
-	int staff_seance_length[] = {3600};
+	struct staff staff = {3862837, 3600};
 	 
 	const CYCService *newService = 
 		cyclients_service_new(
@@ -120,13 +119,14 @@ int main(int argc, char *argv[])
 				1, 
 				NULL, 
 				1, 
-				staff_ids, staff_seance_length);
+				&staff);
 	if (newService == NULL){
 		printf("can't create new service\n");
 		return 1;
 	}
 	printf("Created new service: %s\n", newService->title);
- */
+	*/
+	
 	return 0;
 }
 
