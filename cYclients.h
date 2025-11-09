@@ -57,8 +57,8 @@ cyclients_service_categories(const char *token,
                              int (*callback)(void *userdata, 
                                              const CYCServiceCategory *category));
 
-/* return service category with category_id or NULL on error */
-const CYCServiceCategory *
+/* return allicated service category with category_id or NULL on error */
+CYCServiceCategory *
 cyclients_service_category_get(const char *token,
 															 int company_id,
 															 int category_id);
@@ -82,15 +82,15 @@ cyclients_services(const char *token,
                    int (*callback)(void *userdata, 
                                    const CYCService *service));
 
-/* return service with service_id or NULL on error */
-const CYCService *
+/* return allocated service with service_id or NULL on error */
+CYCService *
 cyclients_service_get(const char *token,
                       int company_id,
                       int service_id);
 
-/* return new created service or NULL on error */
+/* return allocated new created service or NULL on error */
 struct staff {int id; int seance_length;};
-const CYCService *
+CYCService *
 cyclients_service_new(const char *token,
 		                  int company_id,
                       const char *title,
@@ -108,8 +108,8 @@ cyclients_service_new(const char *token,
 											struct staff staff[]);
 
 
-/* return updated service or NULL on error */
-const CYCService *
+/* update service and return 1 on error */
+int
 cyclients_service_update(const char *token,
                          const char *title,
                          const char *booking_title,

@@ -1,6 +1,7 @@
 #include "../cYclients.h"
 #include "config.h"
 #include "log.h"
+#include "alloc.h"
 #include "structs.h"
 #include "cJSON.h"
 #include "../partner_token.h"
@@ -62,7 +63,7 @@ cyclients_service_categories(const char *token,
 	return 0;
 }
 
-const CYCServiceCategory *
+CYCServiceCategory *
 cyclients_service_category_get(const char *token,
                                int company_id,
                                int category_id)
@@ -88,10 +89,12 @@ cyclients_service_category_get(const char *token,
 			cJSON *data = cJSON_GetObjectItem(json, "data");
 			if (cJSON_IsObject(data))
 			{
-				memset(&CATEGORY, 0, sizeof(CATEGORY));
-				cyc_service_category_fr_json(
-						&CATEGORY, data);
-				return &CATEGORY;
+				CYCServiceCategory *category = NEW(CYCServiceCategory);
+				if (category){
+					cyc_service_category_fr_json(
+							category, data);
+					return category;
+				}
 			}
 		}
 	}

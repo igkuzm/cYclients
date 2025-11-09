@@ -96,6 +96,10 @@ int main(int argc, char *argv[])
 		 	company_id,
 		 	NULL, services_cb);
 
+
+	CYCService *service = cyclients_service_get(
+			user->user_token, company_id, 3862837);
+
 	/*
 	// create new service
 	char title[256];

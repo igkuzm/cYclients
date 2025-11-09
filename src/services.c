@@ -1,6 +1,7 @@
 #include "config.h"
 #include "../cYclients.h"
 #include "log.h"
+#include "alloc.h"
 #include "structs.h"
 #include "cJSON.h"
 #include "../partner_token.h"
@@ -62,7 +63,7 @@ cyclients_services(const char *token,
 	return 0;
 }
 
-const CYCService *
+CYCService *
 cyclients_service_get(const char *token,
                       int company_id,
                       int service_id)
@@ -88,10 +89,12 @@ cyclients_service_get(const char *token,
 			cJSON *data = cJSON_GetObjectItem(json, "data");
 			if (cJSON_IsObject(data))
 			{
-				memset(&SERVICE, 0, sizeof(SERVICE));
-				cyc_service_fr_json(
-						&SERVICE, data);
-				return &SERVICE;
+				CYCService *service = NEW(CYCService);
+				if (service){
+					cyc_service_fr_json(
+							service, data);
+					return service;
+				}
 			}
 		}
 	}
@@ -99,7 +102,7 @@ cyclients_service_get(const char *token,
 	return NULL;
 }
 
-const CYCService *
+CYCService *
 cyclients_service_new(const char *token,
                       int company_id,
                       const char *title,
@@ -175,10 +178,12 @@ cyclients_service_new(const char *token,
 			cJSON *data = cJSON_GetObjectItem(json, "data");
 			if (cJSON_IsObject(data))
 			{
-				memset(&SERVICE, 0, sizeof(SERVICE));
-				cyc_service_fr_json(
-						&SERVICE, data);
-				return &SERVICE;
+				CYCService *service = NEW(CYCService);
+				if (service){
+					cyc_service_fr_json(
+							service, data);
+					return service;
+				}
 			}
 		}
 	}
