@@ -32,28 +32,39 @@ cyclients_services(const char *token,
 		 	NULL, &json);
 
 	if (http_code == 200){ // good
-		//if (cJSON_IsObject(json))
-		//{
-			//cJSON *data = cJSON_GetObjectItem(json, "data");
-			//if (cJSON_IsArray(data))
-			//{
-				//int i = 0;
-				//cJSON *company;
-				//memset(&SERVICE, 0, sizeof(SERVICE));
-				//cJSON_ArrayForEach(company, data)
-				//{
-					//cyclients_company_from_json(
-							//company, &COMPANY);
-					//if (callback)
-						//if (callback(userdata, &COMPANY))
-							//break;
+		if (cJSON_IsObject(json))
+		{
+			cJSON *data = cJSON_GetObjectItem(json, "data");
+			// only one item
+			if (cJSON_IsObject(data))
+			{
+				memset(&SERVICE, 0, sizeof(SERVICE));
+				cyc_service_fr_json(
+						&SERVICE, data);
+				if (callback)
+					callback(userdata, &SERVICE);
+				return 1;
+			}
+			// array of items
+			if (cJSON_IsArray(data))
+			{
+				int i = 0;
+				cJSON *service;
+				cJSON_ArrayForEach(service, data)
+				{
+					memset(&SERVICE, 0, sizeof(SERVICE));
+					cyc_service_fr_json(
+							&SERVICE, service);
+					if (callback)
+						if (callback(userdata, &SERVICE))
+							break;
 
-					//i++;
-				//}
+					i++;
+				}
 				
-				//return i;
-			//}
-		//}
+				return i;
+			}
+		}
 	}
 	
 	return 0;

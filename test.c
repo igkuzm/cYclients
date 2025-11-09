@@ -14,7 +14,7 @@ int companies_cb(void *userdata, const CYCCompany *company)
 
 int services_cb(void *userdata, const CYCService *service)
 {
-
+	printf("SERVICE: %s\n", service->title);
 	return 0;
 }
 

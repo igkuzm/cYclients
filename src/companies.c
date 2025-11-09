@@ -39,12 +39,23 @@ cyclients_companies(const char *token,
 		if (cJSON_IsObject(json))
 		{
 			cJSON *data = cJSON_GetObjectItem(json, "data");
+			// only one item
+			if (cJSON_IsObject(data))
+			{
+				memset(&COMPANY, 0, sizeof(COMPANY));
+				cyc_company_fr_json(
+						&COMPANY, data);
+				if (callback)
+					callback(userdata, &COMPANY);
+				return 1;
+			}
+			// array of items
 			if (cJSON_IsArray(data))
 			{
 				cJSON *company;
-				memset(&COMPANY, 0, sizeof(COMPANY));
 				cJSON_ArrayForEach(company, data)
 				{
+					memset(&COMPANY, 0, sizeof(COMPANY));
 					cyc_company_fr_json(
 							&COMPANY, company);
 					if (callback)
