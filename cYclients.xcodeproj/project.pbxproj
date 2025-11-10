@@ -29,6 +29,9 @@
 		AF56A58F2EB23957006214FB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5762EB23844006214FB /* libcrypto.a */; };
 		AF56A5902EB23957006214FB /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5772EB23844006214FB /* libssl.a */; };
 		AF56A59A2EB23995006214FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A57E2EB238EA006214FB /* Foundation.framework */; };
+		AFEBB4962EC20BE900D86001 /* categories.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4952EC20BE900D86001 /* categories.c */; };
+		AFEBB4982EC20BF700D86001 /* companies.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4972EC20BF700D86001 /* companies.c */; };
+		AFEBB49A2EC20C0200D86001 /* services.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4992EC20C0200D86001 /* services.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +67,9 @@
 		AF56A5772EB23844006214FB /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = darwin/libssl.a; sourceTree = "<group>"; };
 		AF56A57E2EB238EA006214FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		AF56A5862EB23913006214FB /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = darwin/libnghttp2.a; sourceTree = "<group>"; };
+		AFEBB4952EC20BE900D86001 /* categories.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = categories.c; path = src/categories.c; sourceTree = "<group>"; };
+		AFEBB4972EC20BF700D86001 /* companies.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = companies.c; path = src/companies.c; sourceTree = "<group>"; };
+		AFEBB4992EC20C0200D86001 /* services.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = services.c; path = src/services.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +121,9 @@
 		AF56A5222EB2317D006214FB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AFEBB4992EC20C0200D86001 /* services.c */,
+				AFEBB4972EC20BF700D86001 /* companies.c */,
+				AFEBB4952EC20BE900D86001 /* categories.c */,
 				AF2052CF2EBCC95C00392497 /* log.c */,
 				AF2052CB2EBCC94B00392497 /* auth.c */,
 				AF03E2B42EB2E4EE00149FCA /* log.h */,
@@ -236,6 +245,9 @@
 				AF03E2B22EB2DFA400149FCA /* structs.c in Sources */,
 				AF2052CC2EBCC94B00392497 /* auth.c in Sources */,
 				AF2052D02EBCC95C00392497 /* log.c in Sources */,
+				AFEBB4962EC20BE900D86001 /* categories.c in Sources */,
+				AFEBB4982EC20BF700D86001 /* companies.c in Sources */,
+				AFEBB49A2EC20C0200D86001 /* services.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +274,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				OTHER_CFLAGS = "-DDEBUG";
 			};
 			name = Debug;
 		};
