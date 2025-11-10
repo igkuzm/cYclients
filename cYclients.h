@@ -57,11 +57,39 @@ cyclients_service_categories(const char *token,
                              int (*callback)(void *userdata, 
                                              const CYCServiceCategory *category));
 
-/* return allicated service category with category_id or NULL on error */
+/* return allocated service category with category_id or NULL on error */
 CYCServiceCategory *
 cyclients_service_category_get(const char *token,
-															 int company_id,
-															 int category_id);
+							   int company_id,
+							   int category_id);
+
+/* return allocated new service category or NULL on error */
+CYCServiceCategory *
+cyclients_service_category_new(const char *token,
+							   int company_id,
+							   const char *title,
+							   const char *api_id,
+							   int weight,
+							   int nstaff,
+							   int staff[]);
+
+/* update service category and return non-null on error */
+int
+cyclients_service_category_update(const char *token,
+							      int company_id,
+								  int category_id,
+								  const char *title,
+							      const char *api_id,
+							      int weight,
+							      int nstaff,
+							      int staff[]);
+
+/* remove service category and return non-null on error */
+int
+cyclients_service_category_delete(const char *token,
+							      int company_id,
+								  int category_id);
+
 
 //////////////////////////////////////////////////////////
 // Services
@@ -92,7 +120,7 @@ cyclients_service_get(const char *token,
 struct staff {int id; int seance_length;};
 CYCService *
 cyclients_service_new(const char *token,
-		                  int company_id,
+					  int company_id,
                       const char *title,
                       int category_id,
                       double price_min,
@@ -104,11 +132,11 @@ cyclients_service_new(const char *token,
                       int weight,
                       CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
-											int nstaff,
-											struct staff staff[]);
+                      int nstaff,
+                      struct staff staff[]);
 
 
-/* update service and return 1 on error */
+/* update service and return non-null on error */
 int
 cyclients_service_update(const char *token,
                          const char *title,
@@ -138,7 +166,7 @@ cyclients_service_update(const char *token,
                          int abonement_restriction_value,
                          int is_abonement_autopayment_enabled,
                          int autopayment_before_visit_time,
-											   int nstaff,
-											   struct staff staff[]);
+						 int nstaff,
+						 struct staff staff[]);
 
 #endif // CYCLIENTS_H

@@ -30,14 +30,21 @@ int main(int argc, char *argv[])
 	const CYCUser *user = NULL;
 	const CYC2fa  *user2fa = NULL;
 	CYCLIENTS_AUTH auth = CYCLIENTS_AUTH_ERROR;
-	char secret[16];
+	char secret[16], login[32], password[32];
 	
 	if (argc < 2){
-		printf("usage: %s login password\n", argv[0]);
-		return 0;
+		//printf("usage: %s login password\n", argv[0]);
+		//return 0;
+		printf("enter login\n");
+		scanf("%s", login);
+		printf("enter password\n");
+		scanf("%s", password);
+	} else {
+		strncat(login,argv[1],32);
+		strncat(password,argv[2],32);
 	}
 	
-	auth = cyclients_login(argv[1], argv[2],
+	auth = cyclients_login(login, password,
 		 	&user, &user2fa);
 	
 	if (auth == CYCLIENTS_AUTH_2FA){
