@@ -196,15 +196,39 @@ struct translation {
 /* update service resources, staff, language translations and 
  * return non-null on error */
 int
-cyclients_service_links(const char *token,
-                        int company_id,
-                        int service_id,
-												int nmaster_configs,
-												struct master_cofig master_cofigs[],
-                        int nresources,
-                        int resources[],
-												int ntranslations,
-												struct translation translations[]);
+cyclients_service_set_links(const char *token,
+                            int company_id,
+                            int service_id,
+						    int nmaster_configs,
+                            struct master_cofig master_cofigs[],
+                            int nresources,
+                            int resources[],
+                            int ntranslations,
+                            struct translation translations[]);
 
+/* set service staff and return non-null on error */
+int
+cyclients_service_set_staff(const char *token,
+                            int company_id,
+                            int service_id,
+						    int master_id,
+                            int seance_length,
+                            int technological_card_id);
+
+/* update service staff and return non-null on error */
+int
+cyclients_service_update_staff(const char *token,
+                               int company_id,
+                               int service_id,
+						       int master_id,
+                               int seance_length,
+                               int technological_card_id);
+
+/* remove service staff and return non-null on error */
+int
+cyclients_service_delete_staff(const char *token,
+                               int company_id,
+                               int service_id,
+						       int master_id);
 
 #endif // CYCLIENTS_H

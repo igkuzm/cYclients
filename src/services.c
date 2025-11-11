@@ -338,21 +338,21 @@ cyclients_service_delete(const char *token,
 }
 
 int
-cyclients_service_links(const char *token,
-                        int company_id,
-                        int service_id,
-												int nmaster_configs,
-												struct master_cofig master_cofigs[],
-                        int nresources,
-                        int resources[],
-												int ntranslations,
-												struct translation translations[])
+cyclients_service_set_links(const char *token,
+                            int company_id,
+							int service_id,
+                            int nmaster_configs,
+							struct master_cofig master_cofigs[],
+                            int nresources,
+							int resources[],
+                            int ntranslations,
+							struct translation translations[])
 {
 	int i;
 	cJSON *json = NULL, *array = NULL, 
-        *master_settings = NULL, 
-				*resource_ids = NULL,
-				*array_translations = NULL;
+          *master_settings = NULL, 
+          *resource_ids = NULL,
+          *array_translations = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -393,15 +393,124 @@ cyclients_service_links(const char *token,
 
 	array = cJSON_CreateArray();
 	cJSON_AddItemToArray(array, json);
+	
+	post_data = cJSON_Print(array);
+	cJSON_free(array);
 
 	http_code = curl_transport_exec(
 			requestString,
-		 	auth, "DELETE",
-		 	NULL, NULL);
+		 	auth, "POST",
+		 	post_data, NULL);
+	free(post_data);
 
-	if (http_code == 200){
+	if (http_code == 201){
 		return 0; 
 	}
 
 	return 1;
 }
+
+cyclients_service_set_staff(const char *token,
+                            int company_id,
+                            int service_id,
+						    int master_id,
+                            int seance_length,
+                            int technological_card_id)
+{
+	cJSON *json = NULL;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	sprintf(requestString, "%s/company/%d/services/%d/staff"
+			,URL, company_id, service_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	json = cJSON_CreateObject();
+	cJSON_AddNumberToObject(json, "master_id", master_id);
+	cJSON_AddNumberToObject(json, "seance_length", seance_length);
+	cJSON_AddNumberToObject(json, "technological_card_id", technological_card_id);
+	
+	post_data = cJSON_Print(json);
+	cJSON_free(json);
+	
+	http_code = curl_transport_exec(
+									requestString,
+									auth, "POST",
+									post_data, NULL);
+	free(post_data);
+	
+	if (http_code == 201){
+		return 0; 
+	}
+	
+	return 1;	
+}
+
+int
+cyclients_service_update_staff(const char *token,
+                               int company_id,
+                               int service_id,
+						       int master_id,
+                               int seance_length,
+                               int technological_card_id)
+{
+	cJSON *json = NULL;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	sprintf(requestString, "%s/company/%d/services/%d/staff/%d"
+			,URL, company_id, service_id, master_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	json = cJSON_CreateObject();
+	cJSON_AddNumberToObject(json, "seance_length", seance_length);
+	cJSON_AddNumberToObject(json, "technological_card_id", technological_card_id);
+	
+	post_data = cJSON_Print(json);
+	cJSON_free(json);
+	
+	http_code = curl_transport_exec(
+									requestString,
+									auth, "PUT",
+									post_data, NULL);
+	free(post_data);
+	
+	if (http_code == 200){
+		return 0; 
+	}
+	
+	return 1;	
+}
+
+int
+cyclients_service_delete_staff(const char *token,
+                               int company_id,
+                               int service_id,
+						       int master_id)
+{
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128];
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	sprintf(requestString, "%s/company/%d/services/%d/staff/%d"
+			,URL, company_id, service_id, master_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	http_code = curl_transport_exec(
+									requestString,
+									auth, "DELETE",
+									NULL, NULL);
+	
+	if (http_code == 204){ // deleted
+		return 0; 
+	}
+	
+	return 1;	
+}
+
+
