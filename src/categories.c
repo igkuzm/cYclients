@@ -30,7 +30,7 @@ cyclients_service_categories(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 			requestString,
 		 	auth, "GET",
 		 	NULL, &json);
@@ -78,7 +78,7 @@ cyclients_service_category_get(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 			requestString,
 		 	auth, "GET",
 		 	NULL, &json);
@@ -140,10 +140,10 @@ cyclients_service_category_update(const char *token,
 	}
 	cJSON_free(json);
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 									requestString,
 									auth, "PUT",
-									post_data, &json);
+									post_data, NULL);
 	free(post_data);
 	
 	if (http_code == 200){ // good
@@ -190,7 +190,7 @@ cyclients_service_category_new(const char *token,
 	}
 	cJSON_free(json);
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 									requestString,
 									auth, "POST",
 									post_data, &json);
@@ -229,7 +229,7 @@ cyclients_service_category_delete(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 									requestString,
 									auth, "DELETE",
 									NULL, NULL);

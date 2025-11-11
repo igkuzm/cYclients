@@ -76,19 +76,19 @@ cyclients_service_category_new(const char *token,
 /* update service category and return non-null on error */
 int
 cyclients_service_category_update(const char *token,
-							      int company_id,
-								  int category_id,
-								  const char *title,
-							      const char *api_id,
-							      int weight,
-							      int nstaff,
-							      int staff[]);
+                                  int company_id,
+                                  int category_id,
+                                  const char *title,
+                                  const char *api_id,
+                                  int weight,
+                                  int nstaff,
+                                  int staff[]);
 
 /* remove service category and return non-null on error */
 int
 cyclients_service_category_delete(const char *token,
-							      int company_id,
-								  int category_id);
+                                  int company_id,
+                                  int category_id);
 
 
 //////////////////////////////////////////////////////////
@@ -116,11 +116,12 @@ cyclients_service_get(const char *token,
                       int company_id,
                       int service_id);
 
-/* return allocated new created service or NULL on error */
 struct staff {int id; int seance_length;};
+
+/* return allocated new created service or NULL on error */
 CYCService *
 cyclients_service_new(const char *token,
-					  int company_id,
+                      int company_id,
                       const char *title,
                       int category_id,
                       double price_min,
@@ -139,6 +140,8 @@ cyclients_service_new(const char *token,
 /* update service and return non-null on error */
 int
 cyclients_service_update(const char *token,
+                         int company_id,
+                         int service_id,
                          const char *title,
                          const char *booking_title,
                          int category_id,
@@ -153,7 +156,7 @@ cyclients_service_update(const char *token,
                          bool is_need_limit_date,
                          const char *date_from,
                          const char *date_to,
-                         const char *datetes[],
+                         const char *dates[],
                          int seance_search_start,
                          int seance_search_finish,
                          int seance_search_step,
@@ -166,7 +169,42 @@ cyclients_service_update(const char *token,
                          int abonement_restriction_value,
                          int is_abonement_autopayment_enabled,
                          int autopayment_before_visit_time,
-						 int nstaff,
-						 struct staff staff[]);
+                         int nstaff,
+                         struct staff staff[]);
+
+/* remove service and return non-null on error */
+int
+cyclients_service_delete(const char *token,
+                         int company_id,
+                         int service_id);
+
+struct master_cofig {
+	int master_id;
+	int technological_card_id;
+	int hours;
+	int minutes;
+	struct price {
+		double min;
+		double max;
+	} price;
+};
+struct translation {
+	int language_id;
+	char translation[256];
+};
+
+/* update service resources, staff, language translations and 
+ * return non-null on error */
+int
+cyclients_service_links(const char *token,
+                        int company_id,
+                        int service_id,
+												int nmaster_configs,
+												struct master_cofig master_cofigs[],
+                        int nresources,
+                        int resources[],
+												int ntranslations,
+												struct translation translations[]);
+
 
 #endif // CYCLIENTS_H

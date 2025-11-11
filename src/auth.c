@@ -58,7 +58,7 @@ cyclients_login(const char *login,
 	sprintf(auth, "Authorization: Bearer %s", partner_token);
 	sprintf(post, "{\"login\":\"%s\",\"password\":\"%s\"}", login, password);		
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 			requestString,
 		 	auth, "POST",
 		 	post, &json);
@@ -104,7 +104,7 @@ cyclients_login_2fa(const char *login,
 	sprintf(post, "{\"login\":\"%s\",\"password\":\"%s\",\"2fa:{\"uuid\":\"%s\",\"secret\":\"%s\"}\"}"
 			, login, password, uuid, secret);		
 	
-	http_code = curl_transport_post(requestString,
+	http_code = curl_transport_exec(requestString,
 		 	auth, "POST", 
 			post, &json);
 

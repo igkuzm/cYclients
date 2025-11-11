@@ -50,7 +50,7 @@ static size_t writefunc(void *ptr, size_t size, size_t nmemb, struct string *s)
 }
 
 HTTP_RESPONCE
-curl_transport_post(const char *request_url, 
+curl_transport_exec(const char *request_url, 
 										const char *auth_header, 
 										const char *http_method,
 										const char *post_data,

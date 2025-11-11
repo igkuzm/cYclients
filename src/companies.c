@@ -30,7 +30,7 @@ cyclients_companies(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_post(
+	http_code = curl_transport_exec(
 			requestString,
 		 	auth, "GET",
 		 	NULL, &json);
