@@ -231,4 +231,16 @@ cyclients_service_delete_staff(const char *token,
                                int service_id,
 						       int master_id);
 
+//////////////////////////////////////////////////////////
+// Users
+//////////////////////////////////////////////////////////
+
+CYCLIENTS_COUNTER
+cyclients_users_roles(const char *token,
+                      int company_id,
+                      void *userdata,
+                      int (*callback)(void *userdata, 
+                                      const CYCUserRole *user_role));
+
+				   
 #endif // CYCLIENTS_H

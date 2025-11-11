@@ -27,6 +27,7 @@ typedef	enum {
 	CYC_TYPE_SERVICE_CATEGORY,
 	CYC_TYPE_STAFF,
 	CYC_TYPE_SERVICE,
+	CYC_TYPE_USER_ROLE,
 	CYC_NTYPES,
 } CYC_TYPE;
 
@@ -507,6 +508,13 @@ typedef	enum {
 	CYC_UNKNOWN(resources) \
 	CYC_BOOL(is_online) \
 
+#define CYC_USER_ROLE \
+   CYC_STRING(slug, 64) \
+   CYC_STRING(title, 128) \
+   CYC_STRING(description, 256) \
+   CYC_INT(weight) \
+   CYC_STRING(paid_status, 64) \
+
 // structure 
 #define CYC_UNKNOWN(_name)
 #define CYC_INT(_name) int _name;
@@ -616,6 +624,13 @@ typedef struct {
 } CYCService;
 int     cyc_service_fr_json(CYCService *t, const cJSON *json);
 cJSON * cyc_service_to_json(CYCService *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_USER_ROLE
+} CYCUserRole;
+int     cyc_user_role_fr_json(CYCUserRole *t, const cJSON *json);
+cJSON * cyc_user_role_to_json(CYCUserRole *t);
 
 #undef CYC_UNKNOWN
 #undef CYC_INT

@@ -158,6 +158,14 @@ int cyc_service_fr_json(CYCService *t, const cJSON *json)
 	FROM_JSON_END
 }
 
+int cyc_user_role_fr_json(CYCUserRole *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_USER_ROLE;
+	CYC_USER_ROLE
+    FROM_JSON_END		
+}
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -353,6 +361,13 @@ cJSON * cyc_service_to_json(CYCService *t)
 	TO_JSON_START
 	CYC_SERVICE
 	TO_JSON_END
+}
+
+cJSON * cyc_user_role_to_json(CYCUserRole *t)
+{
+	TO_JSON_START
+	CYC_USER_ROLE
+	TO_JSON_END	
 }
 
 #undef CYC_UNKNOWN

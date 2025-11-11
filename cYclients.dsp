@@ -109,6 +109,10 @@ SOURCE=.\src\services.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\users.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\auth.c
 # End Source File
 # End Group

@@ -25,6 +25,12 @@ int categories_cb(void *userdata, const CYCServiceCategory *category)
 	return 0;
 }
 
+int users_roles_cb(void *userdata, const CYCUserRole *user_role)
+{
+	printf("USER_ROLE: %s\n", user_role->title);
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	const CYCUser *user = NULL;
@@ -106,6 +112,10 @@ int main(int argc, char *argv[])
 
 	CYCService *service = cyclients_service_get(
 			user->user_token, company_id, 3862837);
+	
+	// get user roles
+	cyclients_users_roles(user->user_token,
+						  company_id, NULL, users_roles_cb);
 
 	/*
 	// create new service

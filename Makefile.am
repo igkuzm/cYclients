@@ -20,6 +20,7 @@ libcyclients_la_SOURCES = \
   src/companies.c	\
   src/categories.c	\
   src/services.c	\
+  src/users.c	\
   src/auth.c
 
 libcyclients_la_LIBADD = 
