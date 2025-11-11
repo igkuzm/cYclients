@@ -32,6 +32,7 @@
 		AFEBB4962EC20BE900D86001 /* categories.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4952EC20BE900D86001 /* categories.c */; };
 		AFEBB4982EC20BF700D86001 /* companies.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4972EC20BF700D86001 /* companies.c */; };
 		AFEBB49A2EC20C0200D86001 /* services.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4992EC20C0200D86001 /* services.c */; };
+		AFF4A41F2EC3552E00801BCE /* users.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF4A41E2EC3552E00801BCE /* users.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		AFEBB4952EC20BE900D86001 /* categories.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = categories.c; path = src/categories.c; sourceTree = "<group>"; };
 		AFEBB4972EC20BF700D86001 /* companies.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = companies.c; path = src/companies.c; sourceTree = "<group>"; };
 		AFEBB4992EC20C0200D86001 /* services.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = services.c; path = src/services.c; sourceTree = "<group>"; };
+		AFF4A41E2EC3552E00801BCE /* users.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = users.c; path = src/users.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				AFEBB4952EC20BE900D86001 /* categories.c */,
 				AF2052CF2EBCC95C00392497 /* log.c */,
 				AF2052CB2EBCC94B00392497 /* auth.c */,
+				AFF4A41E2EC3552E00801BCE /* users.c */,
 				AF03E2B42EB2E4EE00149FCA /* log.h */,
 				AF56A53A2EB231D6006214FB /* test.c */,
 				AF56A5272EB231A2006214FB /* cJSON.c */,
@@ -248,6 +251,7 @@
 				AFEBB4962EC20BE900D86001 /* categories.c in Sources */,
 				AFEBB4982EC20BF700D86001 /* companies.c in Sources */,
 				AFEBB49A2EC20C0200D86001 /* services.c in Sources */,
+				AFF4A41F2EC3552E00801BCE /* users.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
