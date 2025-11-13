@@ -15,7 +15,7 @@ AM_CONDITIONAL([BUILD_TEST], [test "$enable_tests" = "yes"])
 AC_CHECK_FILE([partner_token.h],[],
                [AC_MSG_ERROR([To get partner token - register in https://yclients.com/appstore/developers - see readme])])
 
-AC_CHECK_HEADER([curl/curl.h],[],[AC_MSG_ERROR([Pleaseinstall libcurl])],[])
+AC_CHECK_HEADER([curl/curl.h],[],[AC_MSG_ERROR([Please install libcurl])],[])
 
 AC_CANONICAL_HOST
 case "${host_os}" in
