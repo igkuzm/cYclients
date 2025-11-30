@@ -199,7 +199,7 @@ int
 cyclients_service_set_links(const char *token,
                             int company_id,
                             int service_id,
-						    int nmaster_configs,
+						                int nmaster_configs,
                             struct master_cofig master_cofigs[],
                             int nresources,
                             int resources[],
@@ -211,7 +211,7 @@ int
 cyclients_service_set_staff(const char *token,
                             int company_id,
                             int service_id,
-						    int master_id,
+						                int master_id,
                             int seance_length,
                             int technological_card_id);
 
@@ -220,7 +220,7 @@ int
 cyclients_service_update_staff(const char *token,
                                int company_id,
                                int service_id,
-						       int master_id,
+						                   int master_id,
                                int seance_length,
                                int technological_card_id);
 
@@ -229,7 +229,7 @@ int
 cyclients_service_delete_staff(const char *token,
                                int company_id,
                                int service_id,
-						       int master_id);
+                               int master_id);
 
 //////////////////////////////////////////////////////////
 // Users
@@ -242,5 +242,21 @@ cyclients_users_roles(const char *token,
                       int (*callback)(void *userdata, 
                                       const CYCUserRole *user_role));
 
-				   
+CYCLIENTS_COUNTER
+cyclients_user_roles(const char *token,
+                     int company_id,
+                     int user_id,
+                     void *userdata,
+                     int (*callback)(void *userdata, 
+                                     const CYCUserRole *user_role));
+
+CYCLIENTS_COUNTER
+cyclients_user_permissions(const char *token,
+                           int company_id,
+                           int user_id,
+                           void *userdata,
+                           int (*callback)(void *userdata, 
+                                           const CYCUserRole *user_role));
+
+			   
 #endif // CYCLIENTS_H

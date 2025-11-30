@@ -114,8 +114,8 @@ int main(int argc, char *argv[])
 			user->user_token, company_id, 3862837);
 	
 	// get user roles
-	cyclients_users_roles(user->user_token,
-						  company_id, NULL, users_roles_cb);
+	cyclients_user_permissions(user->user_token,
+						  company_id, user_id, NULL, users_roles_cb);
 
 	/*
 	// create new service
