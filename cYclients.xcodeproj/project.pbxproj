@@ -9,19 +9,9 @@
 /* Begin PBXBuildFile section */
 		AF03E25C2EB2C33C00149FCA /* curl_transport.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E25A2EB2C33C00149FCA /* curl_transport.h */; };
 		AF03E25D2EB2C33C00149FCA /* curl_transport.c in Sources */ = {isa = PBXBuildFile; fileRef = AF03E25B2EB2C33C00149FCA /* curl_transport.c */; };
-		AF03E27E2EB2C89200149FCA /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */; };
-		AF03E2822EB2C8D600149FCA /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */; };
 		AF03E2B12EB2DFA400149FCA /* structs.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E2AF2EB2DFA400149FCA /* structs.h */; };
 		AF03E2B22EB2DFA400149FCA /* structs.c in Sources */ = {isa = PBXBuildFile; fileRef = AF03E2B02EB2DFA400149FCA /* structs.c */; };
 		AF03E2B52EB2E4EE00149FCA /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E2B42EB2E4EE00149FCA /* log.h */; };
-		AF12CF682ED6CF9000899405 /* libzstd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF672ED6CF9000899405 /* libzstd.a */; };
-		AF12CF6D2ED6D07700899405 /* libbrotlicommon.1.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF6B2ED6D07700899405 /* libbrotlicommon.1.1.0.dylib */; };
-		AF12CF6E2ED6D07700899405 /* libbrotlidec.1.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF6C2ED6D07700899405 /* libbrotlidec.1.1.0.dylib */; };
-		AF12CF702ED6D0AC00899405 /* libbrotlicommon.1.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF6B2ED6D07700899405 /* libbrotlicommon.1.1.0.dylib */; };
-		AF12CF712ED6D0AC00899405 /* libbrotlidec.1.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF6C2ED6D07700899405 /* libbrotlidec.1.1.0.dylib */; };
-		AF12CF742ED6D10A00899405 /* libidn2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF732ED6D10A00899405 /* libidn2.a */; };
-		AF12CF772ED6D15900899405 /* libunistring.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF762ED6D15900899405 /* libunistring.a */; };
-		AF12CF7A2ED6D18E00899405 /* libiconv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF12CF792ED6D18E00899405 /* libiconv.a */; };
 		AF2052CC2EBCC94B00392497 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CB2EBCC94B00392497 /* auth.c */; };
 		AF2052D02EBCC95C00392497 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CF2EBCC95C00392497 /* log.c */; };
 		AF56A5242EB2318C006214FB /* partner_token.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5232EB2318C006214FB /* partner_token.h */; };
@@ -31,12 +21,10 @@
 		AF56A52E2EB231A2006214FB /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A52A2EB231A2006214FB /* config.h */; };
 		AF56A53B2EB231D6006214FB /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A53A2EB231D6006214FB /* test.c */; };
 		AF56A54E2EB232B3006214FB /* libcYclients.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A51C2EB2315C006214FB /* libcYclients.a */; };
-		AF56A58C2EB23957006214FB /* libnghttp2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5862EB23913006214FB /* libnghttp2.a */; };
 		AF56A58D2EB23957006214FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A57E2EB238EA006214FB /* Foundation.framework */; };
-		AF56A58E2EB23957006214FB /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5702EB2362D006214FB /* libcurl.a */; };
-		AF56A58F2EB23957006214FB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5762EB23844006214FB /* libcrypto.a */; };
-		AF56A5902EB23957006214FB /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A5772EB23844006214FB /* libssl.a */; };
 		AF56A59A2EB23995006214FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF56A57E2EB238EA006214FB /* Foundation.framework */; };
+		AFE19D292EE148F8007667BA /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AFE19D282EE148F8007667BA /* libcurl.dylib */; };
+		AFE19D2A2EE148F8007667BA /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AFE19D282EE148F8007667BA /* libcurl.dylib */; };
 		AFEBB4962EC20BE900D86001 /* categories.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4952EC20BE900D86001 /* categories.c */; };
 		AFEBB4982EC20BF700D86001 /* companies.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4972EC20BF700D86001 /* companies.c */; };
 		AFEBB49A2EC20C0200D86001 /* services.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4992EC20C0200D86001 /* services.c */; };
@@ -57,16 +45,9 @@
 		AF03E2572EB2C28F00149FCA /* ReadMe.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.md; sourceTree = "<group>"; };
 		AF03E25A2EB2C33C00149FCA /* curl_transport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl_transport.h; path = src/curl_transport.h; sourceTree = "<group>"; };
 		AF03E25B2EB2C33C00149FCA /* curl_transport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = curl_transport.c; path = src/curl_transport.c; sourceTree = "<group>"; };
-		AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = /usr/lib/libz.1.2.3.dylib; sourceTree = "<absolute>"; };
 		AF03E2AF2EB2DFA400149FCA /* structs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = structs.h; path = src/structs.h; sourceTree = "<group>"; };
 		AF03E2B02EB2DFA400149FCA /* structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = structs.c; path = src/structs.c; sourceTree = "<group>"; };
 		AF03E2B42EB2E4EE00149FCA /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = src/log.h; sourceTree = "<group>"; };
-		AF12CF672ED6CF9000899405 /* libzstd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzstd.a; path = darwin/libzstd.a; sourceTree = "<group>"; };
-		AF12CF6B2ED6D07700899405 /* libbrotlicommon.1.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbrotlicommon.1.1.0.dylib; path = darwin/libbrotlicommon.1.1.0.dylib; sourceTree = "<group>"; };
-		AF12CF6C2ED6D07700899405 /* libbrotlidec.1.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbrotlidec.1.1.0.dylib; path = darwin/libbrotlidec.1.1.0.dylib; sourceTree = "<group>"; };
-		AF12CF732ED6D10A00899405 /* libidn2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libidn2.a; path = darwin/libidn2.a; sourceTree = "<group>"; };
-		AF12CF762ED6D15900899405 /* libunistring.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libunistring.a; path = darwin/libunistring.a; sourceTree = "<group>"; };
-		AF12CF792ED6D18E00899405 /* libiconv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libiconv.a; path = darwin/libiconv.a; sourceTree = "<group>"; };
 		AF2052CB2EBCC94B00392497 /* auth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auth.c; path = src/auth.c; sourceTree = "<group>"; };
 		AF2052CF2EBCC95C00392497 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = log.c; path = src/log.c; sourceTree = "<group>"; };
 		AF56A51C2EB2315C006214FB /* libcYclients.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcYclients.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,11 +58,8 @@
 		AF56A52A2EB231A2006214FB /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = src/config.h; sourceTree = "<group>"; };
 		AF56A5322EB231C0006214FB /* cYclients_test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cYclients_test; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF56A53A2EB231D6006214FB /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
-		AF56A5702EB2362D006214FB /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = darwin/libcurl.a; sourceTree = "<group>"; };
-		AF56A5762EB23844006214FB /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = darwin/libcrypto.a; sourceTree = "<group>"; };
-		AF56A5772EB23844006214FB /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = darwin/libssl.a; sourceTree = "<group>"; };
 		AF56A57E2EB238EA006214FB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		AF56A5862EB23913006214FB /* libnghttp2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libnghttp2.a; path = darwin/libnghttp2.a; sourceTree = "<group>"; };
+		AFE19D282EE148F8007667BA /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = /opt/local/lib/libcurl.dylib; sourceTree = "<absolute>"; };
 		AFEBB4952EC20BE900D86001 /* categories.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = categories.c; path = src/categories.c; sourceTree = "<group>"; };
 		AFEBB4972EC20BF700D86001 /* companies.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = companies.c; path = src/companies.c; sourceTree = "<group>"; };
 		AFEBB4992EC20C0200D86001 /* services.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = services.c; path = src/services.c; sourceTree = "<group>"; };
@@ -94,17 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF56A58D2EB23957006214FB /* Foundation.framework in Frameworks */,
-				AF56A58C2EB23957006214FB /* libnghttp2.a in Frameworks */,
-				AF56A58E2EB23957006214FB /* libcurl.a in Frameworks */,
-				AF56A58F2EB23957006214FB /* libcrypto.a in Frameworks */,
-				AF56A5902EB23957006214FB /* libssl.a in Frameworks */,
-				AF03E27E2EB2C89200149FCA /* libz.1.2.3.dylib in Frameworks */,
-				AF12CF682ED6CF9000899405 /* libzstd.a in Frameworks */,
-				AF12CF6D2ED6D07700899405 /* libbrotlicommon.1.1.0.dylib in Frameworks */,
-				AF12CF6E2ED6D07700899405 /* libbrotlidec.1.1.0.dylib in Frameworks */,
-				AF12CF742ED6D10A00899405 /* libidn2.a in Frameworks */,
-				AF12CF772ED6D15900899405 /* libunistring.a in Frameworks */,
-				AF12CF7A2ED6D18E00899405 /* libiconv.a in Frameworks */,
+				AFE19D292EE148F8007667BA /* libcurl.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,11 +80,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF12CF702ED6D0AC00899405 /* libbrotlicommon.1.1.0.dylib in Frameworks */,
-				AF12CF712ED6D0AC00899405 /* libbrotlidec.1.1.0.dylib in Frameworks */,
-				AF03E2822EB2C8D600149FCA /* libz.1.2.3.dylib in Frameworks */,
 				AF56A59A2EB23995006214FB /* Foundation.framework in Frameworks */,
 				AF56A54E2EB232B3006214FB /* libcYclients.a in Frameworks */,
+				AFE19D2A2EE148F8007667BA /* libcurl.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,18 +135,8 @@
 		AF56A5572EB232D0006214FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AFE19D282EE148F8007667BA /* libcurl.dylib */,
 				AF56A57E2EB238EA006214FB /* Foundation.framework */,
-				AF12CF6B2ED6D07700899405 /* libbrotlicommon.1.1.0.dylib */,
-				AF12CF6C2ED6D07700899405 /* libbrotlidec.1.1.0.dylib */,
-				AF03E27D2EB2C89200149FCA /* libz.1.2.3.dylib */,
-				AF56A5862EB23913006214FB /* libnghttp2.a */,
-				AF56A5702EB2362D006214FB /* libcurl.a */,
-				AF56A5762EB23844006214FB /* libcrypto.a */,
-				AF56A5772EB23844006214FB /* libssl.a */,
-				AF12CF672ED6CF9000899405 /* libzstd.a */,
-				AF12CF732ED6D10A00899405 /* libidn2.a */,
-				AF12CF762ED6D15900899405 /* libunistring.a */,
-				AF12CF792ED6D18E00899405 /* libiconv.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -305,7 +261,14 @@
 		AF56A50A2EB23132006214FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					arm64,
+					x86_64,
+					ppc64,
+					ppc,
+				);
 				COPY_PHASE_STRIP = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
 			};
 			name = Debug;
@@ -313,7 +276,14 @@
 		AF56A50B2EB23132006214FB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					arm64,
+					x86_64,
+					ppc64,
+					ppc,
+				);
 				COPY_PHASE_STRIP = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Release;
 		};
@@ -331,6 +301,7 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					/opt/local/lib,
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/darwin\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/darwin\"";
@@ -352,6 +323,7 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					/opt/local/lib,
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/darwin\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/darwin\"";
@@ -374,6 +346,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					/opt/local/lib,
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/darwin\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(DEVELOPER_DIR)/SDKs/MacOSX10.3.9.sdk/usr/lib\"";
@@ -395,6 +368,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					/opt/local/lib,
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/darwin\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(DEVELOPER_DIR)/SDKs/MacOSX10.3.9.sdk/usr/lib\"";
