@@ -166,6 +166,35 @@ int cyc_user_role_fr_json(CYCUserRole *t, const cJSON *json)
     FROM_JSON_END		
 }
 
+int cyc_user_permissions_fr_json(CYCUserPermissions *t, const cJSON *p)
+{
+	assert(p != NULL); \
+	assert(t != NULL); \
+	if (cJSON_IsArray(p)) {
+		t->_type = CYC_TYPE_USER_PERMISSIONS;
+		cJSON *json = NULL;
+		cJSON_ArrayForEach(json, p)
+		{
+			if (cJSON_IsObject(json))
+			{
+				cJSON *slug = cJSON_GetObjectItem(json, "slug");
+				cJSON *value = cJSON_GetObjectItem(json, "value");
+				if (slug == NULL || value == NULL)
+					continue;
+				const char *name = slug->valuestring;
+#ifdef DEBUG
+				LOG("parse permission: %s\n", name);
+#endif
+				value->string = name;
+				CYC_USER_PERMISSIONS
+				//cJSON_free(object);
+			}
+		}
+        return 0; \
+    } \
+   return -1;		
+}
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -367,6 +396,13 @@ cJSON * cyc_user_role_to_json(CYCUserRole *t)
 {
 	TO_JSON_START
 	CYC_USER_ROLE
+	TO_JSON_END	
+}
+
+cJSON * cyc_user_permissions_to_json(CYCUserPermissions *t)
+{
+	TO_JSON_START
+	CYC_USER_PERMISSIONS
 	TO_JSON_END	
 }
 

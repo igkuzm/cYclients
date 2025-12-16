@@ -11,10 +11,10 @@ static CYCCompany COMPANY;
 
 int
 cyclients_companies(const char *token,
-		                char *company_id,
-										void *userdata,
-										int (*callback)(void *userdata, 
-											              const CYCCompany *company))
+                    char *company_id,
+                    void *userdata,
+                    int (*callback)(void *userdata, 
+                                    const CYCCompany *company))
 {
 	int count = 0;
 	cJSON *json = NULL;

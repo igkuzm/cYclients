@@ -31,6 +31,12 @@ int users_roles_cb(void *userdata, const CYCUserRole *user_role)
 	return 0;
 }
 
+int users_permissions_cb(void *userdata, const CYCUserPermissions *user_permissions)
+{
+	printf("USER_PERMISSIONS RECORDS ACCESS: %s\n", user_permissions->records_access?"true":"false");
+	return 0;
+}
+
 int main(int argc, char *argv[])
 {
 	const CYCUser *user = NULL;
@@ -113,9 +119,12 @@ int main(int argc, char *argv[])
 	CYCService *service = cyclients_service_get(
 			user->user_token, company_id, 3862837);
 	
-	// get user roles
-	cyclients_user_permissions(user->user_token,
-						  company_id, user->id, NULL, users_roles_cb);
+	const CYCUserPermissions *permissions =
+	cyclients_user_permissions(user->user_token, company_id, user->id);
+	if (permissions){
+	   printf("USER_PERMISSIONS TIMETABLE ACCESS: %s\n", permissions->timetable_access?"true":"false");
+	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
+    }
 
 	/*
 	// create new service

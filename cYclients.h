@@ -250,13 +250,9 @@ cyclients_user_roles(const char *token,
                      int (*callback)(void *userdata, 
                                      const CYCUserRole *user_role));
 
-CYCLIENTS_COUNTER
+const CYCUserPermissions *
 cyclients_user_permissions(const char *token,
                            int company_id,
-                           int user_id,
-                           void *userdata,
-                           int (*callback)(void *userdata, 
-                                           const CYCUserRole *user_role));
-
+                           int user_id);
 			   
 #endif // CYCLIENTS_H

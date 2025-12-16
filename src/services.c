@@ -54,12 +54,13 @@ cyclients_services(const char *token,
 
 					i++;
 				}
-				
+				cJSON_free(json);
 				return i;
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);	
 	return 0;
 }
 
@@ -93,12 +94,14 @@ cyclients_service_get(const char *token,
 				if (service){
 					cyc_service_fr_json(
 							service, data);
+					cJSON_free(json);
 					return service;
 				}
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);
 	return NULL;
 }
 
@@ -182,12 +185,14 @@ cyclients_service_new(const char *token,
 				if (service){
 					cyc_service_fr_json(
 							service, data);
+					cJSON_free(json);
 					return service;
 				}
 			}
 		}
 	}
-
+	if (json)
+		cJSON_free(json);
 	return NULL;
 }
 

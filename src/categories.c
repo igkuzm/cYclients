@@ -54,12 +54,13 @@ cyclients_service_categories(const char *token,
 
 					i++;
 				}
-				
+				cJSON_free(json);			
 				return i;
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);
 	return 0;
 }
 
@@ -93,12 +94,14 @@ cyclients_service_category_get(const char *token,
 				if (category){
 					cyc_service_category_fr_json(
 							category, data);
+					cJSON_free(json);
 					return category;
 				}
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);
 	return NULL;
 }
 
@@ -206,12 +209,14 @@ cyclients_service_category_new(const char *token,
 				if (category){
 					cyc_service_category_fr_json(
 												 category, data);
+					cJSON_free(json);
 					return category;
 				}
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);
 	return NULL;	
 }
 

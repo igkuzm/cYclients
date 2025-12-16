@@ -79,8 +79,8 @@ cyclients_login(const char *login,
 			ret = CYCLIENTS_AUTH_2FA;
 		}
 	}
-	
-	cJSON_free(json);
+	if (json)
+	   cJSON_free(json);
 	return ret;
 }
 
@@ -118,6 +118,7 @@ cyclients_login_2fa(const char *login,
 		ret = CYCLIENTS_AUTH_AUTHORIZED;
 	}
 	
-	cJSON_free(json);
+	if (json)
+	   cJSON_free(json);
 	return ret;	
 }

@@ -12,6 +12,7 @@
 #include <assert.h>
 
 static CYCUserRole USERROLE;
+static CYCUserPermissions USERPERMISSIONS;
 
 CYCLIENTS_COUNTER
 cyclients_users_roles(const char *token,
@@ -54,12 +55,13 @@ cyclients_users_roles(const char *token,
 					
 					i++;
 				}
-				
+				cJSON_free(json);
 				return i;
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);
 	return 0;	
 }
 
@@ -105,22 +107,20 @@ cyclients_user_roles(const char *token,
 					
 					i++;
 				}
-				
+				cJSON_free(json);
 				return i;
 			}
 		}
 	}
-	
+	if (json)
+		cJSON_free(json);
 	return 0;
 }
 
-CYCLIENTS_COUNTER
+const CYCUserPermissions *
 cyclients_user_permissions(const char *token,
                            int company_id,
-                           int user_id,
-                           void *userdata,
-                           int (*callback)(void *userdata, 
-                                           const CYCUserRole *user_role))
+                           int user_id)
 {
 	cJSON *json = NULL;
 	long http_code = 0;
@@ -141,26 +141,19 @@ cyclients_user_permissions(const char *token,
 		if (cJSON_IsObject(json))
 		{
 			cJSON *data = cJSON_GetObjectItem(json, "data");
-			if (cJSON_IsArray(data))
+			if (cJSON_IsObject(data))
 			{
-				int i = 0;
-				cJSON *user_role;
-				cJSON_ArrayForEach(user_role, data)
-				{
-					memset(&USERROLE, 0, sizeof(USERROLE));
-					cyc_user_role_fr_json(
-										&USERROLE, user_role);
-					if (callback)
-						if (callback(userdata, &USERROLE))
-							break;
-					
-					i++;
-				}
-				
-				return i;
+				cJSON *user_permissions = cJSON_GetObjectItem(data, "user_permissions");
+				if (user_permissions == NULL)
+					return NULL;
+				memset(&USERPERMISSIONS, 0, sizeof(USERPERMISSIONS));
+				cyc_user_permissions_fr_json(
+										&USERPERMISSIONS, user_permissions);
+				cJSON_free(json);
+				return &USERPERMISSIONS;
 			}
 		}
 	}
 	
-	return 0;
+	return NULL;
 }
