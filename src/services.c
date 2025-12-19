@@ -478,8 +478,7 @@ cyclients_service_update_staff(const char *token,
 	post_data = cJSON_Print(json);
 	cJSON_free(json);
 	
-	http_code = curl_transport_exec(
-									requestString,
+	http_code = curl_transport_exec(requestString,
 									auth, "PUT",
 									post_data, NULL);
 	free(post_data);

@@ -235,6 +235,12 @@ cyclients_service_delete_staff(const char *token,
 // Users
 //////////////////////////////////////////////////////////
 
+int
+cyclients_user_new(const char *token,
+				   int company_id,
+                   const char *name,
+                   const char *phone_number);
+
 CYCLIENTS_COUNTER
 cyclients_users_roles(const char *token,
                       int company_id,
@@ -254,5 +260,20 @@ const CYCUserPermissions *
 cyclients_user_permissions(const char *token,
                            int company_id,
                            int user_id);
+
+struct user_company_link {
+	int company_id;
+	char *user_permissions_json;
+};
+
+char * 
+user_permissions_json_with_slug_and_value_pairs(int nslug_and_value_pairs, ...);
+
+int
+cyclients_user_copy_to_companies(const char *token,
+                                 int company_id,
+								 int user_id,
+								 int nuser_user_company_links,
+                                 struct user_company_link *links);
 			   
 #endif // CYCLIENTS_H
