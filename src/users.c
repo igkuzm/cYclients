@@ -220,7 +220,7 @@ cyclients_user_copy_to_companies(const char *token,
 			if (cJSON_IsObject(user_permissions)){
 				obj = cJSON_CreateObject();
 				cJSON_AddNumberToObject(obj, "company_id", links[i].company_id);
-				cJSON_AddItemToObject(obj, user_permissions, user_permissions);
+				cJSON_AddItemToObject(obj, "user_permissions", user_permissions);
 				cJSON_AddItemToArray(json, obj);
 			}
 		}
@@ -262,7 +262,7 @@ cyclients_user_new(const char *token,
 	cJSON_AddNullToObject(json, "specialization");
 	cJSON_AddNullToObject(json, "position_id");
 	// phone number without +
-	*number = (char *)phone_number;
+	number = (char *)phone_number;
 	if (*number == '+')
 		number++;
 	cJSON_AddStringToObject(json, "phone_number", number);

@@ -185,7 +185,7 @@ int cyc_user_permissions_fr_json(CYCUserPermissions *t, const cJSON *p)
 #ifdef DEBUG
 				LOG("parse permission: %s\n", name);
 #endif
-				value->string = name;
+				value->string = (char *)name;
 				CYC_USER_PERMISSIONS
 				//cJSON_free(object);
 			}
