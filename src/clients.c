@@ -1,0 +1,13 @@
+#include "config.h"
+#include "../cYclients.h"
+#include "log.h"
+#include "alloc.h"
+#include "structs.h"
+#include "cJSON.h"
+#include "../partner_token.h"
+#include "curl_transport.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <stdarg.h>

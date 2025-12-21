@@ -12,6 +12,7 @@
 		AF03E2B12EB2DFA400149FCA /* structs.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E2AF2EB2DFA400149FCA /* structs.h */; };
 		AF03E2B22EB2DFA400149FCA /* structs.c in Sources */ = {isa = PBXBuildFile; fileRef = AF03E2B02EB2DFA400149FCA /* structs.c */; };
 		AF03E2B52EB2E4EE00149FCA /* log.h in Headers */ = {isa = PBXBuildFile; fileRef = AF03E2B42EB2E4EE00149FCA /* log.h */; };
+		AF15A91F2EF7DF880027F26A /* clients.c in Sources */ = {isa = PBXBuildFile; fileRef = AF15A91E2EF7DF880027F26A /* clients.c */; };
 		AF2052CC2EBCC94B00392497 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CB2EBCC94B00392497 /* auth.c */; };
 		AF2052D02EBCC95C00392497 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CF2EBCC95C00392497 /* log.c */; };
 		AF56A5242EB2318C006214FB /* partner_token.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5232EB2318C006214FB /* partner_token.h */; };
@@ -47,6 +48,7 @@
 		AF03E2AF2EB2DFA400149FCA /* structs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = structs.h; path = src/structs.h; sourceTree = "<group>"; };
 		AF03E2B02EB2DFA400149FCA /* structs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = structs.c; path = src/structs.c; sourceTree = "<group>"; };
 		AF03E2B42EB2E4EE00149FCA /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = log.h; path = src/log.h; sourceTree = "<group>"; };
+		AF15A91E2EF7DF880027F26A /* clients.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = clients.c; path = src/clients.c; sourceTree = "<group>"; };
 		AF2052CB2EBCC94B00392497 /* auth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auth.c; path = src/auth.c; sourceTree = "<group>"; };
 		AF2052CF2EBCC95C00392497 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = log.c; path = src/log.c; sourceTree = "<group>"; };
 		AF56A51C2EB2315C006214FB /* libcYclients.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcYclients.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,6 +111,7 @@
 		AF56A5222EB2317D006214FB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				AF15A91E2EF7DF880027F26A /* clients.c */,
 				AFEBB4992EC20C0200D86001 /* services.c */,
 				AFEBB4972EC20BF700D86001 /* companies.c */,
 				AFEBB4952EC20BE900D86001 /* categories.c */,
@@ -234,6 +237,7 @@
 				AFEBB4982EC20BF700D86001 /* companies.c in Sources */,
 				AFEBB49A2EC20C0200D86001 /* services.c in Sources */,
 				AFF4A41F2EC3552E00801BCE /* users.c in Sources */,
+				AF15A91F2EF7DF880027F26A /* clients.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

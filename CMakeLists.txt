@@ -36,6 +36,7 @@ set(SOURCES
   src/categories.c		
   src/services.c		
   src/users.c	
+  src/clients.c	
   src/auth.c
 )
 
