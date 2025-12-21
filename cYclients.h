@@ -275,5 +275,18 @@ cyclients_user_copy_to_companies(const char *token,
 								 int user_id,
 								 int nuser_user_company_links,
                                  struct user_company_link *links);
+
+//////////////////////////////////////////////////////////
+// Clients
+//////////////////////////////////////////////////////////
+
+CYCLIENTS_COUNTER
+cyclients_clients_search(const char *token,
+                         int company_id,
+						 const char *comma_separeted_fields_to_return,
+						 const char *search_query,
+                         void *userdata,
+                         int (*callback)(void *userdata, 
+                                         const void *client));
 			   
 #endif // CYCLIENTS_H

@@ -273,6 +273,8 @@ cyclients_user_new(const char *token,
 	http_code = curl_transport_exec(requestString,
 									auth, "POST",
 									post_data, NULL);
+	if(post_data)
+	    free(post_data);
 	
 	if (http_code == 200)
 		return 0;

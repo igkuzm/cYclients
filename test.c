@@ -125,6 +125,8 @@ int main(int argc, char *argv[])
 	   printf("USER_PERMISSIONS TIMETABLE ACCESS: %s\n", permissions->timetable_access?"true":"false");
 	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
     }
+	
+	cyclients_clients_search(user->user_token, company_id, "name, id", "И", NULL, NULL);
 
 	/*
 	// create new service
