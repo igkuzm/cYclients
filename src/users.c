@@ -278,7 +278,7 @@ cyclients_user_new(const char *token,
 									post_data, NULL);
 	free(post_data);
 	
-	if (http_code == 200)
+	if (http_code == 201)
 		return 0;
 	
 	return 1;	

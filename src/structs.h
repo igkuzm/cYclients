@@ -29,6 +29,7 @@ typedef	enum {
 	CYC_TYPE_SERVICE,
 	CYC_TYPE_USER_ROLE,
 	CYC_TYPE_USER_PERMISSIONS,
+    CYC_TYPE_FILE,
 	CYC_NTYPES,
 } CYC_TYPE;
 
@@ -782,6 +783,22 @@ typedef	enum {
    CYC_BOOL(send_sms_access) \
    CYC_BOOL(company_to_chain_add_access) \
    
+#define CYC_FILE \
+   CYC_INT(id) \
+   CYC_INT(client_id) \
+   CYC_STRING(name, 256) \
+   CYC_STRING(description, 256) \
+   CYC_STRING(extension, 32) \
+   CYC_STRING(mime, 64) \
+   CYC_STRING(link, 256) \
+   CYC_STRING(full_link, 512) \
+   CYC_STRING(date_create, 32) \
+   CYC_STRING(size, 32) \
+   CYC_STRING(user_name, 64) \
+   CYC_STRING(user_avatar, 256) \
+   CYC_BOOL(can_edit) \
+
+
 // structure 
 #define CYC_UNKNOWN(_name)
 #define CYC_INT(_name) int _name;
@@ -905,6 +922,13 @@ typedef struct {
 } CYCUserPermissions;
 int     cyc_user_permissions_fr_json(CYCUserPermissions *t, const cJSON *json);
 cJSON * cyc_user_permissions_to_json(CYCUserPermissions *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_FILE
+} CYCFile;
+int     cyc_file_fr_json(CYCFile *t, const cJSON *json);
+cJSON * cyc_file_to_json(CYCFile *t);
 
 #undef CYC_UNKNOWN
 #undef CYC_INT

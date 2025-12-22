@@ -1,4 +1,5 @@
 #include "cYclients.h"
+#include "src/stb_ds.h"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -39,11 +40,14 @@ int users_permissions_cb(void *userdata, const CYCUserPermissions *user_permissi
 
 int clients_cb(void *userdata, int n, const kvpair_t *kvpair)
 {
-	int i;
+	int i, *client_id = userdata;
 	for (i = 0; i < n; ++i) {
 		printf("KEY: %s, VALUE: %s\n", 
 				kvpair[i].key, kvpair[i].value);
 	}
+    if (kvpair){
+        *client_id = atoi((char *)shget(kvpair, "id"));
+    }
 	return 0;
 }
 
@@ -138,7 +142,11 @@ int main(int argc, char *argv[])
 	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
     }
 	
-	cyclients_clients_search(user->user_token, company_id, "name, id", "", NULL, clients_cb);
+    int client_id;
+	cyclients_clients_search(user->user_token, company_id, "name, id", "Семенцов Игорь", &client_id, clients_cb);
+    printf("CLIENT_ID: %d\n", client_id);
+    
+    cyclients_client_files(user->user_token, company_id, client_id, NULL, NULL);
 
 	/*
 	// create new service

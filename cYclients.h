@@ -291,5 +291,26 @@ cyclients_clients_search(const char *token,
                          int (*callback)(void *userdata, 
                                          int nfields,
                                          const kvpair_t *fields));
-			   
+			  
+int
+cyclients_client_new(const char *token,
+                     int company_id,
+                     const char *name,
+                     const char *surname,
+                     const char *patronymic,
+                     const char *phone,
+                     const char *email,
+                     const char *birth_date,
+                     const char *comment,
+                     int number_custom_fields_key_value_pairs,
+                     ...);
+
+CYCLIENTS_COUNTER
+cyclients_client_files(const char *token,
+                       int company_id,
+                       int client_id,
+                       void *userdata,
+                       int (*callback)(void *userdata, 
+                                       const CYCFile *file));
+
 #endif // CYCLIENTS_H

@@ -28,6 +28,9 @@
 		AFEBB4982EC20BF700D86001 /* companies.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4972EC20BF700D86001 /* companies.c */; };
 		AFEBB49A2EC20C0200D86001 /* services.c in Sources */ = {isa = PBXBuildFile; fileRef = AFEBB4992EC20C0200D86001 /* services.c */; };
 		AFF2CB042EF58A5F00B6A084 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AFF2CB032EF58A5F00B6A084 /* libcurl.dylib */; };
+		AFF2CB8B2EF97DC100B6A084 /* stb_ds.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF2CB8A2EF97DC100B6A084 /* stb_ds.c */; };
+		AFF2CB8D2EF97E5A00B6A084 /* strtok_foreach.h in Headers */ = {isa = PBXBuildFile; fileRef = AFF2CB8C2EF97E5A00B6A084 /* strtok_foreach.h */; };
+		AFF2CB8F2EF97E6000B6A084 /* stb_ds.h in Headers */ = {isa = PBXBuildFile; fileRef = AFF2CB8E2EF97E6000B6A084 /* stb_ds.h */; };
 		AFF4A41F2EC3552E00801BCE /* users.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF4A41E2EC3552E00801BCE /* users.c */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +67,9 @@
 		AFEBB4972EC20BF700D86001 /* companies.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = companies.c; path = src/companies.c; sourceTree = "<group>"; };
 		AFEBB4992EC20C0200D86001 /* services.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = services.c; path = src/services.c; sourceTree = "<group>"; };
 		AFF2CB032EF58A5F00B6A084 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = /usr/lib/libcurl.dylib; sourceTree = "<absolute>"; };
+		AFF2CB8A2EF97DC100B6A084 /* stb_ds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = stb_ds.c; path = src/stb_ds.c; sourceTree = "<group>"; };
+		AFF2CB8C2EF97E5A00B6A084 /* strtok_foreach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strtok_foreach.h; path = src/strtok_foreach.h; sourceTree = "<group>"; };
+		AFF2CB8E2EF97E6000B6A084 /* stb_ds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_ds.h; path = src/stb_ds.h; sourceTree = "<group>"; };
 		AFF4A41E2EC3552E00801BCE /* users.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = users.c; path = src/users.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +135,9 @@
 				AF03E25B2EB2C33C00149FCA /* curl_transport.c */,
 				AF03E2AF2EB2DFA400149FCA /* structs.h */,
 				AF03E2B02EB2DFA400149FCA /* structs.c */,
+				AFF2CB8E2EF97E6000B6A084 /* stb_ds.h */,
+				AFF2CB8A2EF97DC100B6A084 /* stb_ds.c */,
+				AFF2CB8C2EF97E5A00B6A084 /* strtok_foreach.h */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -164,6 +173,8 @@
 				AF03E25C2EB2C33C00149FCA /* curl_transport.h in Headers */,
 				AF03E2B12EB2DFA400149FCA /* structs.h in Headers */,
 				AF03E2B52EB2E4EE00149FCA /* log.h in Headers */,
+				AFF2CB8D2EF97E5A00B6A084 /* strtok_foreach.h in Headers */,
+				AFF2CB8F2EF97E6000B6A084 /* stb_ds.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +249,7 @@
 				AFEBB49A2EC20C0200D86001 /* services.c in Sources */,
 				AFF4A41F2EC3552E00801BCE /* users.c in Sources */,
 				AF15A91F2EF7DF880027F26A /* clients.c in Sources */,
+				AFF2CB8B2EF97DC100B6A084 /* stb_ds.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

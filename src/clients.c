@@ -16,6 +16,8 @@
 
 #define PAGE_SIZE 100
 
+static CYCFile CYCFILE;
+
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
                          int company_id,
@@ -35,7 +37,8 @@ cyclients_clients_search(const char *token,
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
 	assert(comma_separeted_fields_to_return);
-	assert(search_query);
+    if (search_query == NULL)
+        search_query = "";
 
 	sprintf(requestString, "%s/company/%d/clients/search", 
 			URL, company_id);
@@ -143,4 +146,135 @@ cyclients_clients_search(const char *token,
 	if (post)
 		cJSON_free(post);
 	return current_count;
+}
+
+int
+cyclients_client_new(const char *token,
+                     int company_id,
+                     const char *name,
+                     const char *surname,
+                     const char *patronymic,
+                     const char *phone,
+                     const char *email,
+                     const char *birth_date,
+                     const char *comment,
+                     int number_custom_fields_key_value_pairs,
+                     ...)
+{
+    int i;
+    cJSON *post, *custom_fields;
+    char *phone_number;
+    long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    assert(name);
+    assert(phone);
+    
+    phone_number = (char *)phone;
+    if (*phone_number == '+') {
+        phone_number++;
+    }
+        
+    sprintf(requestString, "%s/clients/%d", 
+			URL, company_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	post = cJSON_CreateObject();
+    cJSON_AddStringToObject(post, "name", name);
+    if (surname) {
+        cJSON_AddStringToObject(post, "surname", surname);
+    }
+    if (patronymic) {
+        cJSON_AddStringToObject(post, "patronymic", patronymic);
+    }
+    cJSON_AddStringToObject(post, "phone", phone_number);
+    if (email) {
+        cJSON_AddStringToObject(post, "email", email);
+    }
+    if (birth_date) {
+        cJSON_AddStringToObject(post, "birth_date", birth_date);
+    }
+    if (comment) {
+        cJSON_AddStringToObject(post, "comment", comment);
+    }    
+    if (i>0)
+    {
+        va_list args;
+        va_start(args, number_custom_fields_key_value_pairs);
+        custom_fields = cJSON_CreateObject();
+        for (i=0; i<number_custom_fields_key_value_pairs; ++i) {
+            char *key, *value;
+            key = va_arg(args, char *);
+            if (key == NULL)
+                break;
+            value = va_arg(args, char *);
+            if (value == NULL)
+                break;
+            cJSON_AddStringToObject(custom_fields, key, value);
+        }
+        cJSON_AddItemToObject(post, "custom_fields", custom_fields);
+    }
+    
+    post_data = cJSON_Print(post);
+    if (post_data == NULL){
+        ERR("%s: can't generate post data", __func__);
+        return 1;
+    }	
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "POST",
+                                    post_data, NULL);
+    free(post_data);
+    
+    if (http_code == 201)
+		return 0;
+	
+	return 1;
+}
+
+CYCLIENTS_COUNTER
+cyclients_client_files(const char *token,
+                       int company_id,
+                       int client_id,
+                       void *userdata,
+                       int (*callback)(void *userdata, 
+                                       const CYCFile *file))
+{
+    CYCLIENTS_COUNTER n = 0;
+    cJSON *responce;
+    long http_code = 0;
+	char requestString[BUFSIZ], auth[128];
+	char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/company/%d/clients/files/%d", 
+			URL, company_id, client_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "GET",
+                                    NULL, &responce);
+    
+    if (http_code == 200)
+    {
+        if (cJSON_IsArray(responce))
+        {
+            cJSON *file;
+            cJSON_ArrayForEach(file, responce)
+            {
+                memset(&CYCFILE, 0, sizeof(CYCFILE));
+                cyc_file_fr_json(&CYCFILE, file);
+                if (callback)
+                    if (callback(userdata, &CYCFILE))
+                        break;                       
+            }
+        }
+    }
+    
+    if(responce)
+        cJSON_free(responce);
+
+    return n;
 }

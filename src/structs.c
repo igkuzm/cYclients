@@ -195,6 +195,14 @@ int cyc_user_permissions_fr_json(CYCUserPermissions *t, const cJSON *p)
    return -1;		
 }
 
+int cyc_file_fr_json(CYCFile *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_FILE;
+	CYC_FILE
+    FROM_JSON_END		
+}
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -403,6 +411,13 @@ cJSON * cyc_user_permissions_to_json(CYCUserPermissions *t)
 {
 	TO_JSON_START
 	CYC_USER_PERMISSIONS
+	TO_JSON_END	
+}
+
+cJSON * cyc_file_to_json(CYCFile *t)
+{
+	TO_JSON_START
+	CYC_FILE
 	TO_JSON_END	
 }
 
