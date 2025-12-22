@@ -13,7 +13,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-#define PAGE_SIZE 25
+#define PAGE_SIZE 100
 
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
@@ -24,10 +24,10 @@ cyclients_clients_search(const char *token,
                          int (*callback)(void *userdata, 
                                          const void *client))
 {
-	int page = 0, total_count = 0, current_count = 0, is_first_field = 1;
-	cJSON *json = NULL, *fields, *filters, *filter, *state, *meta, *data, *obj;
+	int npage = 0, total_count = 0, current_count = 0, is_first_field = 1;
+	cJSON *post, *page, *fields, *filters, *filter, *state, *meta, *data, *obj, *responce;
 	long http_code = 0;
-	char requestString[BUFSIZ], auth[128], *post_data;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
 	assert(comma_separeted_fields_to_return);
@@ -38,68 +38,76 @@ cyclients_clients_search(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	do {
-	    json = cJSON_CreateObject();
-	    cJSON_AddNumberToObject(json, "page", page);
-	    cJSON_AddNumberToObject(json, "page_size", PAGE_SIZE);
-	    fields = cJSON_CreateArray();
-	    strtok_foreach(comma_separeted_fields_to_return, ",", field){
-		    if (field){
-			    cJSON *obj = cJSON_CreateString(field);
-			    if (is_first_field)
-			        cJSON_AddStringToObject(json, "order_by", field);
-			    is_first_field = 0;
-			    cJSON_AddItemToArray(fields, obj);
-		    }
-	    }
-        cJSON_AddItemToObject(json, "fields", fields);
-	    cJSON_AddStringToObject(json, "order_by_direction", "ASC");
-	    cJSON_AddStringToObject(json, "operation", "AND");
-	    filters = cJSON_CreateArray();
-	    filter = cJSON_CreateObject();
-	    cJSON_AddStringToObject(filter, "type", "quick_search");
-	    state = cJSON_CreateObject();
-	    cJSON_AddStringToObject(state, "value", search_query);
-	    cJSON_AddItemToObject(filter, "state", state);
-	    cJSON_AddItemToArray(filters, filter);
-	    cJSON_AddItemToObject(json, "filters", filters);
+	post = cJSON_CreateObject();
+	cJSON_AddNumberToObject(post, "page", npage);
+	cJSON_AddNumberToObject(post, "page_size", PAGE_SIZE);
+	fields = cJSON_CreateArray();
+	strtok_foreach(comma_separeted_fields_to_return, ",", field){
+		if (field){
+			cJSON *obj = cJSON_CreateString(field);
+			if (is_first_field)
+				cJSON_AddStringToObject(post, "order_by", field);
+			is_first_field = 0;
+			cJSON_AddItemToArray(fields, obj);
+		}
+	}
+	cJSON_AddItemToObject(post, "fields", fields);
+	cJSON_AddStringToObject(post, "order_by_direction", "ASC");
+	cJSON_AddStringToObject(post, "operation", "AND");
+	filters = cJSON_CreateArray();
+	filter = cJSON_CreateObject();
+	cJSON_AddStringToObject(filter, "type", "quick_search");
+	state = cJSON_CreateObject();
+	cJSON_AddStringToObject(state, "value", search_query);
+	cJSON_AddItemToObject(filter, "state", state);
+	cJSON_AddItemToArray(filters, filter);
+	cJSON_AddItemToObject(post, "filters", filters);
 		
-	    post_data = cJSON_Print(json);
-	    cJSON_free(json);
-	    json = NULL;
-	
+	do {
+		responce = NULL;
+	    post_data = cJSON_Print(post);
+		if (post_data == NULL){
+			ERR("%s: can't generate post data", __func__);
+			return current_count;
+		}	
+		
 	    http_code = curl_transport_exec(requestString,
 									    auth, "POST",
-									    post_data, &json);
+									    post_data, &responce);
+		free(post_data);
+
 		// iterate page
-		page++;
-		
-		if(post_data)
-			free(post_data);
+		npage++;
+		cJSON_ReplaceItemInObject(post, "page", cJSON_CreateNumber(npage));
 		
 		if (http_code != 200)
 			break;
 		
-		if (json == NULL)
-			break;
-		
-		meta = cJSON_GetObjectItem(json, "meta");
-		if (meta == NULL)
-			break;
-		obj = cJSON_GetObjectItem(meta, "total_count");
-		if (obj)
+		if (cJSON_IsObject(responce))
+		{
+			
+			meta = cJSON_GetObjectItem(responce, "meta");
+			if (meta == NULL)
+				break;
+			
+			data = cJSON_GetObjectItem(responce, "data");
+			if (data == NULL)
+				break;
+			
+			obj = cJSON_GetObjectItem(meta, "total_count");
+			if (obj == NULL)
+				break;
+			
 			total_count = (int)cJSON_GetNumberValue(obj);
-		
-		data = cJSON_GetObjectItem(json, "data");
-		if (data == NULL)
-			break;
-		
-		current_count += cJSON_GetArraySize(data);
+			current_count += cJSON_GetArraySize(data);
 
-		cJSON_free(json);
-		json = NULL;
+			cJSON_free(responce);
+			responce = NULL;
+		}
 				
 	} while (current_count < total_count);
 
-	return 0;
+	if (post)
+		cJSON_free(post);
+	return current_count;
 }

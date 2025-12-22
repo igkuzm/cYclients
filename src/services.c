@@ -15,12 +15,13 @@ static CYCService SERVICE;
 
 CYCLIENTS_COUNTER
 cyclients_services(const char *token,
-		               int company_id,
-									 void *userdata,
-									 int (*callback)(void *userdata, 
-										               const CYCService *service))
+                   int company_id,
+                   void *userdata,
+                   int (*callback)(void *userdata, 
+                                   const CYCService *service))
 {
-	cJSON *json = NULL;
+	CYCLIENTS_COUNTER n = 0;
+	cJSON *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -30,18 +31,16 @@ cyclients_services(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_exec(
-			requestString,
-		 	auth, "GET",
-		 	NULL, &json);
+	http_code = curl_transport_exec(requestString,
+                                    auth, "GET",
+                                    NULL, &responce);
 
 	if (http_code == 200){ // good
-		if (cJSON_IsObject(json))
+		if (cJSON_IsObject(responce))
 		{
-			cJSON *data = cJSON_GetObjectItem(json, "data");
+			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsArray(data))
 			{
-				int i = 0;
 				cJSON *service;
 				cJSON_ArrayForEach(service, data)
 				{
@@ -52,16 +51,14 @@ cyclients_services(const char *token,
 						if (callback(userdata, &SERVICE))
 							break;
 
-					i++;
+					n++;
 				}
-				cJSON_free(json);
-				return i;
 			}
 		}
 	}
-	if (json)
-		cJSON_free(json);	
-	return 0;
+	if (responce)
+		cJSON_free(responce);	
+	return n;
 }
 
 CYCService *
@@ -69,7 +66,8 @@ cyclients_service_get(const char *token,
                       int company_id,
                       int service_id)
 {
-	cJSON *json = NULL;
+	CYCService *service = NULL;
+	cJSON *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -79,30 +77,26 @@ cyclients_service_get(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_exec(
-			requestString,
-		 	auth, "GET",
-		 	NULL, &json);
+	http_code = curl_transport_exec(requestString,
+		 	                        auth, "GET",
+		 	                        NULL, &responce);
 
 	if (http_code == 200){ // good
-		if (cJSON_IsObject(json))
+		if (cJSON_IsObject(responce))
 		{
-			cJSON *data = cJSON_GetObjectItem(json, "data");
+			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsObject(data))
 			{
-				CYCService *service = NEW(CYCService);
+				service = NEW(CYCService);
 				if (service){
-					cyc_service_fr_json(
-							service, data);
-					cJSON_free(json);
-					return service;
+					cyc_service_fr_json(service, data);
 				}
 			}
 		}
 	}
-	if (json)
-		cJSON_free(json);
-	return NULL;
+	if (responce)
+		cJSON_free(responce);
+	return service;
 }
 
 CYCService *
@@ -119,11 +113,12 @@ cyclients_service_new(const char *token,
                       int weight,
                       CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
-											int nstaff,
-											struct staff staff[])
+                      int nstaff,
+                      struct staff staff[])
 {
 	int i;
-	cJSON *json = NULL, *astaff = NULL;
+	CYCService *service = NULL;
+	cJSON *responce, *astaff, *post;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -133,24 +128,24 @@ cyclients_service_new(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-	json = cJSON_CreateObject();
+	post = cJSON_CreateObject();
 	astaff = cJSON_CreateArray();	
 
 	if (title)
-		cJSON_AddStringToObject(json, "title", title);
-	cJSON_AddNumberToObject(json, "category_id", category_id);
-	cJSON_AddNumberToObject(json, "price_min", price_min);
-	cJSON_AddNumberToObject(json, "price_max", price_max);
-	cJSON_AddNumberToObject(json, "duration", duration);
+		cJSON_AddStringToObject(post, "title", title);
+	cJSON_AddNumberToObject(post, "category_id", category_id);
+	cJSON_AddNumberToObject(post, "price_min", price_min);
+	cJSON_AddNumberToObject(post, "price_max", price_max);
+	cJSON_AddNumberToObject(post, "duration", duration);
 	if (technical_break_duration)
-		cJSON_AddNumberToObject(json, "technical_break_duration", technical_break_duration);
-	cJSON_AddNumberToObject(json, "discount", discount);
+		cJSON_AddNumberToObject(post, "technical_break_duration", technical_break_duration);
+	cJSON_AddNumberToObject(post, "discount", discount);
 	if (comment)
-		cJSON_AddStringToObject(json, "comment", comment);
-	cJSON_AddNumberToObject(json, "weight", weight);
-	cJSON_AddNumberToObject(json, "service_type", service_type);
+		cJSON_AddStringToObject(post, "comment", comment);
+	cJSON_AddNumberToObject(post, "weight", weight);
+	cJSON_AddNumberToObject(post, "service_type", service_type);
 	if (api_service_id)
-		cJSON_AddStringToObject(json, "api_service_id", api_service_id);
+		cJSON_AddStringToObject(post, "api_service_id", api_service_id);
 
 	for (i = 0; i < nstaff; ++i) {
 		cJSON *staff_obj = cJSON_CreateObject();
@@ -160,40 +155,36 @@ cyclients_service_new(const char *token,
 				staff_obj, "seance_length", staff[i].seance_length);
 		cJSON_AddItemToArray(astaff, staff_obj);			
 	}
-	cJSON_AddItemToObject(json, "staff", astaff);
+	cJSON_AddItemToObject(post, "staff", astaff);
 
-	post_data = cJSON_Print(json);
+	post_data = cJSON_Print(post);
 	if (post_data == NULL){
 		ERR("%s: can't generate post data", __func__);
 		return NULL;
 	}
-	cJSON_free(json);
+	cJSON_free(post);
 
-	http_code = curl_transport_exec(
-			requestString,
-		 	auth, "POST",
-		 	cJSON_Print(json), &json);
+	http_code = curl_transport_exec(requestString,
+                                    auth, "POST",
+                                    post_data, &responce);
 	free(post_data);
 
 	if (http_code == 201){ // created
-		if (cJSON_IsObject(json))
+		if (cJSON_IsObject(responce))
 		{
-			cJSON *data = cJSON_GetObjectItem(json, "data");
+			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsObject(data))
 			{
-				CYCService *service = NEW(CYCService);
+				service = NEW(CYCService);
 				if (service){
-					cyc_service_fr_json(
-							service, data);
-					cJSON_free(json);
-					return service;
+					cyc_service_fr_json(service, data);
 				}
 			}
 		}
 	}
-	if (json)
-		cJSON_free(json);
-	return NULL;
+	if (responce)
+		cJSON_free(responce);
+	return service;
 }
 
 int
@@ -231,7 +222,7 @@ cyclients_service_update(const char *token,
                          struct staff staff[])
 {
 	int i;
-	cJSON *json = NULL, *astaff = NULL;
+	cJSON *post, *astaff;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -241,28 +232,28 @@ cyclients_service_update(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-	json = cJSON_CreateObject();
+	post = cJSON_CreateObject();
 	astaff = cJSON_CreateArray();	
 
 	if (title)
-		cJSON_AddStringToObject(json, "title", title);
+		cJSON_AddStringToObject(post, "title", title);
 	if (booking_title)
-		cJSON_AddStringToObject(json, "booking_title", booking_title);
-	cJSON_AddNumberToObject(json, "category_id", category_id);
-	cJSON_AddNumberToObject(json, "price_min", price_min);
-	cJSON_AddNumberToObject(json, "price_max", price_max);
-	cJSON_AddNumberToObject(json, "duration", duration);
+		cJSON_AddStringToObject(post, "booking_title", booking_title);
+	cJSON_AddNumberToObject(post, "category_id", category_id);
+	cJSON_AddNumberToObject(post, "price_min", price_min);
+	cJSON_AddNumberToObject(post, "price_max", price_max);
+	cJSON_AddNumberToObject(post, "duration", duration);
 	if (technical_break_duration)
-		cJSON_AddNumberToObject(json, "technical_break_duration", technical_break_duration);
-	cJSON_AddNumberToObject(json, "discount", discount);
-	cJSON_AddBoolToObject(json, "is_multi", is_multi);
-	cJSON_AddNumberToObject(json, "tax_variant", tax_variant);
-	cJSON_AddNumberToObject(json, "vat_id", vat_id);
-	cJSON_AddBoolToObject(json, "is_need_limit_date", is_need_limit_date);
+		cJSON_AddNumberToObject(post, "technical_break_duration", technical_break_duration);
+	cJSON_AddNumberToObject(post, "discount", discount);
+	cJSON_AddBoolToObject(post, "is_multi", is_multi);
+	cJSON_AddNumberToObject(post, "tax_variant", tax_variant);
+	cJSON_AddNumberToObject(post, "vat_id", vat_id);
+	cJSON_AddBoolToObject(post, "is_need_limit_date", is_need_limit_date);
 	if (date_from)
-		cJSON_AddStringToObject(json, "date_from", date_from);
+		cJSON_AddStringToObject(post, "date_from", date_from);
 	if (date_to)
-		cJSON_AddStringToObject(json, "date_to", date_to);
+		cJSON_AddStringToObject(post, "date_to", date_to);
 	if (dates){
 		char **datesp = (char **)dates;
 		cJSON *datesa = cJSON_CreateArray();
@@ -270,21 +261,21 @@ cyclients_service_update(const char *token,
 			cJSON *item = cJSON_CreateString(*datesp++);
 			cJSON_AddItemToArray(datesa, item);
 		}
-		cJSON_AddItemToObject(json, "dates", datesa);
+		cJSON_AddItemToObject(post, "dates", datesa);
 	}
-	cJSON_AddNumberToObject(json, "seance_search_start", seance_search_start);
-	cJSON_AddNumberToObject(json, "seance_search_finish", seance_search_finish);
-	cJSON_AddNumberToObject(json, "seance_search_step", seance_search_step);
-	cJSON_AddNumberToObject(json, "weight", weight);
-	cJSON_AddNumberToObject(json, "service_type", service_type);
+	cJSON_AddNumberToObject(post, "seance_search_start", seance_search_start);
+	cJSON_AddNumberToObject(post, "seance_search_finish", seance_search_finish);
+	cJSON_AddNumberToObject(post, "seance_search_step", seance_search_step);
+	cJSON_AddNumberToObject(post, "weight", weight);
+	cJSON_AddNumberToObject(post, "service_type", service_type);
 	if (api_service_id)
-		cJSON_AddStringToObject(json, "api_service_id", api_service_id);
-	cJSON_AddNumberToObject(json, "online_invoicing_status", online_invoicing_status);
-	cJSON_AddNumberToObject(json, "price_prepaid_percent", price_prepaid_percent);
-	cJSON_AddNumberToObject(json, "price_prepaid_amount", price_prepaid_amount);
-	cJSON_AddNumberToObject(json, "abonement_restriction_value", abonement_restriction_value);
-	cJSON_AddNumberToObject(json, "is_abonement_autopayment_enabled", is_abonement_autopayment_enabled);
-	cJSON_AddNumberToObject(json, "autopayment_before_visit_time", autopayment_before_visit_time);
+		cJSON_AddStringToObject(post, "api_service_id", api_service_id);
+	cJSON_AddNumberToObject(post, "online_invoicing_status", online_invoicing_status);
+	cJSON_AddNumberToObject(post, "price_prepaid_percent", price_prepaid_percent);
+	cJSON_AddNumberToObject(post, "price_prepaid_amount", price_prepaid_amount);
+	cJSON_AddNumberToObject(post, "abonement_restriction_value", abonement_restriction_value);
+	cJSON_AddNumberToObject(post, "is_abonement_autopayment_enabled", is_abonement_autopayment_enabled);
+	cJSON_AddNumberToObject(post, "autopayment_before_visit_time", autopayment_before_visit_time);
 
 	for (i = 0; i < nstaff; ++i) {
 		cJSON *staff_obj = cJSON_CreateObject();
@@ -294,19 +285,18 @@ cyclients_service_update(const char *token,
 				staff_obj, "seance_length", staff[i].seance_length);
 		cJSON_AddItemToArray(astaff, staff_obj);			
 	}
-	cJSON_AddItemToObject(json, "staff", astaff);
+	cJSON_AddItemToObject(post, "staff", astaff);
 
-	post_data = cJSON_Print(json);
+	post_data = cJSON_Print(post);
 	if (post_data == NULL){
 		ERR("%s: can't generate post data", __func__);
 		return 1;
 	}
-	cJSON_free(json);
+	cJSON_free(post);
 
-	http_code = curl_transport_exec(
-			requestString,
-		 	auth, "PATCH",
-		 	post_data, NULL);
+	http_code = curl_transport_exec(requestString,
+                                    auth, "PATCH",
+									post_data, NULL);
 	free(post_data);
 
 	if (http_code == 200){ // updated
@@ -330,10 +320,9 @@ cyclients_service_delete(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-	http_code = curl_transport_exec(
-			requestString,
-		 	auth, "DELETE",
-		 	NULL, NULL);
+	http_code = curl_transport_exec(requestString,
+                                    auth, "DELETE",
+                                    NULL, NULL);
 
 	if (http_code == 204){ // deleted
 		return 0; 
@@ -354,10 +343,10 @@ cyclients_service_set_links(const char *token,
 							struct translation translations[])
 {
 	int i;
-	cJSON *json = NULL, *array = NULL, 
-          *master_settings = NULL, 
-          *resource_ids = NULL,
-          *array_translations = NULL;
+	cJSON *obj, *post, 
+          *master_settings, 
+          *resource_ids,
+          *array_translations;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -367,9 +356,9 @@ cyclients_service_set_links(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-	json = cJSON_CreateObject();
+	obj = cJSON_CreateObject();
 	master_settings = cJSON_CreateArray();
-	cJSON_AddNumberToObject(json, "service_id", service_id);
+	cJSON_AddNumberToObject(obj, "service_id", service_id);
 	for (i = 0; i < nmaster_configs; ++i) {
 		cJSON *setting = cJSON_CreateObject();		
 		cJSON_AddNumberToObject(setting, "master_id", master_cofigs[i].master_id);
@@ -382,10 +371,10 @@ cyclients_service_set_links(const char *token,
 		cJSON_AddItemToObject(setting, "price", price);
 		cJSON_AddItemToArray(master_settings, setting);
 	}
-	cJSON_AddItemToObject(json, "master_settings", master_settings);
+	cJSON_AddItemToObject(obj, "master_settings", master_settings);
 
 	resource_ids = cJSON_CreateIntArray(resources, nresources);
-	cJSON_AddItemToObject(json, "resource_ids", resource_ids);
+	cJSON_AddItemToObject(obj, "resource_ids", resource_ids);
 
 	array_translations = cJSON_CreateArray();
 	for (i = 0; i < ntranslations; ++i){
@@ -394,18 +383,21 @@ cyclients_service_set_links(const char *token,
 		cJSON_AddStringToObject(translation, "translation", translations[i].translation);
 		cJSON_AddItemToArray(array_translations, translation);
 	} 
-	cJSON_AddItemToObject(json, "translations", array_translations);
+	cJSON_AddItemToObject(obj, "translations", array_translations);
 
-	array = cJSON_CreateArray();
-	cJSON_AddItemToArray(array, json);
+	post = cJSON_CreateArray();
+	cJSON_AddItemToArray(post, obj);
 	
-	post_data = cJSON_Print(array);
-	cJSON_free(array);
+	post_data = cJSON_Print(post);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __func__);
+		return 1;
+	}	
+	cJSON_free(post);
 
-	http_code = curl_transport_exec(
-			requestString,
-		 	auth, "POST",
-		 	post_data, NULL);
+	http_code = curl_transport_exec(requestString,
+                                    auth, "POST",
+                                    post_data, NULL);
 	free(post_data);
 
 	if (http_code == 201){
@@ -415,6 +407,7 @@ cyclients_service_set_links(const char *token,
 	return 1;
 }
 
+int
 cyclients_service_set_staff(const char *token,
                             int company_id,
                             int service_id,
@@ -422,7 +415,7 @@ cyclients_service_set_staff(const char *token,
                             int seance_length,
                             int technological_card_id)
 {
-	cJSON *json = NULL;
+	cJSON *post;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -432,16 +425,19 @@ cyclients_service_set_staff(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	json = cJSON_CreateObject();
-	cJSON_AddNumberToObject(json, "master_id", master_id);
-	cJSON_AddNumberToObject(json, "seance_length", seance_length);
-	cJSON_AddNumberToObject(json, "technological_card_id", technological_card_id);
+	post = cJSON_CreateObject();
+	cJSON_AddNumberToObject(post, "master_id", master_id);
+	cJSON_AddNumberToObject(post, "seance_length", seance_length);
+	cJSON_AddNumberToObject(post, "technological_card_id", technological_card_id);
 	
-	post_data = cJSON_Print(json);
-	cJSON_free(json);
+	post_data = cJSON_Print(post);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __func__);
+		return 1;
+	}	
+	cJSON_free(post);
 	
-	http_code = curl_transport_exec(
-									requestString,
+	http_code = curl_transport_exec(requestString,
 									auth, "POST",
 									post_data, NULL);
 	free(post_data);
@@ -461,7 +457,7 @@ cyclients_service_update_staff(const char *token,
                                int seance_length,
                                int technological_card_id)
 {
-	cJSON *json = NULL;
+	cJSON *post;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -471,12 +467,16 @@ cyclients_service_update_staff(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	json = cJSON_CreateObject();
-	cJSON_AddNumberToObject(json, "seance_length", seance_length);
-	cJSON_AddNumberToObject(json, "technological_card_id", technological_card_id);
+	post = cJSON_CreateObject();
+	cJSON_AddNumberToObject(post, "seance_length", seance_length);
+	cJSON_AddNumberToObject(post, "technological_card_id", technological_card_id);
 	
-	post_data = cJSON_Print(json);
-	cJSON_free(json);
+	post_data = cJSON_Print(post);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __func__);
+		return 1;
+	}	
+	cJSON_free(post);
 	
 	http_code = curl_transport_exec(requestString,
 									auth, "PUT",
@@ -505,8 +505,7 @@ cyclients_service_delete_staff(const char *token,
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
-	http_code = curl_transport_exec(
-									requestString,
+	http_code = curl_transport_exec(requestString,
 									auth, "DELETE",
 									NULL, NULL);
 	
@@ -516,5 +515,4 @@ cyclients_service_delete_staff(const char *token,
 	
 	return 1;	
 }
-
 
