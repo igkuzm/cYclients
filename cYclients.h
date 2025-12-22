@@ -4,6 +4,8 @@
 #include "src/structs.h"
 
 typedef int CYCLIENTS_COUNTER;
+typedef struct {char *key; char *value;} kvpair_t;
+
 
 //////////////////////////////////////////////////////////
 // Authorization
@@ -283,10 +285,11 @@ cyclients_user_copy_to_companies(const char *token,
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
                          int company_id,
-						 const char *comma_separeted_fields_to_return,
-						 const char *search_query,
+                         const char *comma_separeted_fields_to_return,
+                         const char *search_query,
                          void *userdata,
                          int (*callback)(void *userdata, 
-                                         const void *client));
+                                         int nfields,
+                                         const kvpair_t *fields));
 			   
 #endif // CYCLIENTS_H

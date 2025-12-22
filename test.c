@@ -37,6 +37,18 @@ int users_permissions_cb(void *userdata, const CYCUserPermissions *user_permissi
 	return 0;
 }
 
+int clients_cb(void *userdata, int n, const kvpair_t *kvpair)
+{
+	int i;
+	for (i = 0; i < n; ++i) {
+		printf("KEY: %s, VALUE: %s\n", 
+				kvpair[i].key, kvpair[i].value);
+	}
+	return 0;
+}
+
+
+
 int main(int argc, char *argv[])
 {
 	const CYCUser *user = NULL;
@@ -126,7 +138,7 @@ int main(int argc, char *argv[])
 	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
     }
 	
-	cyclients_clients_search(user->user_token, company_id, "name, id", "И", NULL, NULL);
+	cyclients_clients_search(user->user_token, company_id, "name, id", "", NULL, clients_cb);
 
 	/*
 	// create new service

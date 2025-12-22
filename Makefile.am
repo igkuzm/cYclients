@@ -22,6 +22,7 @@ libcyclients_la_SOURCES = \
   src/services.c	\
   src/users.c	\
   src/clients.c	\
+  src/stb_ds.c \
   src/auth.c
 
 libcyclients_la_LIBADD = 

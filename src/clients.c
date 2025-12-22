@@ -4,6 +4,7 @@
 #include "alloc.h"
 #include "structs.h"
 #include "cJSON.h"
+#include "stb_ds.h"
 #include "../partner_token.h"
 #include "curl_transport.h"
 #include "strtok_foreach.h"
@@ -18,14 +19,17 @@
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
                          int company_id,
-						 const char *comma_separeted_fields_to_return,
-						 const char *search_query,
+                         const char *comma_separeted_fields_to_return,
+                         const char *search_query,
                          void *userdata,
                          int (*callback)(void *userdata, 
-                                         const void *client))
+                                         int nfields,
+                                         const kvpair_t *fields))
 {
-	int npage = 0, total_count = 0, current_count = 0, is_first_field = 1;
-	cJSON *post, *page, *fields, *filters, *filter, *state, *meta, *data, *obj, *responce;
+	int i, npage = 0, total_count = 0, current_count = 0, 
+			is_first_field = 1;
+	cJSON *post, *page, *fields, *filters, *filter, *state, 
+				*meta, *data, *obj, *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -100,6 +104,35 @@ cyclients_clients_search(const char *token,
 			
 			total_count = (int)cJSON_GetNumberValue(obj);
 			current_count += cJSON_GetArraySize(data);
+
+			if (cJSON_IsArray(data))
+			{
+				kvpair_t *client = NULL;
+				cJSON *element, *item;
+				cJSON_ArrayForEach(element, data)
+				{
+					if (cJSON_IsObject(element))
+					{
+						// make hashtable
+						for (item = element->child;
+								 item;
+								 item = item->next)
+						{
+							if (cJSON_IsString(item))
+								shput(client, item->string, item->valuestring);
+							else if (cJSON_IsNumber(item))
+								shput(client, item->string, STR("%d", item->valueint));
+							else if (cJSON_IsBool(item))
+								shput(client, item->string, STR("%d", item->valueint));
+							/* TODO: ARAY and OBJECT <22-12-25, yourname> */
+						}
+					}
+					if (callback)
+						if (callback(userdata, shlen(client), client))
+								break;
+				}
+				shfree(client);
+			}
 
 			cJSON_free(responce);
 			responce = NULL;
