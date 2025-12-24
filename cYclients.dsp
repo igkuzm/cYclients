@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "build\win32"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /c /I "win32\curl\include" /D "DEF:cYclients.def"
+# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /FD /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -51,7 +51,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "cYclients - Winnt"
+!ELSEIF  "$(CFG)" == "cYclients - WinnT"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -63,8 +63,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "build\winnt"
 # PROP Intermediate_Dir "build\winnt"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c /I "winnt\curl\include" /D "DEF:cYclients.def"
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -79,25 +79,13 @@ LIB32=link.exe -lib
 # Begin Target
 
 # Name "cYclients - Win32"
-# Name "cYclients - Winnt"
+# Name "cYclients - WinnT"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\src\cJSON.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\log.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\curl_transport.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\structs.c
+SOURCE=.\src\auth.c
 # End Source File
 # Begin Source File
 
@@ -105,11 +93,7 @@ SOURCE=.\src\categories.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\services.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\users.c
+SOURCE=.\src\cJSON.c
 # End Source File
 # Begin Source File
 
@@ -117,11 +101,31 @@ SOURCE=.\src\clients.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\curl_transport.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\cYclients.def
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\log.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\services.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\stb_ds.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\auth.c
+SOURCE=.\src\structs.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\users.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -129,15 +133,11 @@ SOURCE=.\src\auth.c
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\src\config.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\log.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\cJSON.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\config.h
 # End Source File
 # Begin Source File
 
@@ -145,20 +145,24 @@ SOURCE=.\src\curl_transport.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\structs.h
+SOURCE=.\cYclients.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\cYclients.h
+SOURCE=.\src\log.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\partner_token.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\structs.h
+# End Source File
 # End Group
 # Begin Source File
 
 SOURCE=.\ReadMe.md
-# End Source File 
+# End Source File
 # End Target
 # End Project
