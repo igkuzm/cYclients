@@ -245,12 +245,12 @@ cyclients_client_files(const char *token,
     CYCLIENTS_COUNTER n = 0;
     cJSON *responce;
     long http_code = 0;
-	char requestString[BUFSIZ], auth[128];
-	char * SETUP_PARTNER_TOKEN(partner_token);
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
     
     sprintf(requestString, "%s/company/%d/clients/files/%d", 
 			URL, company_id, client_id);
-	sprintf(auth, "Authorization: Bearer %s, User %s"
+    sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
     
     http_code = curl_transport_exec(requestString,
@@ -278,3 +278,30 @@ cyclients_client_files(const char *token,
 
     return n;
 }
+
+int
+cyclients_client_file_remove(const char *token,
+                             int company_id,
+                             int client_id,
+														 int file_id)
+{
+    long http_code = 0;
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/company/%d/clients/files/%d/%d", 
+			URL, company_id, client_id, file_id);
+    sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "DELETE",
+                                    NULL, NULL);
+    
+    if (http_code == 202)
+			return 0;
+
+		return 1;
+}
+
+
