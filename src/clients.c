@@ -28,9 +28,9 @@ cyclients_clients_search(const char *token,
                                          int nfields,
                                          const kvpair_t *fields))
 {
-	int i, npage = 0, total_count = 0, current_count = 0, 
+	int npage = 0, total_count = 0, current_count = 0, 
 			is_first_field = 1;
-	cJSON *post, *page, *fields, *filters, *filter, *state, 
+	cJSON *post, *fields, *filters, *filter, *state, 
 				*meta, *data, *obj, *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
@@ -49,15 +49,17 @@ cyclients_clients_search(const char *token,
 	cJSON_AddNumberToObject(post, "page", npage);
 	cJSON_AddNumberToObject(post, "page_size", PAGE_SIZE);
 	fields = cJSON_CreateArray();
-	strtok_foreach(comma_separeted_fields_to_return, ",", field){
-		if (field){
-			cJSON *obj = cJSON_CreateString(field);
-			if (is_first_field)
-				cJSON_AddStringToObject(post, "order_by", field);
-			is_first_field = 0;
-			cJSON_AddItemToArray(fields, obj);
+	do {
+		strtok_foreach(comma_separeted_fields_to_return, ",", field){
+			if (field){
+				cJSON *obj = cJSON_CreateString(field);
+				if (is_first_field)
+					cJSON_AddStringToObject(post, "order_by", field);
+				is_first_field = 0;
+				cJSON_AddItemToArray(fields, obj);
+			}
 		}
-	}
+	} while(0);
 	cJSON_AddItemToObject(post, "fields", fields);
 	cJSON_AddStringToObject(post, "order_by_direction", "ASC");
 	cJSON_AddStringToObject(post, "operation", "AND");
@@ -74,7 +76,7 @@ cyclients_clients_search(const char *token,
 		responce = NULL;
 	    post_data = cJSON_Print(post);
 		if (post_data == NULL){
-			ERR("%s: can't generate post data", __func__);
+			ERR("%s: can't generate post data", __FILE__);
 			return current_count;
 		}	
 		
@@ -161,7 +163,7 @@ cyclients_client_new(const char *token,
                      int number_custom_fields_key_value_pairs,
                      ...)
 {
-    int i;
+    int i = 0;
     cJSON *post, *custom_fields;
     char *phone_number;
     long http_code = 0;
@@ -219,7 +221,7 @@ cyclients_client_new(const char *token,
     
     post_data = cJSON_Print(post);
     if (post_data == NULL){
-        ERR("%s: can't generate post data", __func__);
+        ERR("%s: can't generate post data", __FILE__);
         return 1;
     }	
     
@@ -311,7 +313,7 @@ cyclients_client_file_upload(const char *token,
 														 int file_id)
 {
     long http_code = 0;
-    char requestString[BUFSIZ], auth[128];
+    char requestString[BUFSIZ], auth[128], *post_data;
     char * SETUP_PARTNER_TOKEN(partner_token);
     
     sprintf(requestString, "%s/company/%d/clients/files/%d", 
@@ -319,7 +321,7 @@ cyclients_client_file_upload(const char *token,
     sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-		char *post_data = "";
+	post_data = "";
     
     http_code = curl_transport_exec(requestString,
                                     auth, "POST",

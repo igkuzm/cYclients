@@ -221,7 +221,7 @@ cyclients_user_copy_to_companies(const char *token,
 	}
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return 1;
 	}	
 	cJSON_free(post);
@@ -268,7 +268,7 @@ cyclients_user_new(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return 1;
 	}	
 	cJSON_free(post);

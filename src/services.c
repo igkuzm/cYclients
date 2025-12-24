@@ -159,7 +159,7 @@ cyclients_service_new(const char *token,
 
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return NULL;
 	}
 	cJSON_free(post);
@@ -289,7 +289,7 @@ cyclients_service_update(const char *token,
 
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return 1;
 	}
 	cJSON_free(post);
@@ -360,12 +360,12 @@ cyclients_service_set_links(const char *token,
 	master_settings = cJSON_CreateArray();
 	cJSON_AddNumberToObject(obj, "service_id", service_id);
 	for (i = 0; i < nmaster_configs; ++i) {
+		cJSON *price = cJSON_CreateObject();
 		cJSON *setting = cJSON_CreateObject();		
 		cJSON_AddNumberToObject(setting, "master_id", master_cofigs[i].master_id);
 		cJSON_AddNumberToObject(setting, "technological_card_id", master_cofigs[i].technological_card_id);
 		cJSON_AddNumberToObject(setting, "hours", master_cofigs[i].hours);
-		cJSON_AddNumberToObject(setting, "minutes", master_cofigs[i].minutes);
-		cJSON *price = cJSON_CreateObject();		
+		cJSON_AddNumberToObject(setting, "minutes", master_cofigs[i].minutes);			
 		cJSON_AddNumberToObject(price, "min", master_cofigs[i].price.min);
 		cJSON_AddNumberToObject(price, "max", master_cofigs[i].price.max);
 		cJSON_AddItemToObject(setting, "price", price);
@@ -390,7 +390,7 @@ cyclients_service_set_links(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return 1;
 	}	
 	cJSON_free(post);
@@ -432,7 +432,7 @@ cyclients_service_set_staff(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return 1;
 	}	
 	cJSON_free(post);
@@ -473,7 +473,7 @@ cyclients_service_update_staff(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __func__);
+		ERR("%s: can't generate post data", __FILE__);
 		return 1;
 	}	
 	cJSON_free(post);

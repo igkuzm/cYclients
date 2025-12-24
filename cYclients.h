@@ -201,7 +201,7 @@ int
 cyclients_service_set_links(const char *token,
                             int company_id,
                             int service_id,
-						                int nmaster_configs,
+                            int nmaster_configs,
                             struct master_cofig master_cofigs[],
                             int nresources,
                             int resources[],
@@ -213,7 +213,7 @@ int
 cyclients_service_set_staff(const char *token,
                             int company_id,
                             int service_id,
-						                int master_id,
+                            int master_id,
                             int seance_length,
                             int technological_card_id);
 
@@ -222,7 +222,7 @@ int
 cyclients_service_update_staff(const char *token,
                                int company_id,
                                int service_id,
-						                   int master_id,
+                               int master_id,
                                int seance_length,
                                int technological_card_id);
 
@@ -317,13 +317,13 @@ int
 cyclients_client_file_remove(const char *token,
                              int company_id,
                              int client_id,
-														 int file_id);
+                             int file_id);
 
 int
 cyclients_client_file_upload(const char *token,
                              int company_id,
                              int client_id,
-														 int file_id);
+                             int file_id);
 
 
 #endif // CYCLIENTS_H

@@ -168,20 +168,23 @@ int cyc_user_role_fr_json(CYCUserRole *t, const cJSON *json)
 
 int cyc_user_permissions_fr_json(CYCUserPermissions *t, const cJSON *p)
 {
+	cJSON *json;
+	
 	assert(p != NULL); \
 	assert(t != NULL); \
+	
 	if (cJSON_IsArray(p)) {
 		t->_type = CYC_TYPE_USER_PERMISSIONS;
-		cJSON *json = NULL;
 		cJSON_ArrayForEach(json, p)
 		{
 			if (cJSON_IsObject(json))
 			{
+				const char *name = NULL;
 				cJSON *slug = cJSON_GetObjectItem(json, "slug");
 				cJSON *value = cJSON_GetObjectItem(json, "value");
 				if (slug == NULL || value == NULL)
 					continue;
-				const char *name = slug->valuestring;
+				name = slug->valuestring;
 #ifdef DEBUG
 				LOG("parse permission: %s\n", name);
 #endif
