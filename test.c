@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
 		//printf("usage: %s login password\n", argv[0]);
 		//return 0;
 		printf("enter login\n");
-		scanf("%s", login);
+		scanf("%31s", login);
 		printf("enter password\n");
-		scanf("%s", password);
+		scanf("%31s", password);
 	} else {
 		strncat(login,argv[1],32);
 		strncat(password,argv[2],32);
@@ -147,6 +147,7 @@ int main(int argc, char *argv[])
     printf("CLIENT_ID: %d\n", client_id);
     
     cyclients_client_files(user->user_token, company_id, client_id, NULL, NULL);
+		cyclients_client_file_upload(user->user_token, company_id, client_id, 0);
 
 	/*
 	// create new service

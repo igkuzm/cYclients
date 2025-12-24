@@ -304,4 +304,28 @@ cyclients_client_file_remove(const char *token,
 		return 1;
 }
 
+int
+cyclients_client_file_upload(const char *token,
+                             int company_id,
+                             int client_id,
+														 int file_id)
+{
+    long http_code = 0;
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/company/%d/clients/files/%d", 
+			URL, company_id, client_id);
+    sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+
+		char *post_data = "";
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "POST",
+                                    post_data, NULL);
+    
+
+}
+
 

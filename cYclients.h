@@ -319,5 +319,11 @@ cyclients_client_file_remove(const char *token,
                              int client_id,
 														 int file_id);
 
+int
+cyclients_client_file_upload(const char *token,
+                             int company_id,
+                             int client_id,
+														 int file_id);
+
 
 #endif // CYCLIENTS_H
