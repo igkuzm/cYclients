@@ -319,11 +319,11 @@ cyclients_client_file_remove(const char *token,
                              int client_id,
                              int file_id);
 
-int
-cyclients_client_file_upload(const char *token,
-                             int company_id,
-                             int client_id,
-                             int file_id);
-
-
+CYCLIENTS_COUNTER
+cyclients_client_visits(const char *token,
+                       int company_id,
+                       int client_id,
+                       void *userdata,
+                       int (*callback)(void *userdata, 
+                                       const CYCVisit *visit));
 #endif // CYCLIENTS_H

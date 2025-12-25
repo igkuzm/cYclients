@@ -306,28 +306,66 @@ cyclients_client_file_remove(const char *token,
 		return 1;
 }
 
-int
-cyclients_client_file_upload(const char *token,
-                             int company_id,
-                             int client_id,
-														 int file_id)
+CYCLIENTS_COUNTER
+cyclients_client_visits(const char *token,
+                       int company_id,
+                       int client_id,
+                       void *userdata,
+                       int (*callback)(void *userdata, 
+                                       void *visit))
 {
+    CYCLIENTS_COUNTER n = 0;
+    cJSON *responce, *post, *from, *to;
     long http_code = 0;
     char requestString[BUFSIZ], auth[128], *post_data;
     char * SETUP_PARTNER_TOKEN(partner_token);
     
-    sprintf(requestString, "%s/company/%d/clients/files/%d", 
-			URL, company_id, client_id);
+    sprintf(requestString, "%s/company/%d/clients/visits/search", 
+			URL, company_id);
     sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-	post_data = "";
+		post = cJSON_CreateObject();
+		cJSON_AddNumberToObject(post, "client_id", client_id);
+		cJSON_AddNullToObject(post, "client_phone");
+		cJSON_AddNullToObject(post, "from");
+		cJSON_AddNullToObject(post, "to");
+		cJSON_AddNullToObject(post, "payment_statuses");
+		cJSON_AddNullToObject(post, "attendance");
+	
+		post_data = cJSON_Print(post);
+    if (post_data == NULL){
+        ERR("%s: %d: can't generate post data", __FILE__, __LINE__);
+        return n;
+    }	
+		cJSON_free(post);
     
     http_code = curl_transport_exec(requestString,
                                     auth, "POST",
-                                    post_data, NULL);
+                                    post_data, &responce);
     
+    if (http_code == 200)
+    {
+			/*
+        if (cJSON_IsArray(responce))
+        {
+            cJSON *file;
+            cJSON_ArrayForEach(file, responce)
+            {
+                memset(&CYCFILE, 0, sizeof(CYCFILE));
+                cyc_file_fr_json(&CYCFILE, file);
+                if (callback)
+                    if (callback(userdata, &CYCFILE))
+                        break;                       
+            }
+        }
+			*/
+    }
+    
+    if(responce)
+        cJSON_free(responce);
 
+    return n;
 }
 
 

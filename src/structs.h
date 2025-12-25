@@ -29,7 +29,9 @@ typedef	enum {
 	CYC_TYPE_SERVICE,
 	CYC_TYPE_USER_ROLE,
 	CYC_TYPE_USER_PERMISSIONS,
-    CYC_TYPE_FILE,
+  CYC_TYPE_FILE,
+  CYC_TYPE_VISIT_SERVICE,
+  CYC_TYPE_VISIT,
 	CYC_NTYPES,
 } CYC_TYPE;
 
@@ -460,6 +462,12 @@ typedef	enum {
 	CYC_STRING(image_url, 256) \
 	CYC_INT(price) \
 	CYC_STRING(name, 64) \
+	CYC_INT(company_id) \
+	CYC_INT(user_id) \
+	CYC_STRING(avatar, 256) \
+	CYC_STRING(avatar_big, 256) \
+	CYC_INT(position) \
+	CYC_STRING(specialization, 64) \
 
 #define CYC_SERVICE \
 	CYC_STRING(booking_title, 256) \
@@ -798,6 +806,29 @@ typedef	enum {
    CYC_STRING(user_avatar, 256) \
    CYC_BOOL(can_edit) \
 
+#define CYC_VISIT_SERVICE \
+	CYC_INT(id) \
+	CYC_STRING(title, 32) \
+	CYC_INT(first_cost) \
+	CYC_INT(discount_percent) \
+	CYC_INT(cost_to_pay) \
+	CYC_INT(paid_sum) \
+	CYC_STRING(payment_status, 32) \
+	CYC_INT(paid_abonements_count) \
+	CYC_INT(amount) \
+	CYC_INT(payed_cost) \
+	CYC_BOOL(is_paid_full) \
+	CYC_BOOL(is_multi) \
+
+#define CYC_VISIT \
+   CYC_INT(id) \
+   CYC_STRING(comment, 256) \
+   CYC_STRING(date, 32) \
+   CYC_INT(visit_id) \
+   CYC_INT(attendance) \
+   CYC_VISIT_SERVICE_CLASS_ARRAY(services, 32) \
+   CYC_STAFF_CLASS(staff) \
+   CYC_COMPANY_CLASS(company) \
 
 // structure 
 #define CYC_UNKNOWN(_name)
@@ -822,6 +853,8 @@ typedef	enum {
 #define CYC_COMPANY_CLASS(_name) CYCCompany _name;
 #define CYC_STAFF_CLASS(_name) CYCStaff _name;
 #define CYC_SERVICE_CLASS(_name) CYCService _name;
+#define CYC_VISIT_SERVICE_CLASS(_name) CYCVisitService _name;
+#define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len];
 
 typedef struct {
 	CYC_TYPE _type;
@@ -930,6 +963,20 @@ typedef struct {
 int     cyc_file_fr_json(CYCFile *t, const cJSON *json);
 cJSON * cyc_file_to_json(CYCFile *t);
 
+typedef struct {
+	CYC_TYPE _type;
+	CYC_VISIT_SERVICE
+} CYCVisitService;
+int     cyc_visit_service_fr_json(CYCVisitService *t, const cJSON *json);
+cJSON * cyc_visit_service_to_json(CYCVisitService *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_VISIT
+} CYCVisit;
+int     cyc_visit_fr_json(CYCVisit *t, const cJSON *json);
+cJSON * cyc_visit_to_json(CYCVisit *t);
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -950,5 +997,7 @@ cJSON * cyc_file_to_json(CYCFile *t);
 #undef CYC_COMPANY_CLASS
 #undef CYC_STAFF_CLASS
 #undef CYC_SERVICE_CLASS
+#undef CYC_VISIT_SERVICE_CLASS
+#undef CYC_VISIT_SERVICE_CLASS_ARRAY
 
 #endif // STRUCTS_H

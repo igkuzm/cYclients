@@ -49,6 +49,10 @@
 	cyc_staff_fr_json(&t->_name, json);
 #define CYC_SERVICE_CLASS(_name) \
 	cyc_service_fr_json(&t->_name, json);
+#define CYC_VISIT_SERVICE_CLASS(_name) \
+	cyc_visit_service_fr_json(&t->_name, json);
+#define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
+	JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_fr_json) \
 
 #define FROM_JSON_START \
 	assert(json != NULL); \
@@ -203,7 +207,23 @@ int cyc_file_fr_json(CYCFile *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_FILE;
 	CYC_FILE
-    FROM_JSON_END		
+  FROM_JSON_END		
+}
+
+int cyc_visit_service_fr_json(CYCVisitService *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_VISIT_SERVICE;
+	CYC_VISIT_SERVICE
+  FROM_JSON_END		
+}
+
+int cyc_visit_fr_json(CYCVisit *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_VISIT;
+	CYC_VISIT
+  FROM_JSON_END		
 }
 
 #undef CYC_UNKNOWN
@@ -226,7 +246,8 @@ int cyc_file_fr_json(CYCFile *t, const cJSON *json)
 #undef CYC_COMPANY_CLASS
 #undef CYC_STAFF_CLASS
 #undef CYC_SERVICE_CLASS
-
+#undef CYC_VISIT_SERVICE_CLASS
+#undef CYC_VISIT_SERVICE_CLASS_ARRAY
 
 // TO JSON
 #define CYC_UNKNOWN(_name)
@@ -307,6 +328,16 @@ int cyc_file_fr_json(CYCFile *t, const cJSON *json)
 		cyc_service_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
 	}	while(0);
+
+#define CYC_VISIT_SERVICE_CLASS(_name) \
+	do { \
+		cJSON *_obj = \
+		cyc_visit_service_to_json(&t->_name); \
+		cJSON_AddItemToObject(json, #_name, _obj); \
+	}	while(0);
+
+#define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
+	JSON_FROM_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_to_json);
 
 #define TO_JSON_START \
 	cJSON *json = NULL; \
@@ -424,6 +455,20 @@ cJSON * cyc_file_to_json(CYCFile *t)
 	TO_JSON_END	
 }
 
+cJSON * cyc_visit_service_to_json(CYCVisitService *t)
+{
+	TO_JSON_START
+	CYC_VISIT_SERVICE
+	TO_JSON_END	
+}
+
+cJSON * cyc_visit_to_json(CYCVisit *t)
+{
+	TO_JSON_START
+	CYC_VISIT
+	TO_JSON_END	
+}
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -444,4 +489,5 @@ cJSON * cyc_file_to_json(CYCFile *t)
 #undef CYC_COMPANY_CLASS
 #undef CYC_STAFF_CLASS
 #undef CYC_SERVICE_CLASS
-
+#undef CYC_VISIT_SERVICE_CLASS
+#undef CYC_VISIT_SERVICE_CLASS_ARRAY

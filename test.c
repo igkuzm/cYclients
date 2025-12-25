@@ -68,8 +68,8 @@ int main(int argc, char *argv[])
 		printf("enter password\n");
 		scanf("%31s", password);
 	} else {
-		strncat(login,argv[1],32);
-		strncat(password,argv[2],32);
+		strncat(login,argv[1],31);
+		strncat(password,argv[2],31);
 	}
 	
 	auth = cyclients_login(login, password,
@@ -147,40 +147,10 @@ int main(int argc, char *argv[])
     printf("CLIENT_ID: %d\n", client_id);
     
     cyclients_client_files(user->user_token, company_id, client_id, NULL, NULL);
-		cyclients_client_file_upload(user->user_token, company_id, client_id, 0);
 
-	/*
-	// create new service
-	char title[256];
-	sprintf(title, "TEST service: %ld", time(NULL));
+		cyclients_client_visits(user->user_token, company_id, client_id, NULL, NULL);
 
-	struct staff staff = {3862837, 3600};
-	 
-	const CYCService *newService = 
-		cyclients_service_new(
-				user->user_token, 
-				company_id, 
-				title, 
-				18565171, 
-				1200, 
-				3500, 
-				3000, 
-				0, 
-				0, 
-				"this is test service", 
-				1, 
-				1, 
-				NULL, 
-				1, 
-				&staff);
-	if (newService == NULL){
-		printf("can't create new service\n");
-		return 1;
-	}
-	printf("Created new service: %s\n", newService->title);
-	*/
-	
-	return 0;
+		return 0;
 }
 
 // vim:ft=c
