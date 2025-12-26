@@ -17,6 +17,7 @@
 #define PAGE_SIZE 100
 
 static CYCFile CYCFILE;
+static CYCVisit VISIT;
 
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
@@ -261,16 +262,20 @@ cyclients_client_files(const char *token,
     
     if (http_code == 200)
     {
-        if (cJSON_IsArray(responce))
+        if (cJSON_IsObject(responce))
         {
-            cJSON *file;
-            cJSON_ArrayForEach(file, responce)
+            cJSON *data = cJSON_GetObjectItem(responce, "data");
+            if (cJSON_IsArray(data))
             {
-                memset(&CYCFILE, 0, sizeof(CYCFILE));
-                cyc_file_fr_json(&CYCFILE, file);
-                if (callback)
-                    if (callback(userdata, &CYCFILE))
-                        break;                       
+                cJSON *file;
+                cJSON_ArrayForEach(file, data)
+                {
+                    memset(&CYCFILE, 0, sizeof(CYCFILE));
+                    cyc_file_fr_json(&CYCFILE, file);
+                    if (callback)
+                        if (callback(userdata, &CYCFILE))
+                            break;                       
+                }
             }
         }
     }
@@ -311,8 +316,8 @@ cyclients_client_visits(const char *token,
                        int company_id,
                        int client_id,
                        void *userdata,
-                       int (*callback)(void *userdata, 
-                                       void *visit))
+                        int (*callback)(void *userdata, 
+                                        const CYCVisit *visit))
 {
     CYCLIENTS_COUNTER n = 0;
     cJSON *responce, *post, *from, *to;
@@ -346,20 +351,26 @@ cyclients_client_visits(const char *token,
     
     if (http_code == 200)
     {
-			/*
-        if (cJSON_IsArray(responce))
+        if (cJSON_IsObject(responce))
         {
-            cJSON *file;
-            cJSON_ArrayForEach(file, responce)
+            cJSON *data = cJSON_GetObjectItem(responce, "data");
+            if (cJSON_IsObject(data))
             {
-                memset(&CYCFILE, 0, sizeof(CYCFILE));
-                cyc_file_fr_json(&CYCFILE, file);
-                if (callback)
-                    if (callback(userdata, &CYCFILE))
-                        break;                       
+                cJSON *records = cJSON_GetObjectItem(data, "records");
+                if (cJSON_IsArray(records))
+                {
+                    cJSON *visit;
+                    cJSON_ArrayForEach(visit, records)
+                    {
+                        memset(&VISIT, 0, sizeof(VISIT));
+                        cyc_visit_fr_json(&VISIT, visit);
+                        if (callback)
+                            if (callback(userdata, &VISIT))
+                                break;                       
+                    }
+                }
             }
         }
-			*/
     }
     
     if(responce)

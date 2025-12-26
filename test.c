@@ -51,6 +51,17 @@ int clients_cb(void *userdata, int n, const kvpair_t *kvpair)
 	return 0;
 }
 
+int file_cb(void *userdata, const CYCFile *file)
+{
+	printf("FILE NAME: %s\n", file->name);
+	return 0;
+}
+
+int visit_cb(void *userdata, const CYCVisit *visit)
+{
+	printf("VISIT COMMENT: %s\n", visit->comment);
+	return 0;
+}
 
 
 int main(int argc, char *argv[])
@@ -146,11 +157,11 @@ int main(int argc, char *argv[])
 	cyclients_clients_search(user->user_token, company_id, "name, id", "Семенцов Игорь", &client_id, clients_cb);
     printf("CLIENT_ID: %d\n", client_id);
     
-    cyclients_client_files(user->user_token, company_id, client_id, NULL, NULL);
+    cyclients_client_files(user->user_token, company_id, client_id, NULL, file_cb);
 
-		cyclients_client_visits(user->user_token, company_id, client_id, NULL, NULL);
+    cyclients_client_visits(user->user_token, company_id, client_id, NULL, visit_cb);
 
-		return 0;
+    return 0;
 }
 
 // vim:ft=c
