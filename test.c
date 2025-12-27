@@ -157,9 +157,15 @@ int main(int argc, char *argv[])
 	cyclients_clients_search(user->user_token, company_id, "name, id", "Семенцов Игорь", &client_id, clients_cb);
     printf("CLIENT_ID: %d\n", client_id);
     
-    cyclients_client_files(user->user_token, company_id, client_id, NULL, file_cb);
+    //cyclients_client_files(user->user_token, company_id, client_id, NULL, file_cb);
 
-    cyclients_client_visits(user->user_token, company_id, client_id, NULL, visit_cb);
+    //cyclients_client_visits(user->user_token, company_id, client_id, NULL, visit_cb);
+
+    CYCClient *client = cyclients_client_get(user->user_token, company_id, client_id);
+    if (client)
+    {
+        printf("CLIENT NAME: %s\n", client->name);
+    }
 
     return 0;
 }

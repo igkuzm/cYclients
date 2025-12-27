@@ -89,6 +89,19 @@
 		} \
 	}	while(0);
 
+#define JSON_TO_KVPAIR(_json, _struct, _name) \
+do { \
+    cJSON *_obj = cJSON_GetObjectItem(_json, #_name); \
+		if (cJSON_IsObject(_obj)){ \
+			int i = 0; \
+            cJSON *_item = NULL; \
+            for(_item = _obj->child; _item && i < 32; _item = _item->next, ++i){ \
+                    _struct->_name[i].key = _item->string; \
+                    _struct->_name[i].value = _item->valuestring; \
+            } \
+		} \
+}	while(0);
+
 
 
 #define JSON_FROM_INT(_json, _struct, _name) \

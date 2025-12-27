@@ -13,6 +13,8 @@
 #include "cJSON.h"
 #include "config.h"
 
+struct kvpair{char *key; char *value;};
+
 typedef	enum {
 	CYC_TYPE_NULL,
 	CYC_TYPE_USER,
@@ -29,9 +31,10 @@ typedef	enum {
 	CYC_TYPE_SERVICE,
 	CYC_TYPE_USER_ROLE,
 	CYC_TYPE_USER_PERMISSIONS,
-  CYC_TYPE_FILE,
-  CYC_TYPE_VISIT_SERVICE,
-  CYC_TYPE_VISIT,
+    CYC_TYPE_FILE,
+    CYC_TYPE_VISIT_SERVICE,
+    CYC_TYPE_VISIT,
+    CYC_TYPE_CLIENT,
 	CYC_NTYPES,
 } CYC_TYPE;
 
@@ -830,6 +833,34 @@ typedef	enum {
    CYC_STAFF_CLASS(staff) \
    CYC_COMPANY_CLASS(company) \
 
+#define CYC_CLIENT \
+   CYC_INT(id) \
+   CYC_STRING(name, 64) \
+   CYC_STRING(surname, 64) \
+   CYC_STRING(patronymic, 64) \
+   CYC_STRING(display_name, 128) \
+   CYC_STRING(phone, 16) \
+   CYC_STRING(email, 64) \
+   CYC_INT(sex_id) \
+   CYC_STRING(sex, 16) \
+   CYC_INT(discount) \
+   CYC_STRING(importance, 32) \
+   CYC_STRING(card, 32) \
+   CYC_STRING(birth_date, 32) \
+   CYC_STRING(comment, 256) \
+   CYC_INT(visits) \
+   CYC_INT(sms_check) \
+   CYC_INT(sms_bot) \
+   CYC_INT(sms_not) \
+   CYC_INT(spent) \
+   CYC_INT(paid) \
+   CYC_INT(balance) \
+   CYC_INT(importance_id) \
+   CYC_STRING_ARRAY(categories, 32, 32) \
+   CYC_STRING(last_change_date, 32) \
+   CYC_KVPAIR(custom_fields) \
+
+
 // structure 
 #define CYC_UNKNOWN(_name)
 #define CYC_INT(_name) int _name;
@@ -855,6 +886,7 @@ typedef	enum {
 #define CYC_SERVICE_CLASS(_name) CYCService _name;
 #define CYC_VISIT_SERVICE_CLASS(_name) CYCVisitService _name;
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len];
+#define CYC_KVPAIR(_name) struct kvpair _name[32];
 
 typedef struct {
 	CYC_TYPE _type;
@@ -977,6 +1009,13 @@ typedef struct {
 int     cyc_visit_fr_json(CYCVisit *t, const cJSON *json);
 cJSON * cyc_visit_to_json(CYCVisit *t);
 
+typedef struct {
+	CYC_TYPE _type;
+	CYC_CLIENT
+} CYCClient;
+int     cyc_client_fr_json(CYCClient *t, const cJSON *json);
+cJSON * cyc_client_to_json(CYCClient *t);
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -999,5 +1038,6 @@ cJSON * cyc_visit_to_json(CYCVisit *t);
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_KVPAIR
 
 #endif // STRUCTS_H

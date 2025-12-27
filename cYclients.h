@@ -291,7 +291,12 @@ cyclients_clients_search(const char *token,
                          int (*callback)(void *userdata, 
                                          int nfields,
                                          const kvpair_t *fields));
-			  
+	
+const CYCClient *
+cyclients_client_get(const char *token,
+                     int company_id,
+                     int client_id);
+
 int
 cyclients_client_new(const char *token,
                      int company_id,

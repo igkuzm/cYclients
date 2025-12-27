@@ -52,7 +52,9 @@
 #define CYC_VISIT_SERVICE_CLASS(_name) \
 	cyc_visit_service_fr_json(&t->_name, json);
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
-	JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_fr_json) \
+	JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_fr_json);
+#define CYC_KVPAIR(_name) \
+    JSON_TO_KVPAIR(json, t, _name);
 
 #define FROM_JSON_START \
 	assert(json != NULL); \
@@ -215,7 +217,7 @@ int cyc_visit_service_fr_json(CYCVisitService *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_VISIT_SERVICE;
 	CYC_VISIT_SERVICE
-  FROM_JSON_END		
+    FROM_JSON_END		
 }
 
 int cyc_visit_fr_json(CYCVisit *t, const cJSON *json)
@@ -223,7 +225,15 @@ int cyc_visit_fr_json(CYCVisit *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_VISIT;
 	CYC_VISIT
-  FROM_JSON_END		
+    FROM_JSON_END		
+}
+
+int cyc_client_fr_json(CYCClient *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_CLIENT;
+	CYC_CLIENT
+    FROM_JSON_END		
 }
 
 #undef CYC_UNKNOWN
@@ -248,6 +258,7 @@ int cyc_visit_fr_json(CYCVisit *t, const cJSON *json)
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_KVPAIR
 
 // TO JSON
 #define CYC_UNKNOWN(_name)
@@ -338,6 +349,8 @@ int cyc_visit_fr_json(CYCVisit *t, const cJSON *json)
 
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
 	JSON_FROM_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_to_json);
+
+#define CYC_KVPAIR(_name) \
 
 #define TO_JSON_START \
 	cJSON *json = NULL; \
@@ -469,6 +482,13 @@ cJSON * cyc_visit_to_json(CYCVisit *t)
 	TO_JSON_END	
 }
 
+cJSON * cyc_client_to_json(CYCClient *t)
+{
+	TO_JSON_START
+	CYC_CLIENT
+	TO_JSON_END	
+}
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -491,3 +511,5 @@ cJSON * cyc_visit_to_json(CYCVisit *t)
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_KVPAIR
+

@@ -18,6 +18,7 @@
 
 static CYCFile CYCFILE;
 static CYCVisit VISIT;
+static CYCClient CLIENT;
 
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
@@ -149,6 +150,45 @@ cyclients_clients_search(const char *token,
 	if (post)
 		cJSON_free(post);
 	return current_count;
+}
+
+const CYCClient *
+cyclients_client_get(const char *token,
+                     int company_id,
+                     int client_id)
+{
+    const CYCClient *client = NULL;
+    cJSON *responce;
+    long http_code = 0;
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/client/%d/%d", 
+			URL, company_id, client_id);
+    sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "GET",
+                                    NULL, &responce);
+    
+    if (http_code == 200)
+    {
+        if (cJSON_IsObject(responce))
+        {
+            cJSON *data = cJSON_GetObjectItem(responce, "data");
+            if (cJSON_IsObject(data))
+            {
+                memset(&CLIENT, 0, sizeof(CLIENT));
+                cyc_client_fr_json(&CLIENT, data);
+                client = &CLIENT;
+            }                
+        }
+    }   
+    
+    if (responce)
+		cJSON_free(responce);
+	return client;    
 }
 
 int
@@ -290,7 +330,7 @@ int
 cyclients_client_file_remove(const char *token,
                              int company_id,
                              int client_id,
-														 int file_id)
+                             int file_id)
 {
     long http_code = 0;
     char requestString[BUFSIZ], auth[128];
