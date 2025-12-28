@@ -17,8 +17,9 @@
 #define PAGE_SIZE 100
 
 static CYCFile CYCFILE;
-static CYCVisit VISIT;
+static CYCRecord RECORD;
 static CYCClient CLIENT;
+static CYCComment COMMENT;
 
 CYCLIENTS_COUNTER
 cyclients_clients_search(const char *token,
@@ -261,6 +262,7 @@ cyclients_client_new(const char *token,
     }
     
     post_data = cJSON_Print(post);
+	cJSON_free(post);
     if (post_data == NULL){
         ERR("%s: can't generate post data", __FILE__);
         return 1;
@@ -357,7 +359,7 @@ cyclients_client_visits(const char *token,
                        int client_id,
                        void *userdata,
                         int (*callback)(void *userdata, 
-                                        const CYCVisit *visit))
+                                        const CYCRecord *visit))
 {
     CYCLIENTS_COUNTER n = 0;
     cJSON *responce, *post, *from, *to;
@@ -370,15 +372,16 @@ cyclients_client_visits(const char *token,
     sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 
-		post = cJSON_CreateObject();
-		cJSON_AddNumberToObject(post, "client_id", client_id);
-		cJSON_AddNullToObject(post, "client_phone");
-		cJSON_AddNullToObject(post, "from");
-		cJSON_AddNullToObject(post, "to");
-		cJSON_AddNullToObject(post, "payment_statuses");
-		cJSON_AddNullToObject(post, "attendance");
-	
-		post_data = cJSON_Print(post);
+	post = cJSON_CreateObject();
+	cJSON_AddNumberToObject(post, "client_id", client_id);
+	cJSON_AddNullToObject(post, "client_phone");
+	cJSON_AddNullToObject(post, "from");
+	cJSON_AddNullToObject(post, "to");
+	cJSON_AddNullToObject(post, "payment_statuses");
+	cJSON_AddNullToObject(post, "attendance");
+
+	post_data = cJSON_Print(post);
+	cJSON_free(post);
     if (post_data == NULL){
         ERR("%s: %d: can't generate post data", __FILE__, __LINE__);
         return n;
@@ -402,10 +405,10 @@ cyclients_client_visits(const char *token,
                     cJSON *visit;
                     cJSON_ArrayForEach(visit, records)
                     {
-                        memset(&VISIT, 0, sizeof(VISIT));
-                        cyc_visit_fr_json(&VISIT, visit);
+                        memset(&RECORD, 0, sizeof(RECORD));
+                        cyc_record_fr_json(&RECORD, visit);
                         if (callback)
-                            if (callback(userdata, &VISIT))
+                            if (callback(userdata, &RECORD))
                                 break;                       
                     }
                 }
@@ -419,4 +422,243 @@ cyclients_client_visits(const char *token,
     return n;
 }
 
+int
+cyclients_client_edit(const char *token,
+                      int company_id,
+					  int client_id,
+                      const char *name,
+                      const char *surname,
+                      const char *patronymic,
+                      const char *phone,
+                      const char *email,
+					  int sex_id,
+					  int importance_id,
+					  int discount,
+					  int card,
+                      const char *birth_date,
+                      const char *comment,
+					  int spent,
+					  int balance,
+					  int sms_check,
+					  int sms_not,
+                      int number_custom_fields_key_value_pairs,
+                      ...)
+{
+    int i = 0;
+    cJSON *post, *custom_fields;
+    char *phone_number;
+    long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    assert(name);
+    assert(phone);
+    
+    phone_number = (char *)phone;
+    if (*phone_number == '+') {
+        phone_number++;
+    }
+	
+    sprintf(requestString, "%s/client/%d/%d", 
+			URL, company_id, client_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	post = cJSON_CreateObject();
+    cJSON_AddStringToObject(post, "name", name);
+    if (surname) {
+        cJSON_AddStringToObject(post, "surname", surname);
+    }
+    if (patronymic) {
+        cJSON_AddStringToObject(post, "patronymic", patronymic);
+    }
+    cJSON_AddStringToObject(post, "phone", phone_number);
+    if (email) {
+        cJSON_AddStringToObject(post, "email", email);
+    }
+	cJSON_AddNumberToObject(post, "sex_id", sex_id);
+	cJSON_AddNumberToObject(post, "importance_id", importance_id);
+	cJSON_AddNumberToObject(post, "discount", discount);
+	cJSON_AddNumberToObject(post, "card", card);
+    if (birth_date) {
+        cJSON_AddStringToObject(post, "birth_date", birth_date);
+    }
+    if (comment) {
+        cJSON_AddStringToObject(post, "comment", comment);
+    }    
+	cJSON_AddNumberToObject(post, "spent", spent);
+	cJSON_AddNumberToObject(post, "balance", balance);
+	cJSON_AddNumberToObject(post, "sms_check", sms_check);
+	cJSON_AddNumberToObject(post, "sms_not", sms_not);
+    if (number_custom_fields_key_value_pairs>0)
+    {
+        va_list args;
+        va_start(args, number_custom_fields_key_value_pairs);
+        custom_fields = cJSON_CreateObject();
+        for (i=0; i<number_custom_fields_key_value_pairs; ++i) {
+            char *key, *value;
+            key = va_arg(args, char *);
+            if (key == NULL)
+                break;
+            value = va_arg(args, char *);
+            if (value == NULL)
+                break;
+            cJSON_AddStringToObject(custom_fields, key, value);
+        }
+        cJSON_AddItemToObject(post, "custom_fields", custom_fields);
+    }
+    
+    post_data = cJSON_Print(post);
+	cJSON_free(post);
+    if (post_data == NULL){
+        ERR("%s: can't generate post data", __FILE__);
+        return 1;
+    }	
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "PUT",
+                                    post_data, NULL);
+    free(post_data);
+    
+    if (http_code == 200)
+		return 0;
+	
+	return 1;
+}
+
+int
+cyclients_client_remove(const char *token,
+                        int company_id,
+                        int client_id)
+{
+    long http_code = 0;
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/client/%d/%d", 
+			URL, company_id, client_id);
+    sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "DELETE",
+                                    NULL, NULL);
+    
+    if (http_code == 204)
+		return 0;
+	
+	return 1;
+}
+
+CYCLIENTS_COUNTER
+cyclients_client_comments(const char *token,
+                          int company_id,
+                          int client_id,
+                          void *userdata,
+                          int (*callback)(void *userdata, 
+                                          const CYCComment *comment))
+{
+    CYCLIENTS_COUNTER n = 0;
+    cJSON *responce;
+    long http_code = 0;
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/company/%d/clients/%d/comments", 
+			URL, company_id, client_id);
+    sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "GET",
+                                    NULL, &responce);
+    
+    if (http_code == 200)
+    {
+        if (cJSON_IsObject(responce))
+        {
+            cJSON *data = cJSON_GetObjectItem(responce, "data");
+            if (cJSON_IsArray(data))
+            {
+                cJSON *comment;
+                cJSON_ArrayForEach(comment, data)
+                {
+                    memset(&COMMENT, 0, sizeof(COMMENT));
+                    cyc_comment_fr_json(&COMMENT, comment);
+                    if (callback)
+                        if (callback(userdata, &COMMENT))
+                            break;                       
+                }
+            }
+        }
+    }
+    
+    if(responce)
+        cJSON_free(responce);
+	
+    return n;
+}
+
+int
+cyclients_client_comment_new(const char *token,
+                             int company_id,
+                             int client_id,
+                             const char *comment)
+{
+    cJSON *post;
+    char *phone_number;
+    long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+    	
+    sprintf(requestString, "%s/company/%d/clients/%d/comments", 
+			URL, company_id, client_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	post = cJSON_CreateObject();
+	cJSON_AddStringToObject(post, "text", comment);
+
+    post_data = cJSON_Print(post);
+	cJSON_free(post);
+    if (post_data == NULL){
+        ERR("%s: can't generate post data", __FILE__);
+        return 1;
+    }
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "POST",
+                                    post_data, NULL);
+    free(post_data);
+    
+    if (http_code == 201)
+		return 0;
+	
+	return 1;
+}
+
+int
+cyclients_client_comment_remove(const char *token,
+                                int company_id,
+                                int client_id,
+                                int comment_id)
+{
+    long http_code = 0;
+    char requestString[BUFSIZ], auth[128];
+    char * SETUP_PARTNER_TOKEN(partner_token);
+    
+    sprintf(requestString, "%s/company/%d/clients/%d/comments/%d", 
+			URL, company_id, client_id, comment_id);
+    sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+    
+    http_code = curl_transport_exec(requestString,
+                                    auth, "DELETE",
+                                    NULL, NULL);
+    
+    if (http_code == 204)
+		return 0;
+	
+	return 1;
+}
 

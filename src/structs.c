@@ -27,8 +27,10 @@
 #define CYC_STRING_ARRAY(_name, _size, _len) \
 	JSON_TO_STRING_ARRAY(json, t, _name, _len);
 
-#define CYC_USER_CLASS(_name) CYCUser _name \
+#define CYC_USER_CLASS(_name) \
 	cyc_user_fr_json(&t->_name, json);
+#define CYC_FILE_CLASS(_name) \
+    cyc_file_fr_json(&t->_name, json);
 #define CYC_TRANSPORT_CLASS(_name) \
 	cyc_transport_fr_json(&t->_name, json);
 #define CYC_2FA_CLASS(_name) CYC2fa _name \
@@ -53,8 +55,8 @@
 	cyc_visit_service_fr_json(&t->_name, json);
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
 	JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_fr_json);
-#define CYC_KVPAIR(_name) \
-    JSON_TO_KVPAIR(json, t, _name);
+#define CYC_KVPAIR(_name, _len) \
+    JSON_TO_KVPAIR(json, t, _name, _len);
 
 #define FROM_JSON_START \
 	assert(json != NULL); \
@@ -209,7 +211,7 @@ int cyc_file_fr_json(CYCFile *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_FILE;
 	CYC_FILE
-  FROM_JSON_END		
+    FROM_JSON_END		
 }
 
 int cyc_visit_service_fr_json(CYCVisitService *t, const cJSON *json)
@@ -220,11 +222,11 @@ int cyc_visit_service_fr_json(CYCVisitService *t, const cJSON *json)
     FROM_JSON_END		
 }
 
-int cyc_visit_fr_json(CYCVisit *t, const cJSON *json)
+int cyc_record_fr_json(CYCRecord *t, const cJSON *json)
 {
 	FROM_JSON_START
-	t->_type = CYC_TYPE_VISIT;
-	CYC_VISIT
+	t->_type = CYC_TYPE_RECORD;
+	CYC_RECORD
     FROM_JSON_END		
 }
 
@@ -233,6 +235,14 @@ int cyc_client_fr_json(CYCClient *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_CLIENT;
 	CYC_CLIENT
+    FROM_JSON_END		
+}
+
+int cyc_comment_fr_json(CYCComment *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_COMMENT;
+	CYC_COMMENT
     FROM_JSON_END		
 }
 
@@ -246,6 +256,7 @@ int cyc_client_fr_json(CYCClient *t, const cJSON *json)
 #undef CYC_STRING_ARRAY
 
 #undef CYC_USER_CLASS
+#undef CYC_FILE_CLASS
 #undef CYC_TRANSPORT_CLASS
 #undef CYC_2FA_CLASS
 #undef CYC_SOCIAL_CLASS
@@ -273,7 +284,14 @@ int cyc_client_fr_json(CYCClient *t, const cJSON *json)
 #define CYC_STRING_ARRAY(_name, _size, _len) \
 	JSON_FROM_STRING_ARRAY(json, t, _name, _len);
 
-#define CYC_USER_CLASS(_name) CYCUser _name \
+#define CYC_FILE_CLASS(_name) \
+    do { \
+        cJSON *_obj = \
+        cyc_file_to_json(&t->_name); \
+        cJSON_AddItemToObject(json, #_name, _obj); \
+    }	while(0);
+
+#define CYC_USER_CLASS(_name) \
 	do { \
 		cJSON *_obj = \
 		cyc_user_to_json(&t->_name); \
@@ -350,7 +368,7 @@ int cyc_client_fr_json(CYCClient *t, const cJSON *json)
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
 	JSON_FROM_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_to_json);
 
-#define CYC_KVPAIR(_name) \
+#define CYC_KVPAIR(_name, _len) \
 
 #define TO_JSON_START \
 	cJSON *json = NULL; \
@@ -475,10 +493,10 @@ cJSON * cyc_visit_service_to_json(CYCVisitService *t)
 	TO_JSON_END	
 }
 
-cJSON * cyc_visit_to_json(CYCVisit *t)
+cJSON * cyc_record_to_json(CYCRecord *t)
 {
 	TO_JSON_START
-	CYC_VISIT
+	CYC_RECORD
 	TO_JSON_END	
 }
 
@@ -486,6 +504,13 @@ cJSON * cyc_client_to_json(CYCClient *t)
 {
 	TO_JSON_START
 	CYC_CLIENT
+	TO_JSON_END	
+}
+
+cJSON * cyc_comment_to_json(CYCComment *t)
+{
+	TO_JSON_START
+	CYC_COMMENT
 	TO_JSON_END	
 }
 
@@ -499,6 +524,7 @@ cJSON * cyc_client_to_json(CYCClient *t)
 #undef CYC_STRING_ARRAY
 
 #undef CYC_USER_CLASS
+#undef CYC_FILE_CLASS
 #undef CYC_TRANSPORT_CLASS
 #undef CYC_2FA_CLASS
 #undef CYC_SOCIAL_CLASS

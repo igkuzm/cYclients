@@ -44,6 +44,7 @@
 					STRCPY(_struct->_name[i++], _item->valuestring); \
 				} \
 			} \
+            _struct->n##_name = i; \
 		} \
 	}	while(0);
 
@@ -58,6 +59,7 @@
 					_struct->_name[i++] = _obj->valuedouble; \
 				} \
 			} \
+            _struct->n##_name = i; \
 		} \
 	}	while(0);
 
@@ -72,6 +74,7 @@
 					_struct->_name[i++] = _obj->valueint; \
 				} \
 			} \
+            _struct->n##_name = i; \
 		} \
 	}	while(0);
 
@@ -86,19 +89,21 @@
 					_func(&_struct->_name[i++], _item); \
 				} \
 			} \
+            _struct->n##_name = i; \
 		} \
 	}	while(0);
 
-#define JSON_TO_KVPAIR(_json, _struct, _name) \
+#define JSON_TO_KVPAIR(_json, _struct, _name, _len) \
 do { \
     cJSON *_obj = cJSON_GetObjectItem(_json, #_name); \
 		if (cJSON_IsObject(_obj)){ \
 			int i = 0; \
             cJSON *_item = NULL; \
-            for(_item = _obj->child; _item && i < 32; _item = _item->next, ++i){ \
+            for(_item = _obj->child; _item && i < _len; _item = _item->next, ++i){ \
                     _struct->_name[i].key = _item->string; \
                     _struct->_name[i].value = _item->valuestring; \
             } \
+            _struct->n##_name = i; \
 		} \
 }	while(0);
 

@@ -310,6 +310,33 @@ cyclients_client_new(const char *token,
                      int number_custom_fields_key_value_pairs,
                      ...);
 
+int
+cyclients_client_edit(const char *token,
+                      int company_id,
+					  int client_id,
+                      const char *name,
+                      const char *surname,
+                      const char *patronymic,
+                      const char *phone,
+                      const char *email,
+					  int sex_id,
+					  int importance_id,
+					  int discount,
+					  int card,
+                      const char *birth_date,
+                      const char *comment,
+					  int spent,
+					  int balance,
+					  int sms_check,
+					  int sms_not,
+                      int number_custom_fields_key_value_pairs,
+                      ...);
+
+int
+cyclients_client_remove(const char *token,
+                        int company_id,
+                        int client_id);
+
 CYCLIENTS_COUNTER
 cyclients_client_files(const char *token,
                        int company_id,
@@ -330,5 +357,26 @@ cyclients_client_visits(const char *token,
                        int client_id,
                        void *userdata,
                        int (*callback)(void *userdata, 
-                                       const CYCVisit *visit));
+                                       const CYCRecord *visit));
+
+CYCLIENTS_COUNTER
+cyclients_client_comments(const char *token,
+                          int company_id,
+                          int client_id,
+                          void *userdata,
+                          int (*callback)(void *userdata, 
+                                          const CYCComment *comment));
+
+int
+cyclients_client_comment_new(const char *token,
+                             int company_id,
+                             int client_id,
+                             const char *comment);
+
+int
+cyclients_client_comment_remove(const char *token,
+                                int company_id,
+                                int client_id,
+                                int comment_id);
+
 #endif // CYCLIENTS_H

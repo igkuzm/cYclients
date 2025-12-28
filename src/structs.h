@@ -33,8 +33,9 @@ typedef	enum {
 	CYC_TYPE_USER_PERMISSIONS,
     CYC_TYPE_FILE,
     CYC_TYPE_VISIT_SERVICE,
-    CYC_TYPE_VISIT,
+    CYC_TYPE_RECORD,
     CYC_TYPE_CLIENT,
+	CYC_TYPE_COMMENT,
 	CYC_NTYPES,
 } CYC_TYPE;
 
@@ -823,7 +824,7 @@ typedef	enum {
 	CYC_BOOL(is_paid_full) \
 	CYC_BOOL(is_multi) \
 
-#define CYC_VISIT \
+#define CYC_RECORD \
    CYC_INT(id) \
    CYC_STRING(comment, 256) \
    CYC_STRING(date, 32) \
@@ -858,8 +859,16 @@ typedef	enum {
    CYC_INT(importance_id) \
    CYC_STRING_ARRAY(categories, 32, 32) \
    CYC_STRING(last_change_date, 32) \
-   CYC_KVPAIR(custom_fields) \
+   CYC_KVPAIR(custom_fields, 32) \
 
+#define CYC_COMMENT \
+   CYC_INT(id) \
+   CYC_STRING(create_date, 32) \
+   CYC_STRING(upate_date, 32) \
+   CYC_STRING(type, 32) \
+   CYC_STRING(text, 512) \
+   CYC_USER_CLASS(user) \
+   CYC_FILE_CLASS(file) \
 
 // structure 
 #define CYC_UNKNOWN(_name)
@@ -867,11 +876,12 @@ typedef	enum {
 #define CYC_DOUBLE(_name) double _name;
 #define CYC_BOOL(_name) bool _name;
 #define CYC_STRING(_name, _size) char _name[_size];
-#define CYC_INT_ARRAY(_name, _len) int _name[_len];
-#define CYC_DOUBLE_ARRAY(_name, _len) double _name[_len];
-#define CYC_STRING_ARRAY(_name, _size, _len) char _name[_len][_size];
+#define CYC_INT_ARRAY(_name, _len) int _name[_len]; int n##_name;
+#define CYC_DOUBLE_ARRAY(_name, _len) double _name[_len]; int n##_name;
+#define CYC_STRING_ARRAY(_name, _size, _len) char _name[_len][_size]; int n##_name;
 
 #define CYC_USER_CLASS(_name) CYCUser _name;
+#define CYC_FILE_CLASS(_name) CYCFile _name;
 #define CYC_TRANSPORT_CLASS(_name) CYCTransport _name;
 #define CYC_2FA_CLASS(_name) CYC2fa _name;
 #define CYC_SOCIAL_CLASS(_name) CYCSocial _name;
@@ -885,8 +895,8 @@ typedef	enum {
 #define CYC_STAFF_CLASS(_name) CYCStaff _name;
 #define CYC_SERVICE_CLASS(_name) CYCService _name;
 #define CYC_VISIT_SERVICE_CLASS(_name) CYCVisitService _name;
-#define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len];
-#define CYC_KVPAIR(_name) struct kvpair _name[32];
+#define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len]; int n##_name;
+#define CYC_KVPAIR(_name, _len) struct kvpair _name[_len]; int n##_name;
 
 typedef struct {
 	CYC_TYPE _type;
@@ -1004,10 +1014,10 @@ cJSON * cyc_visit_service_to_json(CYCVisitService *t);
 
 typedef struct {
 	CYC_TYPE _type;
-	CYC_VISIT
-} CYCVisit;
-int     cyc_visit_fr_json(CYCVisit *t, const cJSON *json);
-cJSON * cyc_visit_to_json(CYCVisit *t);
+	CYC_RECORD
+} CYCRecord;
+int     cyc_record_fr_json(CYCRecord *t, const cJSON *json);
+cJSON * cyc_record_to_json(CYCRecord *t);
 
 typedef struct {
 	CYC_TYPE _type;
@@ -1015,6 +1025,13 @@ typedef struct {
 } CYCClient;
 int     cyc_client_fr_json(CYCClient *t, const cJSON *json);
 cJSON * cyc_client_to_json(CYCClient *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_COMMENT
+} CYCComment;
+int     cyc_comment_fr_json(CYCComment *t, const cJSON *json);
+cJSON * cyc_comment_to_json(CYCComment *t);
 
 #undef CYC_UNKNOWN
 #undef CYC_INT
@@ -1026,6 +1043,7 @@ cJSON * cyc_client_to_json(CYCClient *t);
 #undef CYC_STRING_ARRAY
 
 #undef CYC_USER_CLASS
+#undef CYC_FILE_CLASS
 #undef CYC_TRANSPORT_CLASS
 #undef CYC_2FA_CLASS
 #undef CYC_SOCIAL_CLASS
