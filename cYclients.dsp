@@ -125,6 +125,10 @@ SOURCE=.\src\structs.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\records.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\users.c
 # End Source File
 # End Group
