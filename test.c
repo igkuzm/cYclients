@@ -173,8 +173,10 @@ int main(int argc, char *argv[])
     {
         printf("CLIENT NAME: %s\n", client->name);
     }
-	cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
-	cyclients_client_comments(user->user_token, company_id, client_id, NULL, comments_cb);
+	//cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
+	//cyclients_client_comments(user->user_token, company_id, client_id, NULL, comments_cb);
+    
+    cyclients_records(user->user_token, company_id, NULL, NULL, NULL, NULL);
 
     return 0;
 }

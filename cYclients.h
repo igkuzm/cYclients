@@ -379,4 +379,18 @@ cyclients_client_comment_remove(const char *token,
                                 int client_id,
                                 int comment_id);
 
+//////////////////////////////////////////////////////////
+// Records and Visits
+//////////////////////////////////////////////////////////
+
+CYCLIENTS_COUNTER
+cyclients_records(const char *token,
+                  int company_id,
+                  const char *start_date,
+                  const char *end_date,
+                  void *userdata,
+                  int (*callback)(void *userdata, 
+                                  const CYCRecord *record));
+
+
 #endif // CYCLIENTS_H

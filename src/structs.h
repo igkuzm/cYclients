@@ -833,6 +833,7 @@ typedef	enum {
    CYC_VISIT_SERVICE_CLASS_ARRAY(services, 32) \
    CYC_STAFF_CLASS(staff) \
    CYC_COMPANY_CLASS(company) \
+   CYC_KVPAIR(custom_fields, 32) \
 
 #define CYC_CLIENT \
    CYC_INT(id) \

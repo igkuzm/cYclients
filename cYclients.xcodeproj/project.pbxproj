@@ -33,6 +33,7 @@
 		AFF2CB8D2EF97E5A00B6A084 /* strtok_foreach.h in Headers */ = {isa = PBXBuildFile; fileRef = AFF2CB8C2EF97E5A00B6A084 /* strtok_foreach.h */; };
 		AFF2CB8F2EF97E6000B6A084 /* stb_ds.h in Headers */ = {isa = PBXBuildFile; fileRef = AFF2CB8E2EF97E6000B6A084 /* stb_ds.h */; };
 		AFF4A41F2EC3552E00801BCE /* users.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF4A41E2EC3552E00801BCE /* users.c */; };
+		AFFE74252F1DB3B900B267E4 /* records.c in Sources */ = {isa = PBXBuildFile; fileRef = AFFE74242F1DB3B900B267E4 /* records.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		AFF2CB8C2EF97E5A00B6A084 /* strtok_foreach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strtok_foreach.h; path = src/strtok_foreach.h; sourceTree = "<group>"; };
 		AFF2CB8E2EF97E6000B6A084 /* stb_ds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_ds.h; path = src/stb_ds.h; sourceTree = "<group>"; };
 		AFF4A41E2EC3552E00801BCE /* users.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = users.c; path = src/users.c; sourceTree = "<group>"; };
+		AFFE74242F1DB3B900B267E4 /* records.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = records.c; path = src/records.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				AF2052CF2EBCC95C00392497 /* log.c */,
 				AF2052CB2EBCC94B00392497 /* auth.c */,
 				AFF4A41E2EC3552E00801BCE /* users.c */,
+				AFFE74242F1DB3B900B267E4 /* records.c */,
 				AF03E2B42EB2E4EE00149FCA /* log.h */,
 				AF56A53A2EB231D6006214FB /* test.c */,
 				AF56A5272EB231A2006214FB /* cJSON.c */,
@@ -254,6 +257,7 @@
 				AFF4A41F2EC3552E00801BCE /* users.c in Sources */,
 				AF15A91F2EF7DF880027F26A /* clients.c in Sources */,
 				AFF2CB8B2EF97DC100B6A084 /* stb_ds.c in Sources */,
+				AFFE74252F1DB3B900B267E4 /* records.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,7 +283,7 @@
 		AF56A50A2EB23132006214FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				ARCHS = "$(NATIVE_ARCH)";
 				COPY_PHASE_STRIP = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
