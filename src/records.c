@@ -39,7 +39,7 @@ cyclients_records(const char *token,
 	post = cJSON_CreateObject();
 	cJSON_AddNumberToObject(post, "page", npage);
 	cJSON_AddNumberToObject(post, "count", PAGE_SIZE);
-    cJSON_AddBooToObject(post, "with_deleted", true);
+    cJSON_AddBoolToObject(post, "with_deleted", true);
     if (start_date)
         cJSON_AddStringToObject(post, "start_date", start_date);
     if (end_date)
