@@ -50,7 +50,8 @@ char * STR_LOG(const char *fmt, ...);
 #elif defined __APPLE__
 	#include <CoreFoundation/CoreFoundation.h>
 	void NSLog(CFStringRef format, ...);
-	#define LOG(fmt, ...) NSLog(CFSTR(fmt), ##__VA_ARGS__)
+	//#define LOG(fmt, ...) NSLog(CFSTR(fmt), ##__VA_ARGS__)
+	#define LOG(fmt, ...) fprintf(stderr, "%s\n", STR(fmt, __VA_ARGS__));
 	#define ERR(fmt, ...) LOG("E/_%s: %d: %s", __func__, __LINE__, STR(fmt, __VA_ARGS__)) 
 #else
 

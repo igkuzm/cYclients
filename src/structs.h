@@ -10,6 +10,7 @@
 #define STRUCTS_H
 
 #include <stdio.h>
+#include <time.h>
 #include "cJSON.h"
 #include "config.h"
 

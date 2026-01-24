@@ -599,13 +599,14 @@ cyclients_client_comments(const char *token,
     return n;
 }
 
-int
+CYCLIENTS_ID
 cyclients_client_comment_new(const char *token,
                              int company_id,
                              int client_id,
                              const char *comment)
 {
-    cJSON *post;
+	int comment_id = 0;
+    cJSON *post, *responce;
     char *phone_number;
     long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
@@ -628,13 +629,27 @@ cyclients_client_comment_new(const char *token,
     
     http_code = curl_transport_exec(requestString,
                                     auth, "POST",
-                                    post_data, NULL);
+                                    post_data, &responce);
     free(post_data);
     
     if (http_code == 201)
-		return 0;
+	{
+		if (cJSON_IsObject(responce))
+        {
+            cJSON *data = cJSON_GetObjectItem(responce, "data");
+            if (cJSON_IsObject(data))
+            {
+				cJSON *id = cJSON_GetObjectItem(data, "id");
+				comment_id = id->valueint;
+            }
+        }
+		
+	}
 	
-	return 1;
+	if(responce)
+		cJSON_free(responce);
+	
+	return comment_id;
 }
 
 int

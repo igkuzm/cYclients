@@ -4,6 +4,7 @@
 #include "src/structs.h"
 
 typedef int CYCLIENTS_COUNTER;
+typedef int CYCLIENTS_ID;
 typedef struct {char *key; char *value;} kvpair_t;
 
 
@@ -367,7 +368,7 @@ cyclients_client_comments(const char *token,
                           int (*callback)(void *userdata, 
                                           const CYCComment *comment));
 
-int
+CYCLIENTS_ID
 cyclients_client_comment_new(const char *token,
                              int company_id,
                              int client_id,
@@ -392,15 +393,13 @@ cyclients_records(const char *token,
                   int (*callback)(void *userdata, 
                                   const CYCRecord *record));
 
-int
+CYCLIENTS_ID
 cyclients_record_new (const char *token,
                       int company_id,
 					  int staff_id,
                       const char *client_name,
                       const char *client_phone,
                       const char *datetime,
-                      int nservices,
-                      int *services,
 					  int seance_length,
                       const char *comment,
 					  const char *api_id,

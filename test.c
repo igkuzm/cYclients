@@ -166,8 +166,8 @@ int main(int argc, char *argv[])
 //	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
 //    }
 	
-    int client_id;
-	cyclients_clients_search(user->user_token, company_id, "name, id", "Семенцов Игорь", &client_id, clients_cb);
+    int client_id = 0;
+	cyclients_clients_search(user->user_token, company_id, "name, id", "TEST", &client_id, clients_cb);
     printf("CLIENT_ID: %d\n", client_id);
     
     //cyclients_client_files(user->user_token, company_id, client_id, NULL, file_cb);
@@ -179,15 +179,17 @@ int main(int argc, char *argv[])
 //    {
 //        printf("CLIENT NAME: %s\n", client->name);
 //    }
-	//cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
+	int comment_id = cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
+	printf("COMMENT_ID: %d\n", comment_id);
 	//cyclients_client_comments(user->user_token, company_id, client_id, NULL, comments_cb);
     
     //cyclients_records(user->user_token, company_id, NULL, NULL, NULL, records_cb);
 
-    int staff_id = 3862837;
-    
-    if (cyclients_record_new(user->user_token,company_id,staff_id,"TEST","+79990407731","2026-01-24T15:34:30+1000",0,0,0,"это тестовая запись","api_id afasdfdasf",1, "mykey", "myvalue"))
-        printf("SOME ERROE!\n");
+//    int staff_id = 3862837;
+//	
+//    int record_id = cyclients_record_new(user->user_token,company_id,staff_id,"TEST","+79990407731","28.01.2026 13:00",0,"это тестовая запись","api_id afasdfdasf",1, "mykey", "myvalue");
+//        
+//	printf("RECORD_ID: %d\n", record_id);
     
     return 0;
 }
