@@ -60,21 +60,22 @@ cyclients_service_categories(const char *token,
                              int (*callback)(void *userdata, 
                                              const CYCServiceCategory *category));
 
-/* return allocated service category with category_id or NULL on error */
-CYCServiceCategory *
+int
 cyclients_service_category_get(const char *token,
-							   int company_id,
-							   int category_id);
+							                 int company_id,
+							                 int category_id,
+                               void *userdata,
+                               int (*callback)(void *userdata, 
+                                               const CYCServiceCategory *category));
 
-/* return allocated new service category or NULL on error */
-CYCServiceCategory *
+CYCLIENTS_ID
 cyclients_service_category_new(const char *token,
-							   int company_id,
-							   const char *title,
-							   const char *api_id,
-							   int weight,
-							   int nstaff,
-							   int staff[]);
+							                 int company_id,
+							                 const char *title,
+							                 const char *api_id,
+							                 int weight,
+							                 int nstaff,
+							                 int staff[]);
 
 /* update service category and return non-null on error */
 int
@@ -113,16 +114,17 @@ cyclients_services(const char *token,
                    int (*callback)(void *userdata, 
                                    const CYCService *service));
 
-/* return allocated service with service_id or NULL on error */
-CYCService *
+int
 cyclients_service_get(const char *token,
                       int company_id,
-                      int service_id);
+                      int service_id,
+                      void *userdata,
+                      int (*callback)(void *userdata, 
+                                      const CYCService *service));
 
 struct staff {int id; int seance_length;};
 
-/* return allocated new created service or NULL on error */
-CYCService *
+CYCLIENTS_ID
 cyclients_service_new(const char *token,
                       int company_id,
                       const char *title,
@@ -238,9 +240,9 @@ cyclients_service_delete_staff(const char *token,
 // Users
 //////////////////////////////////////////////////////////
 
-int
+CYCLIENTS_ID
 cyclients_user_new(const char *token,
-				   int company_id,
+				           int company_id,
                    const char *name,
                    const char *phone_number);
 
@@ -259,24 +261,28 @@ cyclients_user_roles(const char *token,
                      int (*callback)(void *userdata, 
                                      const CYCUserRole *user_role));
 
-const CYCUserPermissions *
+int
 cyclients_user_permissions(const char *token,
                            int company_id,
-                           int user_id);
+                           int user_id,
+													 void *userdata,
+                           int (*callback)(void *userdata, 
+                                           const CYCUserPermissions *permissions));
 
 struct user_company_link {
 	int company_id;
 	char *user_permissions_json;
 };
 
+/* return allocated json c-string with slug and value pairs */
 char * 
 user_permissions_json_with_slug_and_value_pairs(int nslug_and_value_pairs, ...);
 
 int
 cyclients_user_copy_to_companies(const char *token,
                                  int company_id,
-								 int user_id,
-								 int nuser_user_company_links,
+								                 int user_id,
+								                 int nuser_user_company_links,
                                  struct user_company_link *links);
 
 //////////////////////////////////////////////////////////
@@ -293,12 +299,15 @@ cyclients_clients_search(const char *token,
                                          int nfields,
                                          const kvpair_t *fields));
 	
-const CYCClient *
+int
 cyclients_client_get(const char *token,
                      int company_id,
-                     int client_id);
+                     int client_id,
+										 void *userdata,
+										 int (*callback)(void *userdata,
+											               const CYCClient *client));
 
-int
+CYCLIENTS_ID
 cyclients_client_new(const char *token,
                      int company_id,
                      const char *name,
@@ -314,22 +323,22 @@ cyclients_client_new(const char *token,
 int
 cyclients_client_edit(const char *token,
                       int company_id,
-					  int client_id,
+					            int client_id,
                       const char *name,
                       const char *surname,
                       const char *patronymic,
                       const char *phone,
                       const char *email,
-					  int sex_id,
-					  int importance_id,
-					  int discount,
-					  int card,
+					            int sex_id,
+					            int importance_id,
+					            int discount,
+					            int card,
                       const char *birth_date,
                       const char *comment,
-					  int spent,
-					  int balance,
-					  int sms_check,
-					  int sms_not,
+					            int spent,
+					            int balance,
+					            int sms_check,
+					            int sms_not,
                       int number_custom_fields_key_value_pairs,
                       ...);
 
@@ -394,16 +403,80 @@ cyclients_records(const char *token,
                                   const CYCRecord *record));
 
 CYCLIENTS_ID
-cyclients_record_new (const char *token,
-                      int company_id,
-					  int staff_id,
-                      const char *client_name,
-                      const char *client_phone,
-                      const char *datetime,
-					  int seance_length,
-                      const char *comment,
-					  const char *api_id,
-                      int number_custom_fields_key_value_pairs,
-                      ...);
+cyclients_record_new(const char *token,
+                     int company_id,
+					           int staff_id,
+                     const char *client_name,
+                     const char *client_phone,
+                     const char *datetime,
+					           int seance_length,
+                     const char *comment,
+                     int number_custom_fields_key_value_pairs,
+                     ...);
+
+int
+cyclients_record_get(const char *token,
+                     int company_id,
+                     int record_id,
+										 void *userdata,
+                     int (*callback)(void *userdata, 
+                                     const CYCRecord *record));
+
+struct service {
+	int id;
+  double price;
+  double discount;
+};
+
+
+/*
+staff_id		  number  Идентификатор сотрудника 
+services[img] Array of objects  Параметры услуг 
+                                (id, стоимость, скидка)                  
+client[img]   object  Параметры клиента 
+                                (телефон, имя, email)                  
+save_if_busy  boolean Сохранять ли запись если время 
+                      занято или нерабочее, или выдать
+										 	ошибку                                            
+datetime      string <date-time> Дата и время записи
+seance_length number             Длительность записи в секундах
+send_sms      boolean            Отправлять ли смс с деталями 
+                                 записи клиенту              
+comment       string             Комментарий к записи
+sms_remain_hours number          За сколько часов до визита 
+                                 следует выслать смс
+																 напоминание клиенту (0 - если не нужно)
+email_remain_hours number        За сколько часов до визита 
+                                 следует выслать email напоминание
+																 клиенту (0 - если не нужно)
+attendance         number        Статус записи (
+                                 2 - Пользователь подтвердил запись, 
+																 1 - Пользователь пришел, услуги оказаны,
+																 0 - ожидание пользователя, 
+																 -1 - пользователь не пришел на визит)
+
+api_id             string        Идентификатор внешней системы
+custom_color       string        Цвет записи
+record_labels      Array of strings Массив идентификаторов 
+                                    категорий записи
+client_agreements [img] object or null Юридические соглашения клиента
+technical_break_durationumber or null  [ 0 .. 3600 ]
+                         Технический перерыв.
+
+                         • Строго кратно 300 (5 минутам).
+                         • Максимальное значение 3600 (1 час)
+                         • Если передан null  или значение не передано — будет
+                           задан согласно настройкам в разделе Настройки →
+                           Журнал записи → Технические перерывы при наличии
+                           услуг с перерывом
+*/
+int
+cyclients_record_update(const char *token,
+                        int company_id,
+					              int record_id,
+                        int number_of_key_value_pairs,
+                        ...);
+
+
 
 #endif // CYCLIENTS_H

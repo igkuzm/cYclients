@@ -24,8 +24,8 @@ cyclients_records(const char *token,
                   int (*callback)(void *userdata, 
                                   const CYCRecord *record))
 {
-    int npage = 0, total_count = 0, current_count = 0, exit_loop = 0, 
-    is_first_field = 1;
+  int npage = 0, total_count = 0, current_count = 0, exit_loop = 0, 
+      is_first_field = 1;
 	cJSON *post, *responce, *meta, *data, *obj;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
@@ -112,18 +112,17 @@ cyclients_records(const char *token,
 	return current_count;    
 }
 
-int
-cyclients_record_new (const char *token,
-                      int company_id,
-					  int staff_id,
-                      const char *client_name,
-                      const char *client_phone,
-                      const char *datetime,
-					  int seance_length,
-                      const char *comment,
-					  const char *api_id,
-                      int number_custom_fields_key_value_pairs,
-                      ...)
+CYCLIENTS_ID
+cyclients_record_new(const char *token,
+                     int company_id,
+					           int staff_id,
+                     const char *client_name,
+                     const char *client_phone,
+                     const char *datetime,
+					           int seance_length,
+                     const char *comment,
+                     int number_custom_fields_key_value_pairs,
+                     ...)
 {
 	int i = 0, length = seance_length, record_id = 0;
 	cJSON *post, *client, *services, *custom_fields, *responce, *data;
@@ -168,9 +167,6 @@ cyclients_record_new (const char *token,
 	if (comment) {
 		cJSON_AddStringToObject(post, "comment", comment);
 	}    
-	if (api_id) {
-		cJSON_AddStringToObject(post, "api_id", api_id);
-	}            
 	if (number_custom_fields_key_value_pairs>0)
 	{
 		va_list args;
@@ -186,6 +182,7 @@ cyclients_record_new (const char *token,
 				break;
 			cJSON_AddStringToObject(custom_fields, key, value);
 		}
+	  va_end(args);
 		cJSON_AddItemToObject(post, "custom_fields", custom_fields);
 	}
 	
@@ -193,7 +190,7 @@ cyclients_record_new (const char *token,
 	cJSON_free(post);
 	if (post_data == NULL){
 		ERR("%s: can't generate post data", __FILE__);
-		return 1;
+		return record_id;
 	}	
 	
 	http_code = curl_transport_exec(requestString,
@@ -220,4 +217,202 @@ cyclients_record_new (const char *token,
 	
 	return record_id;
 }
+
+int
+cyclients_record_get(const char *token,
+                     int company_id,
+                     int record_id,
+										 void *userdata,
+                     int (*callback)(void *userdata, 
+                                     const CYCRecord *record))
+{
+	int ret = 1;
+	cJSON *responce, *data;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128];
+	char * SETUP_PARTNER_TOKEN(partner_token);
+    
+	sprintf(requestString, "%s/record/%d/%d", 
+			URL, company_id, record_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	http_code = curl_transport_exec(requestString,
+									auth, "GET",
+									NULL, &responce);
+        
+	if (http_code == 200)
+	{
+		if (cJSON_IsObject(responce))
+		{
+			data = cJSON_GetObjectItem(responce, "data");
+			if (cJSON_IsObject(data))
+			{
+        memset(&RECORD, 0, sizeof(RECORD));
+        cyc_record_fr_json(&RECORD, data);
+				ret = 0;	
+				if (callback)
+					callback(userdata, &RECORD);
+			}
+		}
+	}
+		
+	if (responce)
+		cJSON_free(responce);
+	
+	return ret;
+}
+
+enum DEFAULT_FIELD_TYPE {
+	DEFAULT_FIELD_TYPE_NULL = 0,
+	DEFAULT_FIELD_TYPE_INT,
+	DEFAULT_FIELD_TYPE_DOUBLE,
+	DEFAULT_FIELD_TYPE_BOOL,
+	DEFAULT_FIELD_TYPE_STRING,
+	DEFAULT_FIELD_TYPE_JSON,
+};
+
+struct default_field {
+	char *name;
+	enum DEFAULT_FIELD_TYPE type;
+};
+
+static const struct default_field record_fields[] = 
+{
+	"services", DEFAULT_FIELD_TYPE_JSON,
+	"client", DEFAULT_FIELD_TYPE_JSON,  
+	"save_if_busy", DEFAULT_FIELD_TYPE_BOOL,
+	"datetime", DEFAULT_FIELD_TYPE_STRING, 
+	"seance_length", DEFAULT_FIELD_TYPE_INT,
+	"send_sms", DEFAULT_FIELD_TYPE_BOOL,
+	"comment", DEFAULT_FIELD_TYPE_STRING,
+	"sms_remain_hours", DEFAULT_FIELD_TYPE_INT,
+	"email_remain_hours", DEFAULT_FIELD_TYPE_INT,
+	"attendance", DEFAULT_FIELD_TYPE_INT,
+	"api_id", DEFAULT_FIELD_TYPE_STRING,
+	"custom_color", DEFAULT_FIELD_TYPE_STRING,
+	"record_labels", DEFAULT_FIELD_TYPE_JSON,
+	"client_agreements", DEFAULT_FIELD_TYPE_JSON,
+	"technical_break_durationumber", DEFAULT_FIELD_TYPE_INT,
+	NULL, DEFAULT_FIELD_TYPE_NULL
+};
+
+cJSON * json_from_default_field(
+		struct default_field *field, const char *value)
+{
+	cJSON *json = NULL;
+	switch (field->type) {
+		case DEFAULT_FIELD_TYPE_INT:
+			{
+				int v = atoi(value);
+				json = cJSON_CreateNumber(v);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_DOUBLE:
+			{
+				int v = atof(value);
+				json = cJSON_CreateNumber(v);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_BOOL:
+			{
+				int v = atoi(value);
+				json = cJSON_CreateBool(v);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_STRING:
+			{
+				json = cJSON_CreateString(value);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_JSON:
+			{
+				json = cJSON_Parse(value);
+			}
+			break;
+		
+		default:
+			break;
+	}
+
+	return json;
+}
+
+int
+cyclients_record_update(const char *token,
+                        int company_id,
+					              int record_id,
+                        int number_key_value_pairs,
+                        ...)
+{
+	int i, k, ret = 1;
+	cJSON *post, *client, *services, *custom_fields;
+	char *phone_number;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+
+	assert(number_key_value_pairs > 0);
+	
+	sprintf(requestString, "%s/record/%d/%d", 
+			URL, company_id, record_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	post = cJSON_CreateObject();
+
+	va_list args;
+	va_start(args, number_key_value_pairs);
+	custom_fields = cJSON_CreateObject();
+	for (i=0; i<number_key_value_pairs; ++i) 
+	{
+		char *key, *value;
+    struct default_field *fields; 
+
+		key = va_arg(args, char *);
+		if (key == NULL)
+			break;
+		value = va_arg(args, char *);
+		if (value == NULL)
+			break;
+
+		// check if key is in default fields
+    fields = (struct default_field *)record_fields; 
+		for (k=0; fields[k].name; ++k)
+		{
+			if (strcmp(key, fields[i].name) == 0)
+			{
+				// this is default field
+				cJSON *item = json_from_default_field(
+						&fields[k], value);
+		    cJSON_AddItemToObject(post, key, item);
+			} else {
+				// this is custom field
+				cJSON_AddStringToObject(
+						custom_fields, key, value);
+			}
+		}
+	}
+	va_end(args);
+	cJSON_AddItemToObject(
+			post, "custom_fields", custom_fields);
+	
+	post_data = cJSON_Print(post);
+	cJSON_free(post);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __FILE__);
+		return ret;
+	}	
+	
+	http_code = curl_transport_exec(requestString,
+									auth, "POST",
+									post_data, NULL);
+	free(post_data);
+	
+	if (http_code == 201)
+		ret = 0;
+	
+	return ret;
+}
+
 

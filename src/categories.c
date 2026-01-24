@@ -60,12 +60,15 @@ cyclients_service_categories(const char *token,
 	return n;
 }
 
-CYCServiceCategory *
+int
 cyclients_service_category_get(const char *token,
                                int company_id,
-                               int category_id)
+                               int category_id,
+                               void *userdata,
+                               int (*callback)(void *userdata, 
+                                               const CYCServiceCategory *category))
 {
-	CYCServiceCategory *category = NULL;
+	int ret = 1;
 	cJSON *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
@@ -86,16 +89,18 @@ cyclients_service_category_get(const char *token,
 			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsObject(data))
 			{
-				category = NEW(CYCServiceCategory);
-				if (category){
-					cyc_service_category_fr_json(category, data);
-				}
+				memset(&CATEGORY, 0, sizeof(CATEGORY));
+				cyc_service_category_fr_json(&CATEGORY, data);
+				ret = 0;
+				if (callback)
+					callback(userdata, &CATEGORY);
 			}
 		}
 	}
 	if (responce)
 		cJSON_free(responce);
-	return category;
+
+	return ret;
 }
 
 int
@@ -148,15 +153,16 @@ cyclients_service_category_update(const char *token,
 	return 1;	
 }
 
-CYCServiceCategory *
+CYCLIENTS_ID
 cyclients_service_category_new(const char *token,
-							   int company_id,
-							   const char *title,
-							   const char *api_id,
-							   int weight,
-							   int nstaff,
-							   int astaff[])
+							                 int company_id,
+							                 const char *title,
+							                 const char *api_id,
+							                 int weight,
+							                 int nstaff,
+							                 int astaff[])
 {
+	int service_category_id = 0;
 	CYCServiceCategory *category = NULL;
 	cJSON *post, *responce, *staff;
 	long http_code = 0;
@@ -182,7 +188,7 @@ cyclients_service_category_new(const char *token,
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
 		ERR("%s: can't generate post data", __FILE__);
-		return NULL;
+		return service_category_id;
 	}
 	cJSON_free(post);
 	
@@ -197,16 +203,15 @@ cyclients_service_category_new(const char *token,
 			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsObject(data))
 			{
-				category = NEW(CYCServiceCategory);
-				if (category){
-					cyc_service_category_fr_json(category, data);
-				}
+				cJSON *id = cJSON_GetObjectItem(data, "id");
+				if (id)
+					service_category_id = id->valueint;
 			}
 		}
 	}
 	if (responce)
 		cJSON_free(responce);
-	return category;	
+	return service_category_id;	
 }
 
 int

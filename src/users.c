@@ -15,10 +15,72 @@
 static CYCUserRole USERROLE;
 static CYCUserPermissions USERPERMISSIONS;
 
+CYCLIENTS_ID
+cyclients_user_new(const char *token,
+				           int company_id,
+                   const char *name,
+                   const char *phone_number)
+{
+	int user_id = 0;
+	cJSON *post, *responce;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128], *post_data, *number;
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	assert(name);
+	assert(phone_number);
+	
+	sprintf(requestString, "%s/company/%d/staff/quick", 
+			URL, company_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+			, partner_token, token);
+	
+	post = cJSON_CreateObject();
+	cJSON_AddStringToObject(post, "name", name);
+	cJSON_AddNullToObject(post, "specialization");
+	cJSON_AddNullToObject(post, "position_id");
+	// phone number without +
+	number = (char *)phone_number;
+	if (*number == '+')
+		number++;
+	cJSON_AddStringToObject(post, "phone_number", number);
+	
+	post_data = cJSON_Print(post);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __FILE__);
+		return 1;
+	}	
+	cJSON_free(post);
+	
+	http_code = curl_transport_exec(requestString,
+									auth, "POST",
+									post_data, &responce);
+	free(post_data);
+	
+	if (http_code == 201)
+	{
+		if (cJSON_IsObject(responce))
+		{
+			cJSON *data = cJSON_GetObjectItem(responce, "data");
+			if (cJSON_IsObject(data))
+			{
+				cJSON *id = cJSON_GetObjectItem(data, "id");
+				if (id)
+					user_id = id->valueint;
+			}
+		}
+	}
+
+	if (responce)
+		cJSON_free(responce);
+	
+	return user_id;	
+}
+
 CYCLIENTS_COUNTER
 cyclients_users_roles(const char *token,
                       int company_id,
-					  void *userdata,
+					            void *userdata,
                       int (*callback)(void *userdata, 
                                       const CYCUserRole *user_role))
 {
@@ -59,6 +121,7 @@ cyclients_users_roles(const char *token,
 	}
 	if (responce)
 		cJSON_free(responce);
+
 	return n;	
 }
 
@@ -107,15 +170,19 @@ cyclients_user_roles(const char *token,
 	}
 	if (responce)
 		cJSON_free(responce);
+	
 	return n;
 }
 
-const CYCUserPermissions *
+int
 cyclients_user_permissions(const char *token,
                            int company_id,
-                           int user_id)
+                           int user_id,
+													 void *userdata,
+                           int (*callback)(void *userdata, 
+                                     const CYCUserPermissions *permissions))
 {
-	const CYCUserPermissions *permissions = NULL;
+	int ret = 1;
 	cJSON *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
@@ -141,7 +208,9 @@ cyclients_user_permissions(const char *token,
 				{
 				    memset(&USERPERMISSIONS, 0, sizeof(USERPERMISSIONS));
 				    cyc_user_permissions_fr_json(&USERPERMISSIONS, user_permissions);
-				    permissions = &USERPERMISSIONS;
+						ret = 0;
+						if (callback)
+							callback(userdata, &USERPERMISSIONS);
 				}
 			}
 		}
@@ -149,7 +218,8 @@ cyclients_user_permissions(const char *token,
 	
 	if (responce)
 		cJSON_free(responce);
-	return permissions;
+
+	return ret;
 }
 
 char * 
@@ -182,6 +252,7 @@ user_permissions_json_with_slug_and_value_pairs(int nslug_and_value_pairs, ...)
 
 		cJSON_AddItemToArray(json, obj);
 	}
+	va_end(args);
 	
 	str = cJSON_Print(json);
 	cJSON_free(json);
@@ -191,8 +262,8 @@ user_permissions_json_with_slug_and_value_pairs(int nslug_and_value_pairs, ...)
 int
 cyclients_user_copy_to_companies(const char *token,
                                  int company_id,
-								 int user_id,
-								 int nuser_user_company_links,
+								                 int user_id,
+								                 int nuser_user_company_links,
                                  struct user_company_link *links)
 {
 	int i;
@@ -237,49 +308,4 @@ cyclients_user_copy_to_companies(const char *token,
 	return 1;
 }
 
-int
-cyclients_user_new(const char *token,
-				   int company_id,
-                   const char *name,
-                   const char *phone_number)
-{
-	cJSON *post;
-	long http_code = 0;
-	char requestString[BUFSIZ], auth[128], *post_data, *number;
-	char * SETUP_PARTNER_TOKEN(partner_token);
-	
-	assert(name);
-	assert(phone_number);
-	
-	sprintf(requestString, "%s/company/%d/staff/quick", 
-			URL, company_id);
-	sprintf(auth, "Authorization: Bearer %s, User %s"
-			, partner_token, token);
-	
-	post = cJSON_CreateObject();
-	cJSON_AddStringToObject(post, "name", name);
-	cJSON_AddNullToObject(post, "specialization");
-	cJSON_AddNullToObject(post, "position_id");
-	// phone number without +
-	number = (char *)phone_number;
-	if (*number == '+')
-		number++;
-	cJSON_AddStringToObject(post, "phone_number", number);
-	
-	post_data = cJSON_Print(post);
-	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
-		return 1;
-	}	
-	cJSON_free(post);
-	
-	http_code = curl_transport_exec(requestString,
-									auth, "POST",
-									post_data, NULL);
-	free(post_data);
-	
-	if (http_code == 201)
-		return 0;
-	
-	return 1;	
-}
+

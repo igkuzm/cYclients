@@ -61,12 +61,15 @@ cyclients_services(const char *token,
 	return n;
 }
 
-CYCService *
+int
 cyclients_service_get(const char *token,
                       int company_id,
-                      int service_id)
+                      int service_id,
+                      void *userdata,
+                      int (*callback)(void *userdata, 
+                                      const CYCService *service))
 {
-	CYCService *service = NULL;
+	int ret = 1;
 	cJSON *responce;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
@@ -87,19 +90,21 @@ cyclients_service_get(const char *token,
 			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsObject(data))
 			{
-				service = NEW(CYCService);
-				if (service){
-					cyc_service_fr_json(service, data);
-				}
+				memset(&SERVICE, 0, sizeof(SERVICE));
+				cyc_service_fr_json(&SERVICE, data);
+				ret = 0;
+				if (callback)
+					callback(userdata, &SERVICE);
 			}
 		}
 	}
 	if (responce)
 		cJSON_free(responce);
-	return service;
+
+	return ret;
 }
 
-CYCService *
+CYCLIENTS_ID
 cyclients_service_new(const char *token,
                       int company_id,
                       const char *title,
@@ -116,7 +121,7 @@ cyclients_service_new(const char *token,
                       int nstaff,
                       struct staff staff[])
 {
-	int i;
+	int i, service_id = 0;
 	CYCService *service = NULL;
 	cJSON *responce, *astaff, *post;
 	long http_code = 0;
@@ -160,7 +165,7 @@ cyclients_service_new(const char *token,
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
 		ERR("%s: can't generate post data", __FILE__);
-		return NULL;
+		return 0;
 	}
 	cJSON_free(post);
 
@@ -175,16 +180,16 @@ cyclients_service_new(const char *token,
 			cJSON *data = cJSON_GetObjectItem(responce, "data");
 			if (cJSON_IsObject(data))
 			{
-				service = NEW(CYCService);
-				if (service){
-					cyc_service_fr_json(service, data);
-				}
+				cJSON *id = cJSON_GetObjectItem(data, "id");
+				if (id)
+					service_id = id->valueint;
 			}
 		}
 	}
 	if (responce)
 		cJSON_free(responce);
-	return service;
+
+	return service_id;
 }
 
 int
@@ -334,13 +339,13 @@ cyclients_service_delete(const char *token,
 int
 cyclients_service_set_links(const char *token,
                             int company_id,
-							int service_id,
+							              int service_id,
                             int nmaster_configs,
-							struct master_cofig master_cofigs[],
+							              struct master_cofig master_cofigs[],
                             int nresources,
-							int resources[],
+							              int resources[],
                             int ntranslations,
-							struct translation translations[])
+							              struct translation translations[])
 {
 	int i;
 	cJSON *obj, *post, 
@@ -411,7 +416,7 @@ int
 cyclients_service_set_staff(const char *token,
                             int company_id,
                             int service_id,
-						    int master_id,
+						                int master_id,
                             int seance_length,
                             int technological_card_id)
 {
@@ -453,7 +458,7 @@ int
 cyclients_service_update_staff(const char *token,
                                int company_id,
                                int service_id,
-						       int master_id,
+						                   int master_id,
                                int seance_length,
                                int technological_card_id)
 {

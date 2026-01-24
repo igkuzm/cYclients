@@ -153,46 +153,52 @@ cyclients_clients_search(const char *token,
 	return current_count;
 }
 
-const CYCClient *
+int
 cyclients_client_get(const char *token,
                      int company_id,
-                     int client_id)
+                     int client_id,
+										 void *userdata,
+										 int (*callback)(void *userdata,
+											               const CYCClient *client))
 {
-    const CYCClient *client = NULL;
-    cJSON *responce;
-    long http_code = 0;
-    char requestString[BUFSIZ], auth[128];
-    char * SETUP_PARTNER_TOKEN(partner_token);
-    
-    sprintf(requestString, "%s/client/%d/%d", 
-			URL, company_id, client_id);
-    sprintf(auth, "Authorization: Bearer %s, User %s"
-			, partner_token, token);
-    
-    http_code = curl_transport_exec(requestString,
-                                    auth, "GET",
-                                    NULL, &responce);
-    
-    if (http_code == 200)
-    {
-        if (cJSON_IsObject(responce))
-        {
-            cJSON *data = cJSON_GetObjectItem(responce, "data");
-            if (cJSON_IsObject(data))
-            {
-                memset(&CLIENT, 0, sizeof(CLIENT));
-                cyc_client_fr_json(&CLIENT, data);
-                client = &CLIENT;
-            }                
-        }
-    }   
-    
-    if (responce)
+	int ret = 1;
+	cJSON *responce;
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128];
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	sprintf(requestString, "%s/client/%d/%d", 
+		URL, company_id, client_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+		, partner_token, token);
+	
+	http_code = curl_transport_exec(requestString,
+																	auth, "GET",
+																	NULL, &responce);
+	
+	if (http_code == 200)
+	{
+			if (cJSON_IsObject(responce))
+			{
+					cJSON *data = cJSON_GetObjectItem(responce, "data");
+					if (cJSON_IsObject(data))
+					{
+							memset(&CLIENT, 0, sizeof(CLIENT));
+							cyc_client_fr_json(&CLIENT, data);
+							ret = 0;
+							if (callback)
+								callback(userdata, &CLIENT);
+					}                
+			}
+	}   
+	
+	if (responce)
 		cJSON_free(responce);
-	return client;    
+	
+	return ret;    
 }
 
-int
+CYCLIENTS_ID
 cyclients_client_new(const char *token,
                      int company_id,
                      const char *name,
@@ -205,78 +211,93 @@ cyclients_client_new(const char *token,
                      int number_custom_fields_key_value_pairs,
                      ...)
 {
-    int i = 0;
-    cJSON *post, *custom_fields;
-    char *phone_number;
-    long http_code = 0;
+	int i = 0, client_id = 0;
+	cJSON *post, *custom_fields, *responce;
+	char *phone_number;
+	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
     
-    assert(name);
-    assert(phone);
-    
-    phone_number = (char *)phone;
-    if (*phone_number == '+') {
-        phone_number++;
-    }
-        
-    sprintf(requestString, "%s/clients/%d", 
-			URL, company_id);
+	assert(name);
+	assert(phone);
+	
+	phone_number = (char *)phone;
+	if (*phone_number == '+') {
+			phone_number++;
+	}
+			
+	sprintf(requestString, "%s/clients/%d", 
+		URL, company_id);
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 			, partner_token, token);
 	
 	post = cJSON_CreateObject();
     cJSON_AddStringToObject(post, "name", name);
-    if (surname) {
-        cJSON_AddStringToObject(post, "surname", surname);
-    }
-    if (patronymic) {
-        cJSON_AddStringToObject(post, "patronymic", patronymic);
-    }
-    cJSON_AddStringToObject(post, "phone", phone_number);
-    if (email) {
-        cJSON_AddStringToObject(post, "email", email);
-    }
-    if (birth_date) {
-        cJSON_AddStringToObject(post, "birth_date", birth_date);
-    }
-    if (comment) {
-        cJSON_AddStringToObject(post, "comment", comment);
-    }    
-    if (number_custom_fields_key_value_pairs>0)
-    {
-        va_list args;
-        va_start(args, number_custom_fields_key_value_pairs);
-        custom_fields = cJSON_CreateObject();
-        for (i=0; i<number_custom_fields_key_value_pairs; ++i) {
-            char *key, *value;
-            key = va_arg(args, char *);
-            if (key == NULL)
-                break;
-            value = va_arg(args, char *);
-            if (value == NULL)
-                break;
-            cJSON_AddStringToObject(custom_fields, key, value);
-        }
-        cJSON_AddItemToObject(post, "custom_fields", custom_fields);
-    }
+	if (surname) {
+			cJSON_AddStringToObject(post, "surname", surname);
+	}
+	if (patronymic) {
+			cJSON_AddStringToObject(post, "patronymic", patronymic);
+	}
+	cJSON_AddStringToObject(post, "phone", phone_number);
+	if (email) {
+			cJSON_AddStringToObject(post, "email", email);
+	}
+	if (birth_date) {
+			cJSON_AddStringToObject(post, "birth_date", birth_date);
+	}
+	if (comment) {
+			cJSON_AddStringToObject(post, "comment", comment);
+	}    
+	if (number_custom_fields_key_value_pairs>0)
+	{
+			va_list args;
+			va_start(args, number_custom_fields_key_value_pairs);
+			custom_fields = cJSON_CreateObject();
+			for (i=0; i<number_custom_fields_key_value_pairs; ++i) {
+					char *key, *value;
+					key = va_arg(args, char *);
+					if (key == NULL)
+							break;
+					value = va_arg(args, char *);
+					if (value == NULL)
+							break;
+					cJSON_AddStringToObject(custom_fields, key, value);
+			}
+	    va_end(args);
+			cJSON_AddItemToObject(post, "custom_fields", custom_fields);
+	}
     
-    post_data = cJSON_Print(post);
-	cJSON_free(post);
-    if (post_data == NULL){
-        ERR("%s: can't generate post data", __FILE__);
-        return 1;
-    }	
-    
-    http_code = curl_transport_exec(requestString,
-                                    auth, "POST",
-                                    post_data, NULL);
-    free(post_data);
-    
-    if (http_code == 201)
+	post_data = cJSON_Print(post);
+cJSON_free(post);
+	if (post_data == NULL){
+		ERR("%s: can't generate post data", __FILE__);
 		return 0;
+	}	
 	
-	return 1;
+	http_code = curl_transport_exec(requestString,
+																	auth, "POST",
+																	post_data, &responce);
+	free(post_data);
+	
+	if (http_code == 201)
+	{
+		if (cJSON_IsObject(responce))
+		{
+			cJSON *data = cJSON_GetObjectItem(responce, "data");
+			if (cJSON_IsObject(data))
+			{
+				cJSON *id = cJSON_GetObjectItem(data, "id");
+				if (id)
+					client_id = id->valueint;
+			}
+		}
+	}
+
+	if (responce)
+		cJSON_free(responce);
+	
+	return client_id;
 }
 
 CYCLIENTS_COUNTER
@@ -505,6 +526,7 @@ cyclients_client_edit(const char *token,
                 break;
             cJSON_AddStringToObject(custom_fields, key, value);
         }
+	      va_end(args);
         cJSON_AddItemToObject(post, "custom_fields", custom_fields);
     }
     
@@ -658,20 +680,20 @@ cyclients_client_comment_remove(const char *token,
                                 int client_id,
                                 int comment_id)
 {
-    long http_code = 0;
-    char requestString[BUFSIZ], auth[128];
-    char * SETUP_PARTNER_TOKEN(partner_token);
-    
-    sprintf(requestString, "%s/company/%d/clients/%d/comments/%d", 
-			URL, company_id, client_id, comment_id);
-    sprintf(auth, "Authorization: Bearer %s, User %s"
-			, partner_token, token);
-    
-    http_code = curl_transport_exec(requestString,
-                                    auth, "DELETE",
-                                    NULL, NULL);
-    
-    if (http_code == 204)
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128];
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	sprintf(requestString, "%s/company/%d/clients/%d/comments/%d", 
+		URL, company_id, client_id, comment_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+		, partner_token, token);
+	
+	http_code = curl_transport_exec(requestString,
+																	auth, "DELETE",
+																	NULL, NULL);
+	
+	if (http_code == 204)
 		return 0;
 	
 	return 1;
