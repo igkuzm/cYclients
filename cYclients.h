@@ -392,5 +392,19 @@ cyclients_records(const char *token,
                   int (*callback)(void *userdata, 
                                   const CYCRecord *record));
 
+int
+cyclients_record_new (const char *token,
+                      int company_id,
+					  int staff_id,
+                      const char *client_name,
+                      const char *client_phone,
+                      const char *datetime,
+                      int nservices,
+                      int *services,
+					  int seance_length,
+                      const char *comment,
+					  const char *api_id,
+                      int number_custom_fields_key_value_pairs,
+                      ...);
 
 #endif // CYCLIENTS_H

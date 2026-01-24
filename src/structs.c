@@ -51,6 +51,10 @@
 	cyc_staff_fr_json(&t->_name, json);
 #define CYC_SERVICE_CLASS(_name) \
 	cyc_service_fr_json(&t->_name, json);
+#define CYC_DOCUMENT_CLASS(_name) \
+    cyc_document_fr_json(&t->_name, json);
+#define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) \
+    JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_document_fr_json);
 #define CYC_VISIT_SERVICE_CLASS(_name) \
 	cyc_visit_service_fr_json(&t->_name, json);
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
@@ -222,6 +226,14 @@ int cyc_visit_service_fr_json(CYCVisitService *t, const cJSON *json)
     FROM_JSON_END		
 }
 
+int cyc_document_fr_json(CYCDocument *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_DOCUMENT;
+	CYC_DOCUMENT
+    FROM_JSON_END		
+}
+
 int cyc_record_fr_json(CYCRecord *t, const cJSON *json)
 {
 	FROM_JSON_START
@@ -269,6 +281,8 @@ int cyc_comment_fr_json(CYCComment *t, const cJSON *json)
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_DOCUMENT_CLASS
+#undef CYC_DOCUMENT_CLASS_ARRAY
 #undef CYC_KVPAIR
 
 // TO JSON
@@ -367,6 +381,16 @@ int cyc_comment_fr_json(CYCComment *t, const cJSON *json)
 
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
 	JSON_FROM_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_to_json);
+
+#define CYC_DOCUMENT_CLASS(_name) \
+do { \
+    cJSON *_obj = \
+    cyc_document_to_json(&t->_name); \
+		cJSON_AddItemToObject(json, #_name, _obj); \
+}	while(0);
+
+#define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) \
+JSON_FROM_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_document_to_json);
 
 #define CYC_KVPAIR(_name, _len) \
 
@@ -490,6 +514,13 @@ cJSON * cyc_visit_service_to_json(CYCVisitService *t)
 {
 	TO_JSON_START
 	CYC_VISIT_SERVICE
+	TO_JSON_END	
+}
+
+cJSON * cyc_document_to_json(CYCDocument *t)
+{
+	TO_JSON_START
+	CYC_DOCUMENT
 	TO_JSON_END	
 }
 

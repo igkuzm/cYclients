@@ -33,6 +33,7 @@ typedef	enum {
 	CYC_TYPE_USER_PERMISSIONS,
     CYC_TYPE_FILE,
     CYC_TYPE_VISIT_SERVICE,
+    CYC_TYPE_DOCUMENT,
     CYC_TYPE_RECORD,
     CYC_TYPE_CLIENT,
 	CYC_TYPE_COMMENT,
@@ -824,16 +825,62 @@ typedef	enum {
 	CYC_BOOL(is_paid_full) \
 	CYC_BOOL(is_multi) \
 
+#define CYC_DOCUMENT \
+    CYC_INT(id) \
+    CYC_INT(type_id) \
+    CYC_INT(storage_id) \
+    CYC_INT(user_id) \
+    CYC_INT(company_id) \
+    CYC_INT(number) \
+    CYC_STRING(comment, 32) \
+    CYC_STRING(date_created, 32) \
+    CYC_INT(category_id) \
+    CYC_INT(visit_id) \
+    CYC_INT(record_id) \
+    CYC_STRING(type_title, 32) \
+    CYC_BOOL(is_sale_bill_printed) \
+
 #define CYC_RECORD \
-   CYC_INT(id) \
-   CYC_STRING(comment, 256) \
-   CYC_STRING(date, 32) \
-   CYC_INT(visit_id) \
-   CYC_INT(attendance) \
-   CYC_VISIT_SERVICE_CLASS_ARRAY(services, 32) \
-   CYC_STAFF_CLASS(staff) \
-   CYC_COMPANY_CLASS(company) \
-   CYC_KVPAIR(custom_fields, 32) \
+    CYC_INT(id) \
+    CYC_INT(company_id) \
+    CYC_INT(staff_id) \
+    CYC_INT(clients_count) \
+    CYC_STRING(date, 32) \
+    CYC_STRING(datetime, 64) \
+    CYC_STRING(create_date, 64) \
+    CYC_STRING(comment, 256) \
+    CYC_BOOL(online) \
+    CYC_INT(visit_attendance) \
+    CYC_INT(attendance) \
+    CYC_INT(confirmed) \
+    CYC_INT(seance_length) \
+    CYC_INT(length) \
+    CYC_INT(technical_break_duration) \
+    CYC_INT(sms_now) \
+    CYC_INT(sms_before) \
+    CYC_STRING(sms_now_text, 256) \
+    CYC_INT(email_now) \
+    CYC_INT(notified) \
+    CYC_INT(master_request) \
+    CYC_STRING(api_id, 128) \
+    CYC_STRING(from_url, 256) \
+    CYC_INT(review_requested) \
+    CYC_INT(visit_id) \
+    CYC_INT(created_user_id) \
+    CYC_BOOL(deleted) \
+    CYC_INT(paid_full) \
+    CYC_INT(payment_status) \
+    CYC_BOOL(prepaid) \
+    CYC_BOOL(prepaid_confirmed) \
+    CYC_STRING(last_change_date, 64) \
+    CYC_STRING(custom_color, 32) \
+    CYC_STRING(custom_font_color, 32) \
+    CYC_INT(activity_id) \
+    CYC_VISIT_SERVICE_CLASS_ARRAY(services, 32) \
+    CYC_STAFF_CLASS(staff) \
+    CYC_COMPANY_CLASS(company) \
+    CYC_DOCUMENT_CLASS_ARRAY(documents, 32) \
+    CYC_KVPAIR(custom_fields, 32) \
 
 #define CYC_CLIENT \
    CYC_INT(id) \
@@ -897,6 +944,8 @@ typedef	enum {
 #define CYC_SERVICE_CLASS(_name) CYCService _name;
 #define CYC_VISIT_SERVICE_CLASS(_name) CYCVisitService _name;
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len]; int n##_name;
+#define CYC_DOCUMENT_CLASS(_name) CYCDocument _name;
+#define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) CYCDocument _name[_len]; int n##_name;
 #define CYC_KVPAIR(_name, _len) struct kvpair _name[_len]; int n##_name;
 
 typedef struct {
@@ -1015,6 +1064,13 @@ cJSON * cyc_visit_service_to_json(CYCVisitService *t);
 
 typedef struct {
 	CYC_TYPE _type;
+	CYC_DOCUMENT
+} CYCDocument;
+int     cyc_document_fr_json(CYCDocument *t, const cJSON *json);
+cJSON * cyc_document_to_json(CYCDocument *t);
+
+typedef struct {
+	CYC_TYPE _type;
 	CYC_RECORD
 } CYCRecord;
 int     cyc_record_fr_json(CYCRecord *t, const cJSON *json);
@@ -1057,6 +1113,8 @@ cJSON * cyc_comment_to_json(CYCComment *t);
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_DOCUMENT_CLASS
+#undef CYC_DOCUMENT_CLASS_ARRAY
 #undef CYC_KVPAIR
 
 #endif // STRUCTS_H

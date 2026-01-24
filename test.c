@@ -69,7 +69,13 @@ int comments_cb(void *userdata, const CYCComment *comment)
 	return 0;
 }
 
-
+int records_cb(void *userdata, const CYCRecord *record)
+{
+	printf("RECORD ID: %d\t", record->id);
+    printf("DATE: %s\t", record->date);
+    printf("COMMENT: %s\n", record->comment);
+	return 1;
+}
 
 int main(int argc, char *argv[])
 {
@@ -141,24 +147,24 @@ int main(int argc, char *argv[])
 			NULL,
 		 	&company_id, companies_cb);
 
-	cyclients_service_categories(
-			user->user_token, company_id, 
-			NULL, categories_cb);
-	
-	cyclients_services(user->user_token,
-		 	company_id,
-		 	NULL, services_cb);
-
-
-	CYCService *service = cyclients_service_get(
-			user->user_token, company_id, 3862837);
-	
-	const CYCUserPermissions *permissions =
-	cyclients_user_permissions(user->user_token, company_id, user->id);
-	if (permissions){
-	   printf("USER_PERMISSIONS TIMETABLE ACCESS: %s\n", permissions->timetable_access?"true":"false");
-	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
-    }
+//	cyclients_service_categories(
+//			user->user_token, company_id, 
+//			NULL, categories_cb);
+//	
+//	cyclients_services(user->user_token,
+//		 	company_id,
+//		 	NULL, services_cb);
+//
+//
+//	CYCService *service = cyclients_service_get(
+//			user->user_token, company_id, 3862837);
+//	
+//	const CYCUserPermissions *permissions =
+//	cyclients_user_permissions(user->user_token, company_id, user->id);
+//	if (permissions){
+//	   printf("USER_PERMISSIONS TIMETABLE ACCESS: %s\n", permissions->timetable_access?"true":"false");
+//	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
+//    }
 	
     int client_id;
 	cyclients_clients_search(user->user_token, company_id, "name, id", "Семенцов Игорь", &client_id, clients_cb);
@@ -168,16 +174,21 @@ int main(int argc, char *argv[])
 
     //cyclients_client_visits(user->user_token, company_id, client_id, NULL, visit_cb);
 
-    CYCClient *client = cyclients_client_get(user->user_token, company_id, client_id);
-    if (client)
-    {
-        printf("CLIENT NAME: %s\n", client->name);
-    }
+//    CYCClient *client = cyclients_client_get(user->user_token, company_id, client_id);
+//    if (client)
+//    {
+//        printf("CLIENT NAME: %s\n", client->name);
+//    }
 	//cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
 	//cyclients_client_comments(user->user_token, company_id, client_id, NULL, comments_cb);
     
-    cyclients_records(user->user_token, company_id, NULL, NULL, NULL, NULL);
+    //cyclients_records(user->user_token, company_id, NULL, NULL, NULL, records_cb);
 
+    int staff_id = 3862837;
+    
+    if (cyclients_record_new(user->user_token,company_id,staff_id,"TEST","+79990407731","2026-01-24T15:34:30+1000",0,0,0,"это тестовая запись","api_id afasdfdasf",1, "mykey", "myvalue"))
+        printf("SOME ERROE!\n");
+    
     return 0;
 }
 

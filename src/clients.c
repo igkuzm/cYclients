@@ -243,7 +243,7 @@ cyclients_client_new(const char *token,
     if (comment) {
         cJSON_AddStringToObject(post, "comment", comment);
     }    
-    if (i>0)
+    if (number_custom_fields_key_value_pairs>0)
     {
         va_list args;
         va_start(args, number_custom_fields_key_value_pairs);
