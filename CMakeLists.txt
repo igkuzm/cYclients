@@ -10,10 +10,6 @@ if (NOT EXISTS ${CMAKE_SOURCE_DIR}/partner_token.h)
   message(FATAL_ERROR "no partner_token.h")
 endif()
 
-if (APPLE)
-  list(APPEND CMAKE_EXE_LINKER_FLAGS "-framework Foundation")	
-endif()
-
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   list(APPEND CMAKE_C_FLAGS "-DDEBUG")
 endif()
@@ -29,7 +25,6 @@ set(HEADERS
 
 set(SOURCES
   src/cJSON.c
-  src/log.c	
   src/curl_transport.c	
   src/structs.c		
   src/companies.c		

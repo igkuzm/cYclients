@@ -49,7 +49,7 @@ cyclients_records(const char *token,
 		responce = NULL;
 	    post_data = cJSON_Print(post);
 		if (post_data == NULL){
-			ERR("%s: can't generate post data", __FILE__);
+			ERR("%s", "can't generate post data");
 			return current_count;
 		}	
 		
@@ -189,7 +189,7 @@ cyclients_record_new(const char *token,
 	post_data = cJSON_Print(post);
 	cJSON_free(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return record_id;
 	}	
 	
@@ -400,7 +400,7 @@ cyclients_record_update(const char *token,
 	post_data = cJSON_Print(post);
 	cJSON_free(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return ret;
 	}	
 	

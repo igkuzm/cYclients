@@ -26,6 +26,7 @@ CFG=cYclients - Win32
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
+MTL=midl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "cYclients - Win32"
@@ -40,8 +41,8 @@ RSC=rc.exe
 # PROP Output_Dir "build\win32"
 # PROP Intermediate_Dir "build\win32"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /Yu"stdafx.h" /c
+# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /FD /Yu"stdafx.h" /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -63,8 +64,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "build\winnt"
 # PROP Intermediate_Dir "build\winnt"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX  /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -83,6 +84,11 @@ LIB32=link.exe -lib
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\StdAfx.c
+# ADD CPP /Yc"stdafx.h"
+# End Source File
 # Begin Source File
 
 SOURCE=.\src\auth.c
@@ -106,10 +112,6 @@ SOURCE=.\src\curl_transport.c
 # Begin Source File
 
 SOURCE=.\cYclients.def
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\log.c
 # End Source File
 # Begin Source File
 
@@ -154,6 +156,10 @@ SOURCE=.\cYclients.h
 # Begin Source File
 
 SOURCE=.\src\log.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
 

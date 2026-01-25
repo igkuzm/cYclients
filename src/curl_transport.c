@@ -63,10 +63,9 @@ curl_transport_exec(const char *request_url,
 	assert(auth_header);
 	assert(http_method);
 	
-#ifdef DEBUG
-		LOG("%s: URL: %s", __FILE__, request_url);
-		LOG("%s: METHOD: %s", __FILE__, http_method);
-#endif
+	LOG("URL: %s", request_url);
+	LOG("METHOD: %s", http_method);
+
 	SETUP_PARTNER_TOKEN(partner_token);
 	curl = curl_easy_init();
 	if (curl){
@@ -88,9 +87,7 @@ curl_transport_exec(const char *request_url,
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
 		
 		if (post_data){
-#ifdef DEBUG
-		LOG("%s: POST data: %s", __FILE__, post_data);
-#endif
+			LOG("POST data: %s", post_data);
 		  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data);
 		  curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(post_data));
 		}
@@ -102,9 +99,7 @@ curl_transport_exec(const char *request_url,
 
 		res = curl_easy_perform(curl);
 		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-#ifdef DEBUG
-		LOG("%s: http returned: %d", __FILE__, http_code);
-#endif
+		LOG("http returned: %d", http_code);
 		
 		curl_easy_cleanup(curl);
 		curl_slist_free_all(header);
@@ -115,14 +110,11 @@ curl_transport_exec(const char *request_url,
 		}		
 		
 		responce = cJSON_ParseWithLength(s.ptr, s.len);
-#ifdef DEBUG
 		if (responce){
-			LOG("%s: %s", __FILE__, cJSON_Print(responce));
+			LOG("%s", cJSON_Print(responce));
+		} else {
+			LOG("%s", "RESPONCE JSON IS NULL");
 		}
-	    else {
-			LOG("%s: %s", __FILE__, "RESPONCE JSON IS NULL");
-		}
-#endif
 		free(s.ptr);
 		
 		if (cJSON_IsObject(responce)){

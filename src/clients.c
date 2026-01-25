@@ -79,7 +79,7 @@ cyclients_clients_search(const char *token,
 		responce = NULL;
 	    post_data = cJSON_Print(post);
 		if (post_data == NULL){
-			ERR("%s: can't generate post data", __FILE__);
+			ERR("%s", "can't generate post data");
 			return current_count;
 		}	
 		
@@ -271,7 +271,7 @@ cyclients_client_new(const char *token,
 	post_data = cJSON_Print(post);
 cJSON_free(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 0;
 	}	
 	
@@ -404,7 +404,7 @@ cyclients_client_visits(const char *token,
 	post_data = cJSON_Print(post);
 	cJSON_free(post);
     if (post_data == NULL){
-        ERR("%s: %d: can't generate post data", __FILE__, __LINE__);
+        ERR("%s", "can't generate post data");
         return n;
     }	
 		cJSON_free(post);
@@ -533,7 +533,7 @@ cyclients_client_edit(const char *token,
     post_data = cJSON_Print(post);
 	cJSON_free(post);
     if (post_data == NULL){
-        ERR("%s: can't generate post data", __FILE__);
+        ERR("%s", "can't generate post data");
         return 1;
     }	
     
@@ -645,7 +645,7 @@ cyclients_client_comment_new(const char *token,
     post_data = cJSON_Print(post);
 	cJSON_free(post);
     if (post_data == NULL){
-        ERR("%s: can't generate post data", __FILE__);
+        ERR("%s", "can't generate post data");
         return 1;
     }
     

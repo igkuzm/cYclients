@@ -136,7 +136,7 @@ cyclients_service_category_update(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 1;
 	}
 	cJSON_free(post);
@@ -187,7 +187,7 @@ cyclients_service_category_new(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return service_category_id;
 	}
 	cJSON_free(post);

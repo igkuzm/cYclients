@@ -197,9 +197,7 @@ int cyc_user_permissions_fr_json(CYCUserPermissions *t, const cJSON *p)
 				if (slug == NULL || value == NULL)
 					continue;
 				name = slug->valuestring;
-#ifdef DEBUG
-				LOG("parse permission: %s\n", name);
-#endif
+				LOG("parse permission: %s", name);
 				value->string = (char *)name;
 				CYC_USER_PERMISSIONS
 				//cJSON_free(object);

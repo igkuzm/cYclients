@@ -164,7 +164,7 @@ cyclients_service_new(const char *token,
 
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 0;
 	}
 	cJSON_free(post);
@@ -294,7 +294,7 @@ cyclients_service_update(const char *token,
 
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 1;
 	}
 	cJSON_free(post);
@@ -395,7 +395,7 @@ cyclients_service_set_links(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 1;
 	}	
 	cJSON_free(post);
@@ -437,7 +437,7 @@ cyclients_service_set_staff(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 1;
 	}	
 	cJSON_free(post);
@@ -478,7 +478,7 @@ cyclients_service_update_staff(const char *token,
 	
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
-		ERR("%s: can't generate post data", __FILE__);
+		ERR("%s", "can't generate post data");
 		return 1;
 	}	
 	cJSON_free(post);
