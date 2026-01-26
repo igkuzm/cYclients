@@ -21,7 +21,7 @@ cyclients_services(const char *token,
                                    const CYCService *service))
 {
 	CYCLIENTS_COUNTER n = 0;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -70,7 +70,7 @@ cyclients_service_get(const char *token,
                                       const CYCService *service))
 {
 	int ret = 1;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -124,7 +124,7 @@ cyclients_service_new(const char *token,
 {
 	int i, service_id = 0;
 	CYCService *service = NULL;
-	cJSON *responce, *astaff, *post;
+	cJSON *responce = NULL, *astaff, *post;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);

@@ -26,7 +26,7 @@ cyclients_records(const char *token,
 {
   int npage = 0, total_count = 0, current_count = 0, exit_loop = 0, 
       is_first_field = 1;
-	cJSON *post, *responce, *meta, *data, *obj;
+	cJSON *post, *responce = NULL, *meta, *data, *obj;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -124,7 +124,7 @@ cyclients_record_new(const char *token,
                      ...)
 {
 	int i = 0, k, length = seance_length, record_id = 0;
-	cJSON *post, *client, *custom_fields, *responce, *data;
+	cJSON *post, *client, *custom_fields, *responce = NULL, *data;
 	char *phone_number;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
@@ -236,7 +236,7 @@ cyclients_record_get(const char *token,
                                      const CYCRecord *record))
 {
 	int ret = 1;
-	cJSON *responce, *data;
+	cJSON *responce = NULL, *data;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -339,7 +339,7 @@ cyclients_record_set(const char *token,
 	}	
 	
 	http_code = curl_transport_exec(requestString,
-									auth, "POST",
+									auth, "PUT",
 									post_data, NULL);
 	free(post_data);
 	

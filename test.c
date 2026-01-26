@@ -38,6 +38,13 @@ int users_permissions_cb(void *userdata, const CYCUserPermissions *user_permissi
 	return 0;
 }
 
+int custom_fields_cb(void *d, const CYCCustomField *f)
+{
+	printf("CUSTOM FIELD: %s\n", f->title);
+	printf("CUSTOM FIELD TYPE: %s\n", f->type.title);
+	return 0;
+}
+
 int clients_cb(void *userdata, int n, const kvpair_t *kvpair)
 {
 	int i, *client_id = userdata;
@@ -170,7 +177,7 @@ int main(int argc, char *argv[])
 //	cyclients_clients_search(user->user_token, company_id, "name, id", "TEST", &client_id, clients_cb);
 //    printf("CLIENT_ID: %d\n", client_id);
 	
-	cyclients_client_remove(user->user_token, company_id, 363089556);
+	/*cyclients_client_remove(user->user_token, company_id, 363089556);*/
 	//int client_id = cyclients_client_new(user->user_token, company_id, "тестовый пациент", "+788299329912", 0);
     
     //cyclients_client_files(user->user_token, company_id, client_id, NULL, file_cb);
@@ -194,6 +201,10 @@ int main(int argc, char *argv[])
 //    int record_id = cyclients_record_new(user->user_token,company_id,staff_id,"TEST","+79990407731","28.01.2026 13:00",0,"это тестовая запись","api_id afasdfdasf",1, "mykey", "myvalue");
 //        
 //	printf("RECORD_ID: %d\n", record_id);
+
+	cyclients_custom_field_new(user->user_token, CYCLIENTS_CATEGORY_RECORD,company_id, "texthh", "kuzm_field", "kuzmich field", true, true);
+	
+	/*cyclients_custom_fields(user->user_token, CYCLIENTS_CATEGORY_RECORD, company_id, NULL, custom_fields_cb);*/
     
     return 0;
 }

@@ -28,37 +28,39 @@
 	JSON_TO_STRING_ARRAY(json, t, _name, _len);
 
 #define CYC_USER_CLASS(_name) \
-	cyc_user_fr_json(&t->_name, json);
+	cyc_user_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_FILE_CLASS(_name) \
-    cyc_file_fr_json(&t->_name, json);
+    cyc_file_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_TRANSPORT_CLASS(_name) \
-	cyc_transport_fr_json(&t->_name, json);
+	cyc_transport_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_2FA_CLASS(_name) CYC2fa _name \
-	cyc_2fa_fr_json(&t->_name, json);
+	cyc_2fa_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_SOCIAL_CLASS(_name) \
-	cyc_social_fr_json(&t->_name, json);
+	cyc_social_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_BOOKING_WIDGET_PROMO_CLASS(_name) \
-	cyc_booking_widget_promo_fr_json(&t->_name, json);
+	cyc_booking_widget_promo_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_MAIN_GROUP_CLASS(_name) \
-	cyc_main_group_fr_json(&t->_name, json);
+	cyc_main_group_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_SALON_GROUP_SETTINGS_CLASS(_name) \
-	cyc_salon_group_settings_fr_json(&t->_name, json);
+	cyc_salon_group_settings_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_ACCESS_CLASS(_name) \
-	cyc_access_fr_json(&t->_name, json);
+	cyc_access_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_COMPANY_CLASS(_name) \
-	cyc_company_fr_json(&t->_name, json);
+	cyc_company_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_STAFF_CLASS(_name) \
-	cyc_staff_fr_json(&t->_name, json);
+	cyc_staff_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_SERVICE_CLASS(_name) \
-	cyc_service_fr_json(&t->_name, json);
+	cyc_service_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_DOCUMENT_CLASS(_name) \
-    cyc_document_fr_json(&t->_name, json);
+    cyc_document_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) \
     JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_document_fr_json);
 #define CYC_VISIT_SERVICE_CLASS(_name) \
-	cyc_visit_service_fr_json(&t->_name, json);
+	cyc_visit_service_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) \
 	JSON_TO_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_visit_service_fr_json);
+#define CYC_CUSTOM_FIELD_TYPE_CLASS(_name) \
+	cyc_custom_field_type_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_KVPAIR(_name, _len) \
     JSON_TO_KVPAIR(json, t, _name, _len);
 
@@ -229,7 +231,7 @@ int cyc_document_fr_json(CYCDocument *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_DOCUMENT;
 	CYC_DOCUMENT
-    FROM_JSON_END		
+  FROM_JSON_END		
 }
 
 int cyc_record_fr_json(CYCRecord *t, const cJSON *json)
@@ -237,7 +239,7 @@ int cyc_record_fr_json(CYCRecord *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_RECORD;
 	CYC_RECORD
-    FROM_JSON_END		
+  FROM_JSON_END		
 }
 
 int cyc_client_fr_json(CYCClient *t, const cJSON *json)
@@ -245,7 +247,7 @@ int cyc_client_fr_json(CYCClient *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_CLIENT;
 	CYC_CLIENT
-    FROM_JSON_END		
+  FROM_JSON_END		
 }
 
 int cyc_comment_fr_json(CYCComment *t, const cJSON *json)
@@ -253,7 +255,23 @@ int cyc_comment_fr_json(CYCComment *t, const cJSON *json)
 	FROM_JSON_START
 	t->_type = CYC_TYPE_COMMENT;
 	CYC_COMMENT
-    FROM_JSON_END		
+  FROM_JSON_END		
+}
+
+int cyc_custom_field_type_fr_json(CYCCustomFieldType *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_CUSTOM_FIELD_TYPE;
+	CYC_CUSTOM_FIELD_TYPE
+  FROM_JSON_END		
+}
+
+int cyc_custom_field_fr_json(CYCCustomField *t, const cJSON *json)
+{
+	FROM_JSON_START
+	t->_type = CYC_TYPE_CUSTOM_FIELD;
+	CYC_CUSTOM_FIELD
+  FROM_JSON_END		
 }
 
 #undef CYC_UNKNOWN
@@ -281,6 +299,7 @@ int cyc_comment_fr_json(CYCComment *t, const cJSON *json)
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
 #undef CYC_DOCUMENT_CLASS
 #undef CYC_DOCUMENT_CLASS_ARRAY
+#undef CYC_CUSTOM_FIELD_TYPE_CLASS
 #undef CYC_KVPAIR
 
 // TO JSON
@@ -389,6 +408,13 @@ do { \
 
 #define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) \
 JSON_FROM_CYCSTRUCT_ARRAY(json, t, _name, _len, cyc_document_to_json);
+
+#define CYC_CUSTOM_FIELD_TYPE_CLASS(_name) \
+do { \
+    cJSON *_obj = \
+    cyc_custom_field_type_to_json(&t->_name); \
+		cJSON_AddItemToObject(json, #_name, _obj); \
+}	while(0);
 
 #define CYC_KVPAIR(_name, _len) \
 
@@ -543,6 +569,20 @@ cJSON * cyc_comment_to_json(CYCComment *t)
 	TO_JSON_END	
 }
 
+cJSON * cyc_custom_field_type_to_json(CYCCustomFieldType *t)
+{
+	TO_JSON_START
+	CYC_CUSTOM_FIELD_TYPE
+	TO_JSON_END	
+}
+
+cJSON * cyc_custom_field_to_json(CYCCustomField *t)
+{
+	TO_JSON_START
+	CYC_CUSTOM_FIELD
+	TO_JSON_END	
+}
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -566,5 +606,6 @@ cJSON * cyc_comment_to_json(CYCComment *t)
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_CUSTOM_FIELD_TYPE_CLASS
 #undef CYC_KVPAIR
 

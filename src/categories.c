@@ -21,7 +21,7 @@ cyclients_service_categories(const char *token,
                                              const CYCServiceCategory *category))
 {
 	CYCLIENTS_COUNTER n = 0;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -69,7 +69,7 @@ cyclients_service_category_get(const char *token,
                                                const CYCServiceCategory *category))
 {
 	int ret = 1;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -164,7 +164,7 @@ cyclients_service_category_new(const char *token,
 {
 	int service_category_id = 0;
 	CYCServiceCategory *category = NULL;
-	cJSON *post, *responce, *staff;
+	cJSON *post, *responce = NULL, *staff;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);

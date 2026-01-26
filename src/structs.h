@@ -39,6 +39,8 @@ typedef	enum {
   CYC_TYPE_RECORD,
   CYC_TYPE_CLIENT,
 	CYC_TYPE_COMMENT,
+	CYC_TYPE_CUSTOM_FIELD_TYPE,
+	CYC_TYPE_CUSTOM_FIELD,
 	CYC_NTYPES,
 } CYC_TYPE;
 
@@ -920,6 +922,20 @@ typedef	enum {
    CYC_USER_CLASS(user) \
    CYC_FILE_CLASS(file) \
 
+#define CYC_CUSTOM_FIELD_TYPE \
+    CYC_INT(id) \
+    CYC_STRING(code, 32) \
+    CYC_STRING(slug, 32) \
+    CYC_STRING(title, 256) \
+
+#define CYC_CUSTOM_FIELD \
+    CYC_INT(id) \
+    CYC_STRING(code, 32) \
+    CYC_STRING(title, 256) \
+    CYC_BOOL(show_in_ui) \
+    CYC_BOOL(user_can_edit) \
+		CYC_CUSTOM_FIELD_TYPE_CLASS(type) \
+
 // structure 
 #define CYC_UNKNOWN(_name)
 #define CYC_INT(_name) int _name;
@@ -948,6 +964,7 @@ typedef	enum {
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len]; int n##_name;
 #define CYC_DOCUMENT_CLASS(_name) CYCDocument _name;
 #define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) CYCDocument _name[_len]; int n##_name;
+#define CYC_CUSTOM_FIELD_TYPE_CLASS(_name) CYCCustomFieldType _name;
 #define CYC_KVPAIR(_name, _len) struct kvpair _name[_len]; int n##_name;
 
 typedef struct {
@@ -1092,6 +1109,20 @@ typedef struct {
 int     cyc_comment_fr_json(CYCComment *t, const cJSON *json);
 cJSON * cyc_comment_to_json(CYCComment *t);
 
+typedef struct {
+	CYC_TYPE _type;
+	CYC_CUSTOM_FIELD_TYPE
+} CYCCustomFieldType;
+int     cyc_custom_field_type_fr_json(CYCCustomFieldType *t, const cJSON *json);
+cJSON * cyc_custom_field_type_to_json(CYCCustomFieldType *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_CUSTOM_FIELD
+} CYCCustomField;
+int     cyc_custom_field_fr_json(CYCCustomField *t, const cJSON *json);
+cJSON * cyc_custom_field_to_json(CYCCustomField *t);
+
 #undef CYC_UNKNOWN
 #undef CYC_INT
 #undef CYC_DOUBLE
@@ -1117,6 +1148,7 @@ cJSON * cyc_comment_to_json(CYCComment *t);
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
 #undef CYC_DOCUMENT_CLASS
 #undef CYC_DOCUMENT_CLASS_ARRAY
+#undef CYC_CUSTOM_FIELD_TYPE_CLASS
 #undef CYC_KVPAIR
 
 // default_fields 
@@ -1155,6 +1187,7 @@ enum DEFAULT_FIELD_TYPE {
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_DOCUMENT_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_CUSTOM_FIELD_TYPE_CLASS(_name) #_name DEFAULT_FIELD_TYPE_JSON;
 #define CYC_KVPAIR(_name, _len)
 
 struct default_field {
@@ -1248,7 +1281,7 @@ static cJSON * json_from_default_field(
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
 #undef CYC_DOCUMENT_CLASS
 #undef CYC_DOCUMENT_CLASS_ARRAY
+#undef CYC_CUSTOM_FIELD_TYPE_CLASS
 #undef CYC_KVPAIR
-
 
 #endif // STRUCTS_H

@@ -22,7 +22,7 @@ cyclients_user_new(const char *token,
                    const char *phone_number)
 {
 	int user_id = 0;
-	cJSON *post, *responce;
+	cJSON *post, *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data, *number;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -85,7 +85,7 @@ cyclients_users_roles(const char *token,
                                       const CYCUserRole *user_role))
 {
 	CYCLIENTS_COUNTER n = 0;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -134,7 +134,7 @@ cyclients_user_roles(const char *token,
                                      const CYCUserRole *user_role))
 {
 	CYCLIENTS_COUNTER n = 0;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -183,7 +183,7 @@ cyclients_user_permissions(const char *token,
                                      const CYCUserPermissions *permissions))
 {
 	int ret = 1;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
