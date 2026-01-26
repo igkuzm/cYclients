@@ -1187,7 +1187,7 @@ enum DEFAULT_FIELD_TYPE {
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_DOCUMENT_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
-#define CYC_CUSTOM_FIELD_TYPE_CLASS(_name) #_name DEFAULT_FIELD_TYPE_JSON;
+#define CYC_CUSTOM_FIELD_TYPE_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_KVPAIR(_name, _len)
 
 struct default_field {
@@ -1214,6 +1214,13 @@ static const struct default_field record_fields[] =
 	"client", DEFAULT_FIELD_TYPE_JSON,
 	NULL, DEFAULT_FIELD_TYPE_NULL
 };
+
+static const struct default_field custom_fields[] = 
+{
+	CYC_CUSTOM_FIELD
+	NULL, DEFAULT_FIELD_TYPE_NULL
+};
+
 
 static cJSON * json_from_default_field(
 		struct default_field *field, const char *value)

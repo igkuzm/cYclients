@@ -177,7 +177,7 @@ cyclients_custom_field_set(const char *token,
 			break;
 
 		// check if key is in default fields
-    fields = (struct default_field *)record_fields; 
+    fields = (struct default_field *)custom_fields; 
 		for (k=0; fields[k].name; ++k)
 		{
 			if (strcmp(key, fields[i].name) == 0)
@@ -219,10 +219,10 @@ cyclients_custom_field_remove(const char *token,
 	char requestString[BUFSIZ], auth[128];
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
-	sprintf(requestString, "%s/custom_fields/%s/%d", 
+	sprintf(requestString, "%s/custom_fields/%s/%d/%d", 
 			URL, 
 			category == CYCLIENTS_CATEGORY_CLIENT?"client":"record",
-		 	company_id);
+		 	company_id, field_id);
 	sprintf(auth, "Authorization: Bearer %s, User %s"
 		, partner_token, token);
 	
