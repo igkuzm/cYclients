@@ -15,7 +15,7 @@
 		AF096A7F2F010FAE003DE13B /* json_to_struct.h in Headers */ = {isa = PBXBuildFile; fileRef = AF096A7E2F010FAE003DE13B /* json_to_struct.h */; };
 		AF15A91F2EF7DF880027F26A /* clients.c in Sources */ = {isa = PBXBuildFile; fileRef = AF15A91E2EF7DF880027F26A /* clients.c */; };
 		AF2052CC2EBCC94B00392497 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CB2EBCC94B00392497 /* auth.c */; };
-		AF2052D02EBCC95C00392497 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = AF2052CF2EBCC95C00392497 /* log.c */; };
+		AF4A85F42F27821F00963BCC /* custom_fields.c in Sources */ = {isa = PBXBuildFile; fileRef = AF4A85F32F27821F00963BCC /* custom_fields.c */; };
 		AF56A5242EB2318C006214FB /* partner_token.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5232EB2318C006214FB /* partner_token.h */; };
 		AF56A5262EB23191006214FB /* cYclients.h in Headers */ = {isa = PBXBuildFile; fileRef = AF56A5252EB23191006214FB /* cYclients.h */; };
 		AF56A52B2EB231A2006214FB /* cJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = AF56A5272EB231A2006214FB /* cJSON.c */; };
@@ -56,7 +56,7 @@
 		AF096A7E2F010FAE003DE13B /* json_to_struct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json_to_struct.h; path = src/json_to_struct.h; sourceTree = "<group>"; };
 		AF15A91E2EF7DF880027F26A /* clients.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = clients.c; path = src/clients.c; sourceTree = "<group>"; };
 		AF2052CB2EBCC94B00392497 /* auth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auth.c; path = src/auth.c; sourceTree = "<group>"; };
-		AF2052CF2EBCC95C00392497 /* log.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = log.c; path = src/log.c; sourceTree = "<group>"; };
+		AF4A85F32F27821F00963BCC /* custom_fields.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = custom_fields.c; path = src/custom_fields.c; sourceTree = "<group>"; };
 		AF56A51C2EB2315C006214FB /* libcYclients.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcYclients.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF56A5232EB2318C006214FB /* partner_token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = partner_token.h; sourceTree = "<group>"; };
 		AF56A5252EB23191006214FB /* cYclients.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cYclients.h; sourceTree = "<group>"; };
@@ -125,10 +125,10 @@
 				AFEBB4992EC20C0200D86001 /* services.c */,
 				AFEBB4972EC20BF700D86001 /* companies.c */,
 				AFEBB4952EC20BE900D86001 /* categories.c */,
-				AF2052CF2EBCC95C00392497 /* log.c */,
 				AF2052CB2EBCC94B00392497 /* auth.c */,
 				AFF4A41E2EC3552E00801BCE /* users.c */,
 				AFFE74242F1DB3B900B267E4 /* records.c */,
+				AF4A85F32F27821F00963BCC /* custom_fields.c */,
 				AF03E2B42EB2E4EE00149FCA /* log.h */,
 				AF56A53A2EB231D6006214FB /* test.c */,
 				AF56A5272EB231A2006214FB /* cJSON.c */,
@@ -250,7 +250,6 @@
 				AF03E25D2EB2C33C00149FCA /* curl_transport.c in Sources */,
 				AF03E2B22EB2DFA400149FCA /* structs.c in Sources */,
 				AF2052CC2EBCC94B00392497 /* auth.c in Sources */,
-				AF2052D02EBCC95C00392497 /* log.c in Sources */,
 				AFEBB4962EC20BE900D86001 /* categories.c in Sources */,
 				AFEBB4982EC20BF700D86001 /* companies.c in Sources */,
 				AFEBB49A2EC20C0200D86001 /* services.c in Sources */,
@@ -258,6 +257,7 @@
 				AF15A91F2EF7DF880027F26A /* clients.c in Sources */,
 				AFF2CB8B2EF97DC100B6A084 /* stb_ds.c in Sources */,
 				AFFE74252F1DB3B900B267E4 /* records.c in Sources */,
+				AF4A85F42F27821F00963BCC /* custom_fields.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +283,7 @@
 		AF56A50A2EB23132006214FB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
@@ -294,9 +294,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = (
-					arm64,
 					x86_64,
-					ppc64,
 					ppc,
 				);
 				COPY_PHASE_STRIP = YES;

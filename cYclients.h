@@ -62,20 +62,20 @@ cyclients_service_categories(const char *token,
 
 int
 cyclients_service_category_get(const char *token,
-							                 int company_id,
-							                 int category_id,
+                               int company_id,
+                               int category_id,
                                void *userdata,
                                int (*callback)(void *userdata, 
                                                const CYCServiceCategory *category));
 
 CYCLIENTS_ID
 cyclients_service_category_new(const char *token,
-							                 int company_id,
-							                 const char *title,
-							                 const char *api_id,
-							                 int weight,
-							                 int nstaff,
-							                 int staff[]);
+                               int company_id,
+                               const char *title,
+                               const char *api_id,
+                               int weight,
+                               int nstaff,
+                               int staff[]);
 
 /* update service category and return non-null on error */
 int
@@ -252,7 +252,7 @@ int
 cyclients_user_permissions(const char *token,
                            int company_id,
                            int user_id,
-													 void *userdata,
+                           void *userdata,
                            int (*callback)(void *userdata, 
                                            const CYCUserPermissions *permissions));
 
@@ -268,8 +268,8 @@ user_permissions_json_with_slug_and_value_pairs(int nslug_and_value_pairs, ...);
 int
 cyclients_user_copy_to_companies(const char *token,
                                  int company_id,
-								                 int user_id,
-								                 int nuser_user_company_links,
+                                 int user_id,
+                                 int nuser_user_company_links,
                                  struct user_company_link *links);
 
 //////////////////////////////////////////////////////////
@@ -290,9 +290,9 @@ int
 cyclients_client_get(const char *token,
                      int company_id,
                      int client_id,
-										 void *userdata,
-										 int (*callback)(void *userdata,
-											               const CYCClient *client));
+                     void *userdata,
+                     int (*callback)(void *userdata,
+                                     const CYCClient *client));
 
 /* create new client- key/value pairs are strings.
  * If you set keys 
@@ -321,7 +321,7 @@ cyclients_client_new(const char *token,
 int
 cyclients_client_set(const char *token,
                      int company_id,
-					           int client_id,
+                     int client_id,
                      int number_of_key_value_pairs,
                      ...);
 
@@ -388,11 +388,11 @@ cyclients_records(const char *token,
 CYCLIENTS_ID
 cyclients_record_new(const char *token,
                      int company_id,
-					           int staff_id,
+                     int staff_id,
                      const char *client_name,
                      const char *client_phone,
                      const char *datetime,
-					           int seance_length,
+                     int seance_length,
                      int number_of_key_value_pairs,
                      ...);
 
@@ -400,7 +400,7 @@ int
 cyclients_record_get(const char *token,
                      int company_id,
                      int record_id,
-										 void *userdata,
+					 void *userdata,
                      int (*callback)(void *userdata, 
                                      const CYCRecord *record));
 
@@ -424,16 +424,89 @@ struct service {
 int
 cyclients_record_set(const char *token,
                      int company_id,
-					           int record_id,
+                     int record_id,
                      int number_of_key_value_pairs,
                      ...);
 
 int
 cyclients_record_remove(const char *token,
                         int company_id,
-					              int record_id);
+                        int record_id);
 
 
+//////////////////////////////////////////////////////////
+// Custom Fields
+//////////////////////////////////////////////////////////
 
+/*
+ Дополнительные поля позволяют добавлять к отдельным объектам системы свойства заданного типа и впоследствии привязывать к этим полям значения, соответствующие данному типу. На данный момент функционал реализован для Записей и Клиентов.
+ При создании дополнительных полей записи и клиента становится возможным передавать собственные значения для полей. Дополнительные поля уникальны для каждой компании. После создания дополнительных полей, их значения для конкретной записи могут передаваться в необязательном поле custom_fields в виде пар ключ-значение где ключ это поле "code" дополнительного поля.
+ Объекты Дополнительных полей:
+ Поле 	Тип 	Описание
+ code 	string 	Код поля по которому устанавливаются значения для полей записи
+ id 	integer 	Уникальный идентификатор поля
+ type 	CustomFieldType 	Тип поля
+ show_in_ui 	boolean 	Показывать ли поле в интерфейсе
+ title 	string 	Название поля
+ user_can_edit 	boolean 	Можно ли редактировать в интерфейсе
+ values 	array or null 	Список допустимых значений для типа "список"
+ 
+ На данный момент поддерживаются следующие типы (поле code):
+  text - строка длиной до 255 символов
+ number - число
+ select - список
+ date - Дата (Y-m-d)
+ datetime - Дата и время (Y-m-d H:i:s)
+ 
+ Следующие коды полей являются зарезервированными:
+ code 	type 	Описание
+ yc_partner_public_key 	text 	Используется для определения партнера при создании записи, является более приоритетным, чем Bearer-токен из авторизации
+ 
+*/
 
+typedef enum {
+	CYCLIENTS_CATEGORY_RECORD,
+	CYCLIENTS_CATEGORY_CLIENT,
+} CYCLIENTS_CATEGORY_TYPE;
+
+/* Получение коллекции полей филиала */
+CYCLIENTS_COUNTER
+cyclients_custom_fields(const char *token,
+                        CYCLIENTS_CATEGORY_TYPE category,
+                        int company_id,
+                        void *userdata,
+                        int (*callback)(void *userdata, 
+                                        void *data));
+
+/* Добавление дополнительного поля 
+ Для добавления поля пользователь должен быть добавлен в связанной с филиалом сети, и иметь права доступа в разделе:
+ Настройки - Доступ к разделу Дополнительные поля - Создание доп. полей
+ type - Тип поля
+ code - Идентификатор поля
+ title - Название поля
+ user_can_edit - Может ли пользователь редактировать поле
+ show_in_ui - Показывать ли поле в интерфейсе */
+CYCLIENTS_ID
+cyclients_custom_field_new(const char *token,
+						   CYCLIENTS_CATEGORY_TYPE category,
+						   int company_id,
+						   const char *type,
+						   const char *code,
+						   const char *title,
+						   bool user_can_edit,
+						   bool show_in_ui);
+
+int
+cyclients_custom_field_set(const char *token,
+                           CYCLIENTS_CATEGORY_TYPE category,
+                           int company_id,
+                           int field_id,
+                           int number_of_key_value_pairs,
+						   ...);
+
+int
+cyclients_custom_field_remove(const char *token,
+                              CYCLIENTS_CATEGORY_TYPE category,
+                              int company_id,
+                              int field_id);
 #endif // CYCLIENTS_H

@@ -166,9 +166,12 @@ int main(int argc, char *argv[])
 //	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
 //    }
 	
-    int client_id = 0;
-	cyclients_clients_search(user->user_token, company_id, "name, id", "TEST", &client_id, clients_cb);
-    printf("CLIENT_ID: %d\n", client_id);
+//    int client_id = 0;
+//	cyclients_clients_search(user->user_token, company_id, "name, id", "TEST", &client_id, clients_cb);
+//    printf("CLIENT_ID: %d\n", client_id);
+	
+	cyclients_client_remove(user->user_token, company_id, 363089556);
+	//int client_id = cyclients_client_new(user->user_token, company_id, "тестовый пациент", "+788299329912", 0);
     
     //cyclients_client_files(user->user_token, company_id, client_id, NULL, file_cb);
 
@@ -179,8 +182,9 @@ int main(int argc, char *argv[])
 //    {
 //        printf("CLIENT NAME: %s\n", client->name);
 //    }
-	int comment_id = cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
-	printf("COMMENT_ID: %d\n", comment_id);
+
+//	int comment_id = cyclients_client_comment_new(user->user_token, company_id, client_id, "hello world!");
+//	printf("COMMENT_ID: %d\n", comment_id);
 	//cyclients_client_comments(user->user_token, company_id, client_id, NULL, comments_cb);
     
     //cyclients_records(user->user_token, company_id, NULL, NULL, NULL, records_cb);

@@ -34,6 +34,7 @@ set(SOURCES
   src/clients.c	
   src/records.c	
   src/stb_ds.c	
+  src/custom_fields.c	
   src/auth.c
 )
 

@@ -123,6 +123,10 @@ SOURCE=.\src\stb_ds.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\custom_fields.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\structs.c
 # End Source File
 # Begin Source File

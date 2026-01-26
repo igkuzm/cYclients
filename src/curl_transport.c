@@ -104,9 +104,9 @@ curl_transport_exec(const char *request_url,
 		curl_easy_cleanup(curl);
 		curl_slist_free_all(header);
 		if (res) { //handle erros
-      sprintf(CURL_ERROR, "CURL ERROR: %d", res);
+			sprintf(CURL_ERROR, "CURL ERROR: %d", res);
 			ERR("%s",CURL_ERROR);
-      return http_code;			
+			return http_code;			
 		}		
 		
 		responce = cJSON_ParseWithLength(s.ptr, s.len);
@@ -136,22 +136,17 @@ curl_transport_exec(const char *request_url,
 			// handle errors
 			if (success && success->valueint == false){
 				if (cJSON_IsObject(meta)){
-					cJSON *message;
-					message = cJSON_GetObjectItem(
-							meta, "message");
-					if (message){
-						ERR("%s", message->valuestring);
-						cJSON_free(responce);
-						return http_code;
-					}
+					ERR("%s", cJSON_Print(meta));
+					goto curl_transport_exec_end_on_error;
 				}
 			}
 			
 			ERR("%s", "unknown error!");
-			return http_code;
+curl_transport_exec_end_on_error:
+			if (responce)
+				cJSON_free(responce);
+			return http_code;			
 		}
-		return http_code;
 	}
-	
 	return -1;
 }
