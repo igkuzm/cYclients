@@ -10,6 +10,7 @@
 #define STRUCTS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include "cJSON.h"
 #include "config.h"
@@ -32,11 +33,11 @@ typedef	enum {
 	CYC_TYPE_SERVICE,
 	CYC_TYPE_USER_ROLE,
 	CYC_TYPE_USER_PERMISSIONS,
-    CYC_TYPE_FILE,
-    CYC_TYPE_VISIT_SERVICE,
-    CYC_TYPE_DOCUMENT,
-    CYC_TYPE_RECORD,
-    CYC_TYPE_CLIENT,
+  CYC_TYPE_FILE,
+  CYC_TYPE_VISIT_SERVICE,
+  CYC_TYPE_DOCUMENT,
+  CYC_TYPE_RECORD,
+  CYC_TYPE_CLIENT,
 	CYC_TYPE_COMMENT,
 	CYC_NTYPES,
 } CYC_TYPE;
@@ -1117,5 +1118,137 @@ cJSON * cyc_comment_to_json(CYCComment *t);
 #undef CYC_DOCUMENT_CLASS
 #undef CYC_DOCUMENT_CLASS_ARRAY
 #undef CYC_KVPAIR
+
+// default_fields 
+enum DEFAULT_FIELD_TYPE {
+	DEFAULT_FIELD_TYPE_NULL = 0,
+	DEFAULT_FIELD_TYPE_INT,
+	DEFAULT_FIELD_TYPE_DOUBLE,
+	DEFAULT_FIELD_TYPE_BOOL,
+	DEFAULT_FIELD_TYPE_STRING,
+	DEFAULT_FIELD_TYPE_JSON,
+};
+#define CYC_UNKNOWN(_name)
+#define CYC_INT(_name) #_name, DEFAULT_FIELD_TYPE_INT,
+#define CYC_DOUBLE(_name) #_name, DEFAULT_FIELD_TYPE_DOUBLE,
+#define CYC_BOOL(_name) #_name, DEFAULT_FIELD_TYPE_BOOL,
+#define CYC_STRING(_name, _size) #_name, DEFAULT_FIELD_TYPE_STRING,
+#define CYC_INT_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_DOUBLE_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_STRING_ARRAY(_name, _size, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
+
+#define CYC_USER_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_FILE_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_TRANSPORT_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_2FA_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_SOCIAL_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_BOOKING_WIDGET_PROMO_CLASS(_name) \
+	#_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_MAIN_GROUP_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_SALON_GROUP_SETTINGS_CLASS(_name) \
+	#_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_ACCESS_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_COMPANY_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_STAFF_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_SERVICE_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_VISIT_SERVICE_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_DOCUMENT_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_DOCUMENT_CLASS_ARRAY(_name, _len) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_KVPAIR(_name, _len)
+
+struct default_field {
+	char *name;
+	enum DEFAULT_FIELD_TYPE type;
+};
+
+static const struct default_field service_fields[] = 
+{
+	CYC_SERVICE
+	NULL, DEFAULT_FIELD_TYPE_NULL
+};
+
+static const struct default_field client_fields[] = 
+{
+	CYC_CLIENT
+	NULL, DEFAULT_FIELD_TYPE_NULL
+};
+
+static const struct default_field record_fields[] = 
+{
+	CYC_RECORD
+	"client_agreements", DEFAULT_FIELD_TYPE_JSON,
+	"client", DEFAULT_FIELD_TYPE_JSON,
+	NULL, DEFAULT_FIELD_TYPE_NULL
+};
+
+static cJSON * json_from_default_field(
+		struct default_field *field, const char *value)
+{
+	cJSON *json = NULL;
+	switch (field->type) {
+		case DEFAULT_FIELD_TYPE_INT:
+			{
+				int v = atoi(value);
+				json = cJSON_CreateNumber(v);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_DOUBLE:
+			{
+				int v = atof(value);
+				json = cJSON_CreateNumber(v);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_BOOL:
+			{
+				int v = atoi(value);
+				json = cJSON_CreateBool(v);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_STRING:
+			{
+				json = cJSON_CreateString(value);
+			}
+			break;
+		case DEFAULT_FIELD_TYPE_JSON:
+			{
+				json = cJSON_Parse(value);
+			}
+			break;
+		
+		default:
+			break;
+	}
+
+	return json;
+}
+
+#undef CYC_UNKNOWN
+#undef CYC_INT
+#undef CYC_DOUBLE
+#undef CYC_BOOL
+#undef CYC_STRING
+#undef CYC_INT_ARRAY
+#undef CYC_DOUBLE_ARRAY
+#undef CYC_STRING_ARRAY
+
+#undef CYC_USER_CLASS
+#undef CYC_FILE_CLASS
+#undef CYC_TRANSPORT_CLASS
+#undef CYC_2FA_CLASS
+#undef CYC_SOCIAL_CLASS
+#undef CYC_BOOKING_WIDGET_PROMO_CLASS
+#undef CYC_MAIN_GROUP_CLASS
+#undef CYC_SALON_GROUP_SETTINGS_CLASS
+#undef CYC_ACCESS_CLASS
+#undef CYC_COMPANY_CLASS
+#undef CYC_STAFF_CLASS
+#undef CYC_SERVICE_CLASS
+#undef CYC_VISIT_SERVICE_CLASS
+#undef CYC_VISIT_SERVICE_CLASS_ARRAY
+#undef CYC_DOCUMENT_CLASS
+#undef CYC_DOCUMENT_CLASS_ARRAY
+#undef CYC_KVPAIR
+
 
 #endif // STRUCTS_H

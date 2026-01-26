@@ -84,6 +84,8 @@ cyclients_service_get(const char *token,
 		 	                        auth, "GET",
 		 	                        NULL, &responce);
 
+	ret = http_code;
+
 	if (http_code == 200){ // good
 		if (cJSON_IsObject(responce))
 		{
@@ -118,8 +120,7 @@ cyclients_service_new(const char *token,
                       int weight,
                       CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
-                      int nstaff,
-                      struct staff staff[])
+                      const char *staff_json)
 {
 	int i, service_id = 0;
 	CYCService *service = NULL;
@@ -152,15 +153,7 @@ cyclients_service_new(const char *token,
 	if (api_service_id)
 		cJSON_AddStringToObject(post, "api_service_id", api_service_id);
 
-	for (i = 0; i < nstaff; ++i) {
-		cJSON *staff_obj = cJSON_CreateObject();
-		cJSON_AddNumberToObject(
-				staff_obj, "id", staff[i].id);
-		cJSON_AddNumberToObject(
-				staff_obj, "seance_length", staff[i].seance_length);
-		cJSON_AddItemToArray(astaff, staff_obj);			
-	}
-	cJSON_AddItemToObject(post, "staff", astaff);
+	cJSON_AddItemToObject(post, "staff", cJSON_Parse(staff_json));
 
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){
@@ -193,44 +186,19 @@ cyclients_service_new(const char *token,
 }
 
 int
-cyclients_service_update(const char *token,
-                         int company_id,
-                         int service_id,
-                         const char *title,
-                         const char *booking_title,
-                         int category_id,
-                         double price_min,
-                         double price_max,
-                         int duration,
-                         int technical_break_duration,
-                         double discount,
-                         bool is_multi,
-                         int tax_variant,
-                         int vat_id,
-                         bool is_need_limit_date,
-                         const char *date_from,
-                         const char *date_to,
-                         const char *dates[],
-                         int seance_search_start,
-                         int seance_search_finish,
-                         int seance_search_step,
-                         int weight,
-                         CYCLIENTS_SERVICE_TYPE service_type,
-                         const char *api_service_id,
-                         int online_invoicing_status,
-                         int price_prepaid_percent,
-                         int price_prepaid_amount,
-                         int abonement_restriction_value,
-                         int is_abonement_autopayment_enabled,
-                         int autopayment_before_visit_time,
-                         int nstaff,
-                         struct staff staff[])
+cyclients_service_set(const char *token,
+                      int company_id,
+                      int service_id,
+                      int number_of_key_value_pairs,
+                      ...)
 {
-	int i;
-	cJSON *post, *astaff;
+	int i, k;
+	cJSON *post, *astaff, *custom_fields;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	assert(number_of_key_value_pairs > 0);
 
 	sprintf(requestString, "%s/company/%d/services/%d"
 			,URL, company_id, service_id);
@@ -238,59 +206,41 @@ cyclients_service_update(const char *token,
 			, partner_token, token);
 
 	post = cJSON_CreateObject();
-	astaff = cJSON_CreateArray();	
+	va_list args;
+	custom_fields = cJSON_CreateObject();
+	va_start(args, number_of_key_value_pairs);
+	for (i=0; i<number_of_key_value_pairs; ++i) 
+	{
+		char *key, *value;
+		struct default_field *fields; 
 
-	if (title)
-		cJSON_AddStringToObject(post, "title", title);
-	if (booking_title)
-		cJSON_AddStringToObject(post, "booking_title", booking_title);
-	cJSON_AddNumberToObject(post, "category_id", category_id);
-	cJSON_AddNumberToObject(post, "price_min", price_min);
-	cJSON_AddNumberToObject(post, "price_max", price_max);
-	cJSON_AddNumberToObject(post, "duration", duration);
-	if (technical_break_duration)
-		cJSON_AddNumberToObject(post, "technical_break_duration", technical_break_duration);
-	cJSON_AddNumberToObject(post, "discount", discount);
-	cJSON_AddBoolToObject(post, "is_multi", is_multi);
-	cJSON_AddNumberToObject(post, "tax_variant", tax_variant);
-	cJSON_AddNumberToObject(post, "vat_id", vat_id);
-	cJSON_AddBoolToObject(post, "is_need_limit_date", is_need_limit_date);
-	if (date_from)
-		cJSON_AddStringToObject(post, "date_from", date_from);
-	if (date_to)
-		cJSON_AddStringToObject(post, "date_to", date_to);
-	if (dates){
-		char **datesp = (char **)dates;
-		cJSON *datesa = cJSON_CreateArray();
-		while (*datesp && datesa){
-			cJSON *item = cJSON_CreateString(*datesp++);
-			cJSON_AddItemToArray(datesa, item);
+		key = va_arg(args, char *);
+		if (key == NULL)
+			break;
+		value = va_arg(args, char *);
+		if (value == NULL)
+			break;
+
+		// check if key is in default fields
+		fields = (struct default_field *)service_fields; 
+		for (k=0; fields[k].name; ++k)
+		{
+			if (strcmp(key, fields[i].name) == 0)
+			{
+				// this is default field
+				cJSON *item = json_from_default_field(
+						&fields[k], value);
+				cJSON_AddItemToObject(post, key, item);
+			} else {
+				// this is custom field
+				cJSON_AddStringToObject(
+						custom_fields, key, value);
+			}
 		}
-		cJSON_AddItemToObject(post, "dates", datesa);
 	}
-	cJSON_AddNumberToObject(post, "seance_search_start", seance_search_start);
-	cJSON_AddNumberToObject(post, "seance_search_finish", seance_search_finish);
-	cJSON_AddNumberToObject(post, "seance_search_step", seance_search_step);
-	cJSON_AddNumberToObject(post, "weight", weight);
-	cJSON_AddNumberToObject(post, "service_type", service_type);
-	if (api_service_id)
-		cJSON_AddStringToObject(post, "api_service_id", api_service_id);
-	cJSON_AddNumberToObject(post, "online_invoicing_status", online_invoicing_status);
-	cJSON_AddNumberToObject(post, "price_prepaid_percent", price_prepaid_percent);
-	cJSON_AddNumberToObject(post, "price_prepaid_amount", price_prepaid_amount);
-	cJSON_AddNumberToObject(post, "abonement_restriction_value", abonement_restriction_value);
-	cJSON_AddNumberToObject(post, "is_abonement_autopayment_enabled", is_abonement_autopayment_enabled);
-	cJSON_AddNumberToObject(post, "autopayment_before_visit_time", autopayment_before_visit_time);
-
-	for (i = 0; i < nstaff; ++i) {
-		cJSON *staff_obj = cJSON_CreateObject();
-		cJSON_AddNumberToObject(
-				staff_obj, "id", staff[i].id);
-		cJSON_AddNumberToObject(
-				staff_obj, "seance_length", staff[i].seance_length);
-		cJSON_AddItemToArray(astaff, staff_obj);			
-	}
-	cJSON_AddItemToObject(post, "staff", astaff);
+	va_end(args);
+	cJSON_AddItemToObject(
+		post, "custom_fields", custom_fields);
 
 	post_data = cJSON_Print(post);
 	if (post_data == NULL){

@@ -122,8 +122,25 @@ cyclients_service_get(const char *token,
                       int (*callback)(void *userdata, 
                                       const CYCService *service));
 
-struct staff {int id; int seance_length;};
-
+/* Метод, позволяющий создать услугу 
+ * данные передают
+ * string "title" Название услуги
+ * number "category_id" ID категории услуг
+ * number <float> "price_min" Минимальная стоимость услуги
+ * number <float> "price_max" Максимальная стоимость услуги
+ * number "duration" Длительность услуги, по умолчанию равна 3600 секундам
+ * number or null [ 0 .. 3600 ] "technical_break_duration" 
+ * Если нпередан. Значение по умолчанию null  Длительность 
+ * технического перерыва
+ * number <float> "discount" Скидка при оказании услуги
+ * string "comment" Комментарий к услуге
+ * number "weight" Вес услуги (используется для сортировки 
+ * услуг при отображении)
+ * number "service_type" Доступна ли для онлайн записи услуга. 
+ * 1 - доступна, 0 не доступна.
+ * string "api_service_id" Внешний идентификатор услуги
+ * Array of objects "staff" Сотрудники, оказываюшие услугу 
+ * и длительность оказания услуги каждым из них {"id", "seance_length"} */
 CYCLIENTS_ID
 cyclients_service_new(const char *token,
                       int company_id,
@@ -138,46 +155,16 @@ cyclients_service_new(const char *token,
                       int weight,
                       CYCLIENTS_SERVICE_TYPE service_type,
                       const char *api_service_id,
-                      int nstaff,
-                      struct staff staff[]);
-
+                      const char *staff_json);
 
 /* update service and return non-null on error */
 int
-cyclients_service_update(const char *token,
-                         int company_id,
-                         int service_id,
-                         const char *title,
-                         const char *booking_title,
-                         int category_id,
-                         double price_min,
-                         double price_max,
-                         int duration,
-                         int technical_break_duration,
-                         double discount,
-                         bool is_multi,
-                         int tax_variant,
-                         int vat_id,
-                         bool is_need_limit_date,
-                         const char *date_from,
-                         const char *date_to,
-                         const char *dates[],
-                         int seance_search_start,
-                         int seance_search_finish,
-                         int seance_search_step,
-                         int weight,
-                         CYCLIENTS_SERVICE_TYPE service_type,
-                         const char *api_service_id,
-                         int online_invoicing_status,
-                         int price_prepaid_percent,
-                         int price_prepaid_amount,
-                         int abonement_restriction_value,
-                         int is_abonement_autopayment_enabled,
-                         int autopayment_before_visit_time,
-                         int nstaff,
-                         struct staff staff[]);
-
-/* remove service and return non-null on error */
+cyclients_service_set(const char *token,
+                      int company_id,
+                      int service_id,
+                      int number_of_key_value_pairs,
+                      ...);
+/* Метод, позволяющий изменить услугу */ 
 int
 cyclients_service_delete(const char *token,
                          int company_id,
@@ -307,40 +294,36 @@ cyclients_client_get(const char *token,
 										 int (*callback)(void *userdata,
 											               const CYCClient *client));
 
+/* create new client- key/value pairs are strings.
+ * If you set keys 
+ * "surname", "patronymic",
+ * "email", "sex_id", "importance_id", 
+ * "discount", "card", "birth_date", "comment",     
+ * "spent", "balance", "sms_check", "sms_not" - the 
+ * values are simple strings
+ * Other key/values pairs are treated as custon_fields */
 CYCLIENTS_ID
 cyclients_client_new(const char *token,
                      int company_id,
                      const char *name,
-                     const char *surname,
-                     const char *patronymic,
                      const char *phone,
-                     const char *email,
-                     const char *birth_date,
-                     const char *comment,
-                     int number_custom_fields_key_value_pairs,
+                     int number_of_key_value_pairs,
                      ...);
 
+/* set client vars - key/value pairs are strings.
+ * If you set keys 
+ * "name", "surname", "patronymic", "phone",
+ * "email", "sex_id", "importance_id", 
+ * "discount", "card", "birth_date", "comment",     
+ * "spent", "balance", "sms_check", "sms_not" - the 
+ * values are simple strings
+ * Other key/values pairs are treated as custon_fields */
 int
-cyclients_client_edit(const char *token,
-                      int company_id,
-					            int client_id,
-                      const char *name,
-                      const char *surname,
-                      const char *patronymic,
-                      const char *phone,
-                      const char *email,
-					            int sex_id,
-					            int importance_id,
-					            int discount,
-					            int card,
-                      const char *birth_date,
-                      const char *comment,
-					            int spent,
-					            int balance,
-					            int sms_check,
-					            int sms_not,
-                      int number_custom_fields_key_value_pairs,
-                      ...);
+cyclients_client_set(const char *token,
+                     int company_id,
+					           int client_id,
+                     int number_of_key_value_pairs,
+                     ...);
 
 int
 cyclients_client_remove(const char *token,
@@ -410,8 +393,7 @@ cyclients_record_new(const char *token,
                      const char *client_phone,
                      const char *datetime,
 					           int seance_length,
-                     const char *comment,
-                     int number_custom_fields_key_value_pairs,
+                     int number_of_key_value_pairs,
                      ...);
 
 int
@@ -429,53 +411,28 @@ struct service {
 };
 
 
-/*
-staff_id		  number  Идентификатор сотрудника 
-services[img] Array of objects  Параметры услуг 
-                                (id, стоимость, скидка)                  
-client[img]   object  Параметры клиента 
-                                (телефон, имя, email)                  
-save_if_busy  boolean Сохранять ли запись если время 
-                      занято или нерабочее, или выдать
-										 	ошибку                                            
-datetime      string <date-time> Дата и время записи
-seance_length number             Длительность записи в секундах
-send_sms      boolean            Отправлять ли смс с деталями 
-                                 записи клиенту              
-comment       string             Комментарий к записи
-sms_remain_hours number          За сколько часов до визита 
-                                 следует выслать смс
-																 напоминание клиенту (0 - если не нужно)
-email_remain_hours number        За сколько часов до визита 
-                                 следует выслать email напоминание
-																 клиенту (0 - если не нужно)
-attendance         number        Статус записи (
-                                 2 - Пользователь подтвердил запись, 
-																 1 - Пользователь пришел, услуги оказаны,
-																 0 - ожидание пользователя, 
-																 -1 - пользователь не пришел на визит)
-
-api_id             string        Идентификатор внешней системы
-custom_color       string        Цвет записи
-record_labels      Array of strings Массив идентификаторов 
-                                    категорий записи
-client_agreements [img] object or null Юридические соглашения клиента
-technical_break_durationumber or null  [ 0 .. 3600 ]
-                         Технический перерыв.
-
-                         • Строго кратно 300 (5 минутам).
-                         • Максимальное значение 3600 (1 час)
-                         • Если передан null  или значение не передано — будет
-                           задан согласно настройкам в разделе Настройки →
-                           Журнал записи → Технические перерывы при наличии
-                           услуг с перерывом
-*/
+/* set record vars - key/value pairs are strings.
+ * If you set keys 
+ * "staff_id", "save_if_busy", "datetime", "seance_length",
+ * "send_sms", "comment", "sms_remain_hours", 
+ * "email_remain_hour", "attendance", "api_id", "custom_color",     
+ * "record_labels", "technical_break_durationumber" - the 
+ * values are simple strings
+ * "client_agreements", "services", "client" - values are 
+ * JSON strings
+ * Other key/values pairs are treated as custon_fields */
 int
-cyclients_record_update(const char *token,
+cyclients_record_set(const char *token,
+                     int company_id,
+					           int record_id,
+                     int number_of_key_value_pairs,
+                     ...);
+
+int
+cyclients_record_remove(const char *token,
                         int company_id,
-					              int record_id,
-                        int number_of_key_value_pairs,
-                        ...);
+					              int record_id);
+
 
 
 

@@ -120,12 +120,11 @@ cyclients_record_new(const char *token,
                      const char *client_phone,
                      const char *datetime,
 					           int seance_length,
-                     const char *comment,
-                     int number_custom_fields_key_value_pairs,
+                     int number_of_key_value_pairs,
                      ...)
 {
-	int i = 0, length = seance_length, record_id = 0;
-	cJSON *post, *client, *services, *custom_fields, *responce, *data;
+	int i = 0, k, length = seance_length, record_id = 0;
+	cJSON *post, *client, *custom_fields, *responce, *data;
 	char *phone_number;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
@@ -150,8 +149,6 @@ cyclients_record_new(const char *token,
 	
 	post = cJSON_CreateObject();
 	cJSON_AddNumberToObject(post, "staff_id", staff_id);
-	cJSON_AddBoolToObject(post, "save_if_busy", true);
-	
 	client = cJSON_CreateObject();
 	cJSON_AddStringToObject(client, "name", client_name);
 	cJSON_AddStringToObject(client, "phone", phone_number);
@@ -159,32 +156,44 @@ cyclients_record_new(const char *token,
 	
 	cJSON_AddStringToObject(post, "datetime", datetime);
 	
-	services = cJSON_CreateArray();
-	cJSON_AddItemToObject(post, "services", services);
-	
 	cJSON_AddNumberToObject(post, "seance_length", seance_length);
 
-	if (comment) {
-		cJSON_AddStringToObject(post, "comment", comment);
-	}    
-	if (number_custom_fields_key_value_pairs>0)
+	va_list args;
+	va_start(args, number_of_key_value_pairs);
+	custom_fields = cJSON_CreateObject();
+	for (i=0; i<number_of_key_value_pairs; ++i) 
 	{
-		va_list args;
-		va_start(args, number_custom_fields_key_value_pairs);
-		custom_fields = cJSON_CreateObject();
-		for (i=0; i<number_custom_fields_key_value_pairs; ++i) {
-			char *key, *value;
-			key = va_arg(args, char *);
-			if (key == NULL)
-				break;
-			value = va_arg(args, char *);
-			if (value == NULL)
-				break;
-			cJSON_AddStringToObject(custom_fields, key, value);
+		char *key, *value;
+    struct default_field *fields; 
+
+		key = va_arg(args, char *);
+		if (key == NULL)
+			break;
+		value = va_arg(args, char *);
+		if (value == NULL)
+			break;
+
+		// check if key is in default fields
+    fields = (struct default_field *)record_fields; 
+		for (k=0; fields[k].name; ++k)
+		{
+			if (strcmp(key, fields[i].name) == 0)
+			{
+				// this is default field
+				cJSON *item = json_from_default_field(
+						&fields[k], value);
+		    cJSON_AddItemToObject(post, key, item);
+			} else {
+				// this is custom field
+				cJSON_AddStringToObject(
+						custom_fields, key, value);
+			}
 		}
-	  va_end(args);
-		cJSON_AddItemToObject(post, "custom_fields", custom_fields);
 	}
+	va_end(args);
+	cJSON_AddItemToObject(
+			post, "custom_fields", custom_fields);
+	
 	
 	post_data = cJSON_Print(post);
 	cJSON_free(post);
@@ -263,87 +272,12 @@ cyclients_record_get(const char *token,
 	return ret;
 }
 
-enum DEFAULT_FIELD_TYPE {
-	DEFAULT_FIELD_TYPE_NULL = 0,
-	DEFAULT_FIELD_TYPE_INT,
-	DEFAULT_FIELD_TYPE_DOUBLE,
-	DEFAULT_FIELD_TYPE_BOOL,
-	DEFAULT_FIELD_TYPE_STRING,
-	DEFAULT_FIELD_TYPE_JSON,
-};
-
-struct default_field {
-	char *name;
-	enum DEFAULT_FIELD_TYPE type;
-};
-
-static const struct default_field record_fields[] = 
-{
-	"services", DEFAULT_FIELD_TYPE_JSON,
-	"client", DEFAULT_FIELD_TYPE_JSON,  
-	"save_if_busy", DEFAULT_FIELD_TYPE_BOOL,
-	"datetime", DEFAULT_FIELD_TYPE_STRING, 
-	"seance_length", DEFAULT_FIELD_TYPE_INT,
-	"send_sms", DEFAULT_FIELD_TYPE_BOOL,
-	"comment", DEFAULT_FIELD_TYPE_STRING,
-	"sms_remain_hours", DEFAULT_FIELD_TYPE_INT,
-	"email_remain_hours", DEFAULT_FIELD_TYPE_INT,
-	"attendance", DEFAULT_FIELD_TYPE_INT,
-	"api_id", DEFAULT_FIELD_TYPE_STRING,
-	"custom_color", DEFAULT_FIELD_TYPE_STRING,
-	"record_labels", DEFAULT_FIELD_TYPE_JSON,
-	"client_agreements", DEFAULT_FIELD_TYPE_JSON,
-	"technical_break_durationumber", DEFAULT_FIELD_TYPE_INT,
-	NULL, DEFAULT_FIELD_TYPE_NULL
-};
-
-cJSON * json_from_default_field(
-		struct default_field *field, const char *value)
-{
-	cJSON *json = NULL;
-	switch (field->type) {
-		case DEFAULT_FIELD_TYPE_INT:
-			{
-				int v = atoi(value);
-				json = cJSON_CreateNumber(v);
-			}
-			break;
-		case DEFAULT_FIELD_TYPE_DOUBLE:
-			{
-				int v = atof(value);
-				json = cJSON_CreateNumber(v);
-			}
-			break;
-		case DEFAULT_FIELD_TYPE_BOOL:
-			{
-				int v = atoi(value);
-				json = cJSON_CreateBool(v);
-			}
-			break;
-		case DEFAULT_FIELD_TYPE_STRING:
-			{
-				json = cJSON_CreateString(value);
-			}
-			break;
-		case DEFAULT_FIELD_TYPE_JSON:
-			{
-				json = cJSON_Parse(value);
-			}
-			break;
-		
-		default:
-			break;
-	}
-
-	return json;
-}
-
 int
-cyclients_record_update(const char *token,
-                        int company_id,
-					              int record_id,
-                        int number_key_value_pairs,
-                        ...)
+cyclients_record_set(const char *token,
+                     int company_id,
+					           int record_id,
+                     int number_of_key_value_pairs,
+                     ...)
 {
 	int i, k, ret = 1;
 	cJSON *post, *client, *services, *custom_fields;
@@ -352,7 +286,7 @@ cyclients_record_update(const char *token,
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 
-	assert(number_key_value_pairs > 0);
+	assert(number_of_key_value_pairs > 0);
 	
 	sprintf(requestString, "%s/record/%d/%d", 
 			URL, company_id, record_id);
@@ -362,9 +296,9 @@ cyclients_record_update(const char *token,
 	post = cJSON_CreateObject();
 
 	va_list args;
-	va_start(args, number_key_value_pairs);
+	va_start(args, number_of_key_value_pairs);
 	custom_fields = cJSON_CreateObject();
-	for (i=0; i<number_key_value_pairs; ++i) 
+	for (i=0; i<number_of_key_value_pairs; ++i) 
 	{
 		char *key, *value;
     struct default_field *fields; 
@@ -413,6 +347,30 @@ cyclients_record_update(const char *token,
 		ret = 0;
 	
 	return ret;
+}
+
+int
+cyclients_record_remove(const char *token,
+                        int company_id,
+					              int record_id)
+{
+	long http_code = 0;
+	char requestString[BUFSIZ], auth[128];
+	char * SETUP_PARTNER_TOKEN(partner_token);
+	
+	sprintf(requestString, "%s/record/%d/%d", 
+			URL, company_id, record_id);
+	sprintf(auth, "Authorization: Bearer %s, User %s"
+		, partner_token, token);
+	
+	http_code = curl_transport_exec(requestString,
+																	auth, "DELETE",
+																	NULL, NULL);
+	
+	if (http_code == 204)
+		return 0;
+	
+	return http_code;
 }
 
 
