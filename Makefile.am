@@ -1,3 +1,4 @@
+ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = subdir-objects
 
 lib_LTLIBRARIES = libcyclients.la
@@ -23,7 +24,7 @@ libcyclients_la_SOURCES = \
   src/clients.c	\
   src/records.c	\
   src/stb_ds.c \
-  src/custom_fields.c \	
+  src/custom_fields.c \
   src/auth.c
 
 libcyclients_la_LIBADD = 
