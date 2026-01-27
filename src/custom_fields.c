@@ -146,9 +146,9 @@ cyclients_custom_field_set(const char *token,
 {
 	int i, k, ret = 1;
 	cJSON *post;
-	char *phone_number;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	va_list args;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 
 	assert(number_of_key_value_pairs > 0);
@@ -162,7 +162,6 @@ cyclients_custom_field_set(const char *token,
 	
 	post = cJSON_CreateObject();
 
-	va_list args;
 	va_start(args, number_of_key_value_pairs);
 	for (i=0; i<number_of_key_value_pairs; ++i) 
 	{

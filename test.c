@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 	const CYC2fa  *user2fa = NULL;
 	CYCLIENTS_AUTH auth = CYCLIENTS_AUTH_ERROR;
 	char secret[16], login[32], password[32];
+	int company_id;
 	
 	if (argc < 2){
 		//printf("usage: %s login password\n", argv[0]);
@@ -149,7 +150,6 @@ int main(int argc, char *argv[])
 	printf("Authorized as: %s\n", user->name);
 	printf("TOKEN: %s\n", user->user_token);
 
-	int company_id;
 	cyclients_companies(user->user_token,
 			NULL,
 		 	&company_id, companies_cb);

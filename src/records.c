@@ -128,6 +128,7 @@ cyclients_record_new(const char *token,
 	char *phone_number;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	va_list args;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
 	assert(client_name);
@@ -158,7 +159,6 @@ cyclients_record_new(const char *token,
 	
 	cJSON_AddNumberToObject(post, "seance_length", seance_length);
 
-	va_list args;
 	va_start(args, number_of_key_value_pairs);
 	custom_fields = cJSON_CreateObject();
 	for (i=0; i<number_of_key_value_pairs; ++i) 
@@ -280,10 +280,10 @@ cyclients_record_set(const char *token,
                      ...)
 {
 	int i, k, ret = 1;
-	cJSON *post, *client, *services, *custom_fields;
-	char *phone_number;
+	cJSON *post, *custom_fields;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	va_list args;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 
 	assert(number_of_key_value_pairs > 0);
@@ -295,7 +295,6 @@ cyclients_record_set(const char *token,
 	
 	post = cJSON_CreateObject();
 
-	va_list args;
 	va_start(args, number_of_key_value_pairs);
 	custom_fields = cJSON_CreateObject();
 	for (i=0; i<number_of_key_value_pairs; ++i) 

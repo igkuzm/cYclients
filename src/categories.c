@@ -104,7 +104,7 @@ cyclients_service_category_get(const char *token,
 }
 
 int
-cyclients_service_category_update(const char *token,
+cyclients_service_category_set(const char *token,
 							      int company_id,
 								  int category_id,
 								  const char *title,

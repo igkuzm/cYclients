@@ -122,7 +122,7 @@ cyclients_service_new(const char *token,
                       const char *api_service_id,
                       const char *staff_json)
 {
-	int i, service_id = 0;
+	int service_id = 0;
 	CYCService *service = NULL;
 	cJSON *responce = NULL, *astaff, *post;
 	long http_code = 0;
@@ -193,9 +193,10 @@ cyclients_service_set(const char *token,
                       ...)
 {
 	int i, k;
-	cJSON *post, *astaff, *custom_fields;
+	cJSON *post, *custom_fields;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	va_list args;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
 	assert(number_of_key_value_pairs > 0);
@@ -206,7 +207,6 @@ cyclients_service_set(const char *token,
 			, partner_token, token);
 
 	post = cJSON_CreateObject();
-	va_list args;
 	custom_fields = cJSON_CreateObject();
 	va_start(args, number_of_key_value_pairs);
 	for (i=0; i<number_of_key_value_pairs; ++i) 
@@ -262,7 +262,7 @@ cyclients_service_set(const char *token,
 }
 
 int
-cyclients_service_delete(const char *token,
+cyclients_service_remove(const char *token,
                          int company_id,
                          int service_id)
 {

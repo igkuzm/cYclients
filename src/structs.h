@@ -1235,7 +1235,7 @@ static cJSON * json_from_default_field(
 			break;
 		case DEFAULT_FIELD_TYPE_DOUBLE:
 			{
-				int v = atof(value);
+				double v = atof(value);
 				json = cJSON_CreateNumber(v);
 			}
 			break;

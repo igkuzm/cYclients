@@ -385,7 +385,7 @@ cyclients_client_visits(const char *token,
                                        const CYCRecord *visit))
 {
 	CYCLIENTS_COUNTER n = 0;
-	cJSON *responce, *post, *from, *to;
+	cJSON *responce, *post;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data;
 	char * SETUP_PARTNER_TOKEN(partner_token);
@@ -454,9 +454,9 @@ cyclients_client_set(const char *token,
 {
 	int i = 0, k;
 	cJSON *post, *custom_fields;
-	char *phone_number;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
+	va_list args;
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
 	assert(number_of_key_value_pairs > 0);
@@ -468,7 +468,6 @@ cyclients_client_set(const char *token,
 
 	post = cJSON_CreateObject();
 	
-	va_list args;
 	custom_fields = cJSON_CreateObject();
 	va_start(args, number_of_key_value_pairs);
 	for (i=0; i<number_of_key_value_pairs; ++i) 
@@ -603,7 +602,6 @@ cyclients_client_comment_new(const char *token,
 {
 	int comment_id = 0;
 	cJSON *post, *responce;
-	char *phone_number;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);

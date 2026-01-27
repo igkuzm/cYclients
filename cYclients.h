@@ -1,6 +1,10 @@
 #ifndef CYCLIENTS_H
 #define CYCLIENTS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "src/structs.h"
 
 typedef int CYCLIENTS_COUNTER;
@@ -79,18 +83,18 @@ cyclients_service_category_new(const char *token,
 
 /* update service category and return non-null on error */
 int
-cyclients_service_category_update(const char *token,
-                                  int company_id,
-                                  int category_id,
-                                  const char *title,
-                                  const char *api_id,
-                                  int weight,
-                                  int nstaff,
-                                  int staff[]);
+cyclients_service_category_set(const char *token,
+                               int company_id,
+                               int category_id,
+                               const char *title,
+                               const char *api_id,
+                               int weight,
+                               int nstaff,
+                               int staff[]);
 
 /* remove service category and return non-null on error */
 int
-cyclients_service_category_delete(const char *token,
+cyclients_service_category_remove(const char *token,
                                   int company_id,
                                   int category_id);
 
@@ -166,7 +170,7 @@ cyclients_service_set(const char *token,
                       ...);
 /* Метод, позволяющий изменить услугу */ 
 int
-cyclients_service_delete(const char *token,
+cyclients_service_remove(const char *token,
                          int company_id,
                          int service_id);
 
@@ -520,4 +524,9 @@ cyclients_custom_field_remove(const char *token,
                               CYCLIENTS_CATEGORY_TYPE category,
                               int company_id,
                               int field_id);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // CYCLIENTS_H
