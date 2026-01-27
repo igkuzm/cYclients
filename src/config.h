@@ -6,7 +6,6 @@
 #define bool char
 #define true 1
 #define false 0
-#include "../StdAfx.h"
 #endif
 #else
 #include <stdbool.h>

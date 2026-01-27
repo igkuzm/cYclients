@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "build\win32"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /Yu"stdafx.h" /c
-# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /FD /Yu"stdafx.h" /c
+# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /FI"stdafx.h" /YX /FD /Yu"stdafx.h" /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -65,7 +65,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "build\winnt"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX  /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /YX /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def"  /FI"stdafx.h" /YX /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
