@@ -18,7 +18,7 @@ CFG=cYclients - Win32
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "cYclients - Win32" (based on "Win32 (x86) Static Library")
-!MESSAGE "cYclients - WinnT" (based on "Win32 (x86) Static Library")
+!MESSAGE "cYclients - WinNT" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project

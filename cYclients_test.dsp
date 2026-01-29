@@ -18,7 +18,7 @@ CFG=cYclients_test - Win32
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "cYclients_test - Win32" (based on "Win32 (x86) Console Application")
-!MESSAGE "cYclients_test - Winnt" (based on "Win32 (x86) Console Application")
+!MESSAGE "cYclients_test - WinNT" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
