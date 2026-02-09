@@ -28,6 +28,7 @@
 #include <curl/curl.h>
 #include "src/log.h"
 #include "src/alloc.h"
+#include "src/cJSON.h"
 #include "src/stb_ds.h"
 #include "src/strtok_foreach.h"
 #include "src/json_to_struct.h"
