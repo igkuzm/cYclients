@@ -31,7 +31,9 @@ cyclients_clients_search(const char *token,
                                          int nfields,
                                          const kvpair_t *fields))
 {
-	int npage = 0, total_count = 0, current_count = 0, 
+	int npage = 0, 
+			total_count = 0, 
+			current_count = 0, 
 			is_first_field = 1;
 	cJSON *post, *fields, *filters, *filter, *state, 
 				*meta, *data, *obj, *responce;
@@ -40,8 +42,8 @@ cyclients_clients_search(const char *token,
 	char * SETUP_PARTNER_TOKEN(partner_token);
 	
 	assert(comma_separeted_fields_to_return);
-    if (search_query == NULL)
-        search_query = "";
+	if (search_query == NULL)
+			search_query = "";
 
 	sprintf(requestString, "%s/company/%d/clients/search", 
 			URL, company_id);

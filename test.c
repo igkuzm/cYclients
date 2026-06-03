@@ -173,9 +173,9 @@ int main(int argc, char *argv[])
 //	   printf("USER_PERMISSIONS AUTH ENABLE CHECK IP: %s\n", permissions->auth_enable_check_ip?"true":"false");
 //    }
 	
-//    int client_id = 0;
-//	cyclients_clients_search(user->user_token, company_id, "name, id", "TEST", &client_id, clients_cb);
-//    printf("CLIENT_ID: %d\n", client_id);
+		//int client_id = 0;
+	//cyclients_clients_search(user->user_token, company_id, "name, id", "today", &client_id, clients_cb);
+		//printf("CLIENT_ID: %d\n", client_id);
 	
 	/*cyclients_client_remove(user->user_token, company_id, 363089556);*/
 	//int client_id = cyclients_client_new(user->user_token, company_id, "тестовый пациент", "+788299329912", 0);
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 //	printf("COMMENT_ID: %d\n", comment_id);
 	//cyclients_client_comments(user->user_token, company_id, client_id, NULL, comments_cb);
     
-    //cyclients_records(user->user_token, company_id, NULL, NULL, NULL, records_cb);
+    cyclients_records(user->user_token, company_id, "2026-06-03", "2026-06-03", NULL, records_cb);
 
 //    int staff_id = 3862837;
 //	
@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 //        
 //	printf("RECORD_ID: %d\n", record_id);
 
-	cyclients_custom_field_new(user->user_token, CYCLIENTS_CATEGORY_RECORD,company_id, "texthh", "kuzm_field", "kuzmich field", true, true);
+	/*cyclients_custom_field_new(user->user_token, CYCLIENTS_CATEGORY_RECORD,company_id, "texthh", "kuzm_field", "kuzmich field", true, true);*/
 	
 	/*cyclients_custom_fields(user->user_token, CYCLIENTS_CATEGORY_RECORD, company_id, NULL, custom_fields_cb);*/
     

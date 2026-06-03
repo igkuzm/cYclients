@@ -24,43 +24,37 @@ cyclients_records(const char *token,
                   int (*callback)(void *userdata, 
                                   const CYCRecord *record))
 {
-  int npage = 0, total_count = 0, current_count = 0, exit_loop = 0, 
-      is_first_field = 1;
-	cJSON *post, *responce = NULL, *meta, *data, *obj;
+  int npage = 0, total_count = 0, current_count = 0, exit_loop = 0;
 	long http_code = 0;
-	char requestString[BUFSIZ], auth[128], *post_data = NULL;
 	char * SETUP_PARTNER_TOKEN(partner_token);
     
-	sprintf(requestString, "%s/records/%d", 
-			URL, company_id);
-	sprintf(auth, "Authorization: Bearer %s, User %s"
-			, partner_token, token);
-	
-	post = cJSON_CreateObject();
-	cJSON_AddNumberToObject(post, "page", npage);
-	cJSON_AddNumberToObject(post, "count", PAGE_SIZE);
-    cJSON_AddBoolToObject(post, "with_deleted", true);
-    if (start_date)
-        cJSON_AddStringToObject(post, "start_date", start_date);
-    if (end_date)
-        cJSON_AddStringToObject(post, "end_date", end_date);
-	
 	do {
-		responce = NULL;
-	    post_data = cJSON_Print(post);
-		if (post_data == NULL){
-			ERR("%s", "can't generate post data");
-			return current_count;
-		}	
+		cJSON *responce = NULL, *meta, *data, *obj;
+		char requestString[BUFSIZ], auth[128];
 		
-	    http_code = curl_transport_exec(requestString,
-									    auth, "GET",
-									    post_data, &responce);
-		free(post_data);
+		sprintf(requestString, "%s/records/%d", 
+				URL, company_id);
+
+		sprintf(auth, "Authorization: Bearer %s, User %s"
+				, partner_token, token);
+
+		sprintf(requestString, 
+				"%s?page=%d", requestString, npage);
+		
+		if (start_date)
+			sprintf(requestString,
+				 	"%s&start_date=%s", requestString, start_date);
+		printf("RS: %s\n", requestString);
+		if (end_date)
+			sprintf(requestString,
+					"%s&end_date=%s", requestString, end_date);
+
+		http_code = curl_transport_exec(requestString,
+										auth, "GET",
+										NULL, &responce);
         
 		// iterate page
 		npage++;
-		cJSON_ReplaceItemInObject(post, "page", cJSON_CreateNumber(npage));
 		
 		if (http_code != 200)
 			break;
@@ -104,10 +98,6 @@ cyclients_records(const char *token,
         
 	} while (exit_loop == 0 && current_count < total_count);
     
-	if (post)
-		cJSON_free(post);
-	if (responce)
-		cJSON_free(responce);
 	
 	return current_count;    
 }
