@@ -844,6 +844,33 @@ typedef	enum {
     CYC_STRING(type_title, 32) \
     CYC_BOOL(is_sale_bill_printed) \
 
+#define CYC_CLIENT \
+   CYC_INT(id) \
+   CYC_STRING(name, 64) \
+   CYC_STRING(surname, 64) \
+   CYC_STRING(patronymic, 64) \
+   CYC_STRING(display_name, 128) \
+   CYC_STRING(phone, 16) \
+   CYC_STRING(email, 64) \
+   CYC_INT(sex_id) \
+   CYC_STRING(sex, 16) \
+   CYC_INT(discount) \
+   CYC_STRING(importance, 32) \
+   CYC_STRING(card, 32) \
+   CYC_STRING(birth_date, 32) \
+   CYC_STRING(comment, 256) \
+   CYC_INT(visits) \
+   CYC_INT(sms_check) \
+   CYC_INT(sms_bot) \
+   CYC_INT(sms_not) \
+   CYC_INT(spent) \
+   CYC_INT(paid) \
+   CYC_INT(balance) \
+   CYC_INT(importance_id) \
+   CYC_STRING_ARRAY(categories, 32, 32) \
+   CYC_STRING(last_change_date, 32) \
+   CYC_KVPAIR(custom_fields, 32) \
+
 #define CYC_RECORD \
     CYC_INT(id) \
     CYC_INT(company_id) \
@@ -884,34 +911,8 @@ typedef	enum {
     CYC_STAFF_CLASS(staff) \
     CYC_DOCUMENT_CLASS_ARRAY(documents, 32) \
     CYC_KVPAIR(custom_fields, 32) \
+    CYC_CLIENT_CLASS(client) \
 //CYC_COMPANY_CLASS(company) \
-
-#define CYC_CLIENT \
-   CYC_INT(id) \
-   CYC_STRING(name, 64) \
-   CYC_STRING(surname, 64) \
-   CYC_STRING(patronymic, 64) \
-   CYC_STRING(display_name, 128) \
-   CYC_STRING(phone, 16) \
-   CYC_STRING(email, 64) \
-   CYC_INT(sex_id) \
-   CYC_STRING(sex, 16) \
-   CYC_INT(discount) \
-   CYC_STRING(importance, 32) \
-   CYC_STRING(card, 32) \
-   CYC_STRING(birth_date, 32) \
-   CYC_STRING(comment, 256) \
-   CYC_INT(visits) \
-   CYC_INT(sms_check) \
-   CYC_INT(sms_bot) \
-   CYC_INT(sms_not) \
-   CYC_INT(spent) \
-   CYC_INT(paid) \
-   CYC_INT(balance) \
-   CYC_INT(importance_id) \
-   CYC_STRING_ARRAY(categories, 32, 32) \
-   CYC_STRING(last_change_date, 32) \
-   CYC_KVPAIR(custom_fields, 32) \
 
 #define CYC_COMMENT \
    CYC_INT(id) \
@@ -959,6 +960,7 @@ typedef	enum {
 #define CYC_ACCESS_CLASS(_name) CYCAccess _name;
 #define CYC_COMPANY_CLASS(_name) CYCCompany _name;
 #define CYC_STAFF_CLASS(_name) CYCStaff _name;
+#define CYC_CLIENT_CLASS(_name) CYCClient _name;
 #define CYC_SERVICE_CLASS(_name) CYCService _name;
 #define CYC_VISIT_SERVICE_CLASS(_name) CYCVisitService _name;
 #define CYC_VISIT_SERVICE_CLASS_ARRAY(_name, _len) CYCVisitService _name[_len]; int n##_name;
@@ -1090,17 +1092,17 @@ cJSON * cyc_document_to_json(CYCDocument *t);
 
 typedef struct {
 	CYC_TYPE _type;
-	CYC_RECORD
-} CYCRecord;
-int     cyc_record_fr_json(CYCRecord *t, const cJSON *json);
-cJSON * cyc_record_to_json(CYCRecord *t);
-
-typedef struct {
-	CYC_TYPE _type;
 	CYC_CLIENT
 } CYCClient;
 int     cyc_client_fr_json(CYCClient *t, const cJSON *json);
 cJSON * cyc_client_to_json(CYCClient *t);
+
+typedef struct {
+	CYC_TYPE _type;
+	CYC_RECORD
+} CYCRecord;
+int     cyc_record_fr_json(CYCRecord *t, const cJSON *json);
+cJSON * cyc_record_to_json(CYCRecord *t);
 
 typedef struct {
 	CYC_TYPE _type;
@@ -1143,6 +1145,7 @@ cJSON * cyc_custom_field_to_json(CYCCustomField *t);
 #undef CYC_ACCESS_CLASS
 #undef CYC_COMPANY_CLASS
 #undef CYC_STAFF_CLASS
+#undef CYC_CLIENT_CLASS
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY
@@ -1181,6 +1184,7 @@ enum DEFAULT_FIELD_TYPE {
 	#_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_ACCESS_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_COMPANY_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
+#define CYC_CLIENT_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_STAFF_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_SERVICE_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
 #define CYC_VISIT_SERVICE_CLASS(_name) #_name, DEFAULT_FIELD_TYPE_JSON,
@@ -1283,6 +1287,7 @@ static cJSON * json_from_default_field(
 #undef CYC_ACCESS_CLASS
 #undef CYC_COMPANY_CLASS
 #undef CYC_STAFF_CLASS
+#undef CYC_CLIENT_CLASS
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS_ARRAY

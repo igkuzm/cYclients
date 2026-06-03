@@ -47,6 +47,8 @@
 	cyc_access_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_COMPANY_CLASS(_name) \
 	cyc_company_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
+#define CYC_CLIENT_CLASS(_name) \
+	cyc_client_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_STAFF_CLASS(_name) \
 	cyc_staff_fr_json(&t->_name, cJSON_GetObjectItem(json, #_name));
 #define CYC_SERVICE_CLASS(_name) \
@@ -293,6 +295,7 @@ int cyc_custom_field_fr_json(CYCCustomField *t, const cJSON *json)
 #undef CYC_SALON_GROUP_SETTINGS_CLASS
 #undef CYC_ACCESS_CLASS
 #undef CYC_COMPANY_CLASS
+#undef CYC_CLIENT_CLASS
 #undef CYC_STAFF_CLASS
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
@@ -374,6 +377,12 @@ int cyc_custom_field_fr_json(CYCCustomField *t, const cJSON *json)
 	do { \
 		cJSON *_obj = \
 		cyc_company_to_json(&t->_name); \
+		cJSON_AddItemToObject(json, #_name, _obj); \
+	}	while(0);
+#define CYC_CLIENT_CLASS(_name) \
+	do { \
+		cJSON *_obj = \
+		cyc_client_to_json(&t->_name); \
 		cJSON_AddItemToObject(json, #_name, _obj); \
 	}	while(0);
 #define CYC_STAFF_CLASS(_name) \
@@ -602,6 +611,7 @@ cJSON * cyc_custom_field_to_json(CYCCustomField *t)
 #undef CYC_SALON_GROUP_SETTINGS_CLASS
 #undef CYC_ACCESS_CLASS
 #undef CYC_COMPANY_CLASS
+#undef CYC_CLIENT_CLASS
 #undef CYC_STAFF_CLASS
 #undef CYC_SERVICE_CLASS
 #undef CYC_VISIT_SERVICE_CLASS
