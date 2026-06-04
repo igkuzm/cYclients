@@ -18,7 +18,7 @@ cyclients_companies(const char *token,
                                     const CYCCompany *company))
 {
 	CYCLIENTS_COUNTER n = 0;
-	cJSON *responce;
+	cJSON *responce = NULL;
 	long http_code = 0;
 	char requestString[BUFSIZ], auth[128], company_id_req[16];
 	char * SETUP_PARTNER_TOKEN(partner_token);
