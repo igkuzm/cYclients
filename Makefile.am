@@ -29,7 +29,7 @@ libcyclients_la_SOURCES = \
 
 libcyclients_la_LIBADD = 
 
-if BUILD_TEST
+if WITH_TEST
 bin_PROGRAMS = cYclients_test
 cYclients_test_CFLAGS = 
 cYclients_test_LDFLAGS = 

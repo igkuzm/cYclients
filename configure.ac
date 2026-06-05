@@ -7,12 +7,12 @@ LT_INIT
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_ARG_ENABLE([tests], 
-               [AS_HELP_STRING([--enable-tests], [Build
-               tests @<:@no@:>@])],
-               [enable_tests=yes],
-               [enable_tests=no])
+               [AS_HELP_STRING([--with-test], [Build
+               with_test @<:@no@:>@])],
+               [with_test=yes],
+               [with_test=no])
 
-AM_CONDITIONAL([BUILD_TEST], [test "$enable_tests" = "yes"])
+AM_CONDITIONAL([WITH_TEST], [test "$with_tests" = "yes"])
 
 AC_CHECK_FILE([partner_token.h],[],
                [AC_MSG_ERROR([To get partner token - register in https://yclients.com/appstore/developers - see readme])])

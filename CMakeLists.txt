@@ -41,7 +41,7 @@ set(SOURCES
 add_library(${TARGET} ${SOURCES} ${HEADERS})
 target_link_libraries(${TARGET} curl)
 
-if(${BUILD_TEST})
+if(${WITH_TEST})
   add_executable(${TARGET}_test test.c)
   target_link_libraries(${TARGET}_test ${TARGET})
 endif()
