@@ -8,7 +8,7 @@
  */
 
 #include "curl_transport.h"
-#include "../partner_token.h"
+#include <partner_token.h>
 #include "cJSON.h"
 #include "config.h"
 #include "log.h"

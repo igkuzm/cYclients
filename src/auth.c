@@ -1,5 +1,5 @@
 #include "../cYclients.h"
-#include "../partner_token.h"
+#include <partner_token.h>
 #include "cJSON.h"
 #include "log.h"
 #include "config.h"

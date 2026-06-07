@@ -40,6 +40,7 @@ set(SOURCES
 
 add_library(${TARGET} ${SOURCES} ${HEADERS})
 target_link_libraries(${TARGET} curl)
+include_directories(${TARGET} ${CMAKE_SOURCE_DIR})
 
 if(${WITH_TEST})
   add_executable(${TARGET}_test test.c)

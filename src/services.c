@@ -4,7 +4,7 @@
 #include "alloc.h"
 #include "structs.h"
 #include "cJSON.h"
-#include "../partner_token.h"
+#include <partner_token.h>
 #include "curl_transport.h"
 #include <stdio.h>
 #include <stdlib.h>

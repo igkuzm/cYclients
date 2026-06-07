@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS = -I m4
 AUTOMAKE_OPTIONS = subdir-objects
 
 lib_LTLIBRARIES = libcyclients.la
-libcyclients_la_CFLAGS =
+libcyclients_la_CFLAGS = -I$(top_srcdir)
 libcyclients_la_LDFLAGS =
 
 nobase_include_HEADERS = \

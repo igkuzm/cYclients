@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "cJSON.h"
 #include "stb_ds.h"
-#include "../partner_token.h"
+#include <partner_token.h>
 #include "curl_transport.h"
 #include "strtok_foreach.h"
 #include <stdio.h>
