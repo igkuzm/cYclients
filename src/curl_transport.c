@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <locale.h>
 
 static char CURL_ERROR[256];
 
@@ -62,6 +63,8 @@ curl_transport_exec(const char *request_url,
 	assert(request_url);
 	assert(auth_header);
 	assert(http_method);
+
+	setlocale(LC_NUMERIC, "C"); // parsing json floats
 	
 	LOG("URL: %s", request_url);
 	LOG("METHOD: %s", http_method);
