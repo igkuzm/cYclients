@@ -14,6 +14,7 @@
 #include <time.h>
 #include "cJSON.h"
 #include "config.h"
+#include "log.h"
 
 struct kvpair{char *key; char *value;};
 
@@ -1257,6 +1258,10 @@ static cJSON * json_from_default_field(
 		case DEFAULT_FIELD_TYPE_JSON:
 			{
 				json = cJSON_Parse(value);
+				if (json == NULL){
+					const char *err = cJSON_GetErrorPtr();
+					ERR("cJSON parsing error in: %.20s", err);
+				}
 			}
 			break;
 		

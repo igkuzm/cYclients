@@ -28,7 +28,7 @@
 #define JSON_TO_STRING(_json, _struct, _name) \
 	do { \
 		cJSON *_obj = cJSON_GetObjectItem(_json, #_name); \
-		if (_obj){ \
+		if (_obj && _obj->valuestring){ \
 			STRCPY(_struct->_name, _obj->valuestring); \
 		} \
 	}	while(0);
@@ -40,7 +40,7 @@
 			int i = 0; \
 			cJSON *_item = NULL; \
 			cJSON_ArrayForEach(_item, _obj){ \
-				if (_item && i < _len){ \
+				if (_item && i < _len && _item->valuestring){ \
 					STRCPY(_struct->_name[i++], _item->valuestring); \
 				} \
 			} \

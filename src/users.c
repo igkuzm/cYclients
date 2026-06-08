@@ -282,6 +282,10 @@ cyclients_user_copy_to_companies(const char *token,
 		if (links[i].user_permissions_json){
 			cJSON *obj, *user_permissions;
 			user_permissions = cJSON_Parse(links[i].user_permissions_json);
+			if (user_permissions == NULL){
+				const char *err = cJSON_GetErrorPtr();
+				ERR("cJSON parsing error in: %.20s", err);
+			}
 			if (cJSON_IsObject(user_permissions)){
 				obj = cJSON_CreateObject();
 				cJSON_AddNumberToObject(obj, "company_id", links[i].company_id);

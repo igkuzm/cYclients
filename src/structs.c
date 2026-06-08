@@ -69,6 +69,7 @@
 #define FROM_JSON_START \
 	assert(json != NULL); \
 	assert(t != NULL); \
+	LOG("Parsing json: %s", cJSON_Print(json)); \
 	if (cJSON_IsObject(json)) {
 
 #define FROM_JSON_END \

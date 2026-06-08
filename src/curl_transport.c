@@ -116,7 +116,8 @@ curl_transport_exec(const char *request_url,
 		if (responce){
 			LOG("%s", cJSON_Print(responce));
 		} else {
-			LOG("%s", "RESPONCE JSON IS NULL");
+			const char *err = cJSON_GetErrorPtr();
+			ERR("cJSON parsing error in: %.20s", err);
 		}
 		free(s.ptr);
 		

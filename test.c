@@ -5,14 +5,14 @@
 #include <time.h>
 
 
-int companies_cb(void *userdata, const CYCCompany *company)
-{
-	int *company_id = userdata;
-	printf("COMPANY: %s\n", company->title);
-	*company_id = company->id;
+//int companies_cb(void *userdata, const CYCCompany *company)
+//{
+	//int *company_id = userdata;
+	//printf("COMPANY: %s\n", company->title);
+	//*company_id = company->id;
 
-	return 0;
-}
+	//return 0;
+//}
 
 int services_cb(void *userdata, const CYCService *service)
 {
@@ -76,13 +76,161 @@ int comments_cb(void *userdata, const CYCComment *comment)
 	return 0;
 }
 
-int records_cb(void *userdata, const CYCRecord *record)
+/*int records_cb(void *userdata, const CYCRecord *record)*/
+/*{*/
+	/*printf("RECORD ID: %d\t", record->id);*/
+    /*printf("DATE: %s\t", record->date);*/
+    /*printf("COMMENT: %s\n", record->comment);*/
+	/*return 1;*/
+/*}*/
+
+struct cy_t {
+	char *token;
+	int companes[32];
+	int ncompanies;
+	void *userdata; 
+	int (*callback)(void *userdata, struct passport_t *patient);
+};
+
+static int companies_cb(void *userdata, const CYCCompany *company)
 {
-	printf("RECORD ID: %d\t", record->id);
-    printf("DATE: %s\t", record->date);
-    printf("COMMENT: %s\n", record->comment);
-	return 1;
+	fprintf(stderr, "FUN: %s: LINE: %d\n", __func__, __LINE__);
+	struct cy_t *cy_t = userdata;
+	if (company == NULL)
+		return 0;
+	printf("COMPANY: %s\n", company->title);
+	if (cy_t->ncompanies < 32)
+		cy_t->companes[cy_t->ncompanies++] = company->id;
+
+	return 0;
 }
+
+static int records_cb(void *userdata, const CYCRecord *record)
+{
+	struct cy_t *cy_t = userdata;
+	/*struct passport_t  *patient;*/
+
+	if (!record)
+		return 0;
+
+	printf("CLIENT %s\n", record->client.name);
+
+	// FIO fix
+	/*
+	do {
+		int i = 0;
+		char surname[256];
+		memset(surname, 0, 256);
+		strtok_foreach(record->client.name, " ", token)
+		{
+			switch (i) {
+				case 0:
+					strncpy(surname, token, sizeof(surname));
+					break;
+				case 1:
+					strncpy((char *)record->client.surname, 
+							surname, sizeof(record->client.surname));
+					strncpy((char *)record->client.name, 
+							token, sizeof(record->client.name));
+					break;
+				case 2:
+					strncpy((char *)record->client.patronymic, 
+							token, sizeof(record->client.patronymic));
+					break;
+
+				default:
+					break;
+			}
+			i++;
+		}
+	} while(0);
+	*/
+/*
+	patient = NEW(struct passport_t);
+	if (patient == NULL)
+		return 0;
+
+	patient->familiya  = (char *)record->client.surname;
+	patient->imia      = (char *)record->client.name;
+	patient->otchestvo = (char *)record->client.patronymic;
+	patient->tel       = (char *)record->client.phone;
+	patient->email     = (char *)record->client.email;
+	patient->comment   = (char *)record->client.comment;
+	
+	// date of birth
+	do {
+		struct tm tm;
+		memset(&tm, 0, sizeof(struct tm));
+		sscanf(record->client.birth_date,
+				"%d-%d-%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
+		tm.tm_year -= 1900;
+		tm.tm_mon -= 1;
+		patient->dateofbirth = mktime(&tm);
+	} while(0);
+	if (cy_t->callback)
+		cy_t->callback(cy_t->userdata, patient);
+*/
+
+	return 0;
+}
+
+static void cyclients_get_clients(
+		int i,
+		struct cy_t * cy_t)
+{
+	time_t tnow;
+	struct tm *tm;
+	char date[32];
+
+	tnow = time(NULL);
+	tm = localtime(&tnow);
+	sprintf(date, "%d-%02d-%02d", 
+			tm->tm_year + 1900,
+			tm->tm_mon + 1,
+			tm->tm_mday);
+		
+	cyclients_records(
+			cy_t->token, 
+			cy_t->companes[i], 
+			"2026-06-07", 
+			"2026-06-07", 
+			cy_t, 
+			records_cb);
+}
+
+/*static int cyclients_clients_for_current_date(*/
+		/*void *userdata, */
+		/*int (*callback)(void *userdata,*/
+										/*struct passport_t *patient))*/
+/*{*/
+	/*int i;*/
+	/*struct cy_t cy_t;*/
+	/*fprintf(stderr, "LINE: %d\n", __LINE__);*/
+	
+	/*memset(&cy_t, 0, sizeof(struct cy_t));*/
+	/*cy_t.userdata = userdata;*/
+	/*cy_t.callback = callback;*/
+		
+	/*yclients_token_from_config(&cy_t.token);*/
+	/*if (cy_t.token == NULL)*/
+		/*return 1;*/
+	/*fprintf(stderr, "TOKEN: %s\n", cy_t.token);*/
+	/*fprintf(stderr, "LINE: %d\n", __LINE__);*/
+
+	/*// get companies*/
+	/*cyclients_companies(strdup(cy_t.token),*/
+			/*NULL,*/
+			 /*&cy_t, companies_cb);*/
+
+	/*for (i = 0; i < cy_t.ncompanies; ++i) {*/
+		/*cyclients_get_clients(i, &cy_t);*/
+	/*}*/
+
+	/*free(cy_t.token);*/
+	/*return 0;*/
+/*}*/
+
+
 
 int main(int argc, char *argv[])
 {
@@ -106,7 +254,30 @@ int main(int argc, char *argv[])
 	
 	auth = cyclients_login(login, password,
 		 	&user, &user2fa);
+
+	if (auth != CYCLIENTS_AUTH_AUTHORIZED) {
+		return 1;
+	}
+
+	int i;
+	struct cy_t cy_t;
+	fprintf(stderr, "LINE: %d\n", __LINE__);
 	
+	memset(&cy_t, 0, sizeof(struct cy_t));
+	/*cy_t.userdata = userdata;*/
+	/*cy_t.callback = callback;*/
+	cy_t.token = user->user_token;
+	
+	fprintf(stderr, "LINE: %d\n", __LINE__);
+		cyclients_companies(strdup(cy_t.token),
+			NULL,
+			 &cy_t, companies_cb);
+
+	for (i = 0; i < cy_t.ncompanies; ++i) {
+		cyclients_get_clients(i, &cy_t);
+	}
+
+
 	if (auth == CYCLIENTS_AUTH_2FA){
 		// login with 2fa
 		if (user2fa == NULL){
