@@ -1,5 +1,5 @@
+#include "StdAfx.h"
 #include "cYclients.h"
-#include "src/stb_ds.h"
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
@@ -94,8 +94,8 @@ struct cy_t {
 
 static int companies_cb(void *userdata, const CYCCompany *company)
 {
-	fprintf(stderr, "FUN: %s: LINE: %d\n", __func__, __LINE__);
 	struct cy_t *cy_t = userdata;
+
 	if (company == NULL)
 		return 0;
 	printf("COMPANY: %s\n", company->title);
@@ -239,10 +239,13 @@ int main(int argc, char *argv[])
 	CYCLIENTS_AUTH auth = CYCLIENTS_AUTH_ERROR;
 	char secret[16], login[32], password[32];
 	int company_id;
+
+	int i;
+	struct cy_t cy_t;
 	
 	if (argc < 2){
-		//printf("usage: %s login password\n", argv[0]);
-		//return 0;
+		printf("usage: %s login password\n", argv[0]);
+		return 0;
 		printf("enter login\n");
 		scanf("%31s", login);
 		printf("enter password\n");
@@ -259,8 +262,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	int i;
-	struct cy_t cy_t;
 	fprintf(stderr, "LINE: %d\n", __LINE__);
 	
 	memset(&cy_t, 0, sizeof(struct cy_t));
@@ -268,14 +269,14 @@ int main(int argc, char *argv[])
 	/*cy_t.callback = callback;*/
 	cy_t.token = user->user_token;
 	
-	fprintf(stderr, "LINE: %d\n", __LINE__);
-		cyclients_companies(strdup(cy_t.token),
-			NULL,
-			 &cy_t, companies_cb);
+//	fprintf(stderr, "LINE: %d\n", __LINE__);
+//		cyclients_companies(strdup(cy_t.token),
+//			NULL,
+//			 &cy_t, companies_cb);
 
-	for (i = 0; i < cy_t.ncompanies; ++i) {
-		cyclients_get_clients(i, &cy_t);
-	}
+//	for (i = 0; i < cy_t.ncompanies; ++i) {
+//		cyclients_get_clients(i, &cy_t);
+//	}
 
 
 	if (auth == CYCLIENTS_AUTH_2FA){
@@ -318,12 +319,12 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	printf("Authorized as: %s\n", user->name);
-	printf("TOKEN: %s\n", user->user_token);
+//	printf("Authorized as: %s\n", user->name);
+//	printf("TOKEN: %s\n", user->user_token);
 
-	cyclients_companies(user->user_token,
-			NULL,
-		 	&company_id, companies_cb);
+//	cyclients_companies(user->user_token,
+//			NULL,
+//		 	&company_id, companies_cb);
 
 //	cyclients_service_categories(
 //			user->user_token, company_id, 

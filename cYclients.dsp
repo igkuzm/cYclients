@@ -26,7 +26,6 @@ CFG=cYclients - Win32
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
-MTL=midl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "cYclients - Win32"
@@ -41,8 +40,9 @@ RSC=rc.exe
 # PROP Output_Dir "build\win32"
 # PROP Intermediate_Dir "build\win32"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /YX /FD /Yu"stdafx.h" /c
-# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /FI"stdafx.h" /YX /FD /Yu"stdafx.h" /c
+MTL=midl.exe
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "_MBCS" /D "_LIB" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "win32\curl\include" /I "." /FI"stdafx.h" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /Yu"stdafx.h" /FD /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -52,7 +52,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "cYclients - WinnT"
+!ELSEIF  "$(CFG)" == "cYclients - WinNT"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -64,8 +64,9 @@ LIB32=link.exe -lib
 # PROP Output_Dir "build\winnt"
 # PROP Intermediate_Dir "build\winnt"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /YX  /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def"  /FI"stdafx.h" /YX /Yu"stdafx.h" /FD /GZ /c
+MTL=midl.exe
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_MBCS" /D "_LIB" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "winnt\curl\include" /I "." /FI"stdafx.h" /D "WIN32" /D "_MBCS" /D "_LIB" /D "DEF:cYclients.def" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE RSC /l 0x419
 # ADD RSC /l 0x419
 BSC32=bscmake.exe
@@ -80,15 +81,10 @@ LIB32=link.exe -lib
 # Begin Target
 
 # Name "cYclients - Win32"
-# Name "cYclients - WinnT"
+# Name "cYclients - WinNT"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=.\StdAfx.c
-# ADD CPP /Yc"stdafx.h"
-# End Source File
 # Begin Source File
 
 SOURCE=.\src\auth.c
@@ -107,11 +103,23 @@ SOURCE=.\src\clients.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\companies.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\curl_transport.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\custom_fields.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cYclients.def
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\records.c
 # End Source File
 # Begin Source File
 
@@ -123,19 +131,12 @@ SOURCE=.\src\stb_ds.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\custom_fields.c
+SOURCE=.\StdAfx.c
+# ADD CPP /Yc"stdafx.h"
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\structs.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\records.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\companies.c
 # End Source File
 # Begin Source File
 
@@ -167,11 +168,11 @@ SOURCE=.\src\log.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\StdAfx.h
+SOURCE=.\partner_token.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\partner_token.h
+SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
 
